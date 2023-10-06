@@ -3,6 +3,8 @@ import Signup from './components/Signup';
 import Profile from './components/Profile';
 import CreateQuote from './components/CreateQuote';
 import Home from './components/Home';
+import Team from './components/team';
+import Addemployee from './components/Addemployee';
 
 export const routes = [
     {path:"/",element:<Home />},
@@ -10,4 +12,6 @@ export const routes = [
     {path:"/login",element:<Login />},
     {path:"/signup",element:<Signup />},
     {path:"/profile",element:<Profile />},
+    {path : "/team", element:<Team />},
+    {path: "/addemployee", element:<Addemployee />}
 ]

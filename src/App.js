@@ -9,6 +9,7 @@ import NavBar from './components/NavBar';
 import {routes } from './routes'
 import { useRoutes } from 'react-router';
 import Sidebar from './scenes/global/Sidebar';
+import Addemployee from './components/Addemployee';
 
 function App() {
   const element = useRoutes(routes)
