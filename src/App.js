@@ -13,15 +13,11 @@ import Sidebar from './scenes/global/Sidebar';
 function App() {
   const element = useRoutes(routes)
   return (
-    <div className="App">
-    {/* <Login></Login> */}
-    {/* <Signup></Signup> */}
-    {/* <Profile></Profile> */}
-    {/* <CreateQuote></CreateQuote> */}
-    {/* <Home></Home> */}
+   <>
     <NavBar></NavBar>
     {element}
-    </div>
+    {/* <Sidebar></Sidebar> */}
+    </>
   );
 }
 

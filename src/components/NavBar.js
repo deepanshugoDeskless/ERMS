@@ -7,7 +7,7 @@ export default function NavBar() {
   return (
     <nav>
         <div className="nav-wrapper #673ab7 deep-purple">
-          <Link to="/" className="brand-logo left">Quote App</Link>
+          <Link to="/" className="brand-logo left" >GoDeskless</Link>
           <ul id="nav-mobile" className="right">
               {
                   token ?
