@@ -12,7 +12,7 @@ export default function Login() {
     if(loading) return <h1>Loading</h1>
     if(data){
         localStorage.setItem("token",data.user.token)
-        navigate('/')
+        navigate('/home')
     }
     
     const handleChange = (e)=>{

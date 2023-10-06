@@ -5,13 +5,17 @@ import CreateQuote from './components/CreateQuote';
 import Home from './components/Home';
 import Team from './components/team';
 import Addemployee from './components/Addemployee';
+import Pagenotfound from './components/data/Pagenotfound';
+import Welcome from './components/Welcome';
 
 export const routes = [
-    {path:"/",element:<Home />},
+    {path:"/home",element:<Home />},
     {path:"/create",element:<CreateQuote />},
     {path:"/login",element:<Login />},
     {path:"/signup",element:<Signup />},
     {path:"/profile",element:<Profile />},
     {path : "/team", element:<Team />},
-    {path: "/addemployee", element:<Addemployee />}
+    {path: "/addemployee", element:<Addemployee />},
+    {path: "/*", element:<Pagenotfound />},
+    {path: "/",element:<Welcome />}
 ]

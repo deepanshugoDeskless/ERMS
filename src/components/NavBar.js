@@ -6,8 +6,8 @@ export default function NavBar() {
     const navigate = useNavigate()
   return (
     <nav>
-        <div className="nav-wrapper #673ab7 deep-purple">
-          <Link to="/" className="brand-logo left" >GoDeskless</Link>
+        <div className="nav-wrapper " style={{backgroundColor: '#eb0c70'}}>
+          <Link to="/" className="brand-logo left" >GoDeskless ERMS</Link>
           <ul id="nav-mobile" className="right">
               {
                   token ?
@@ -16,7 +16,7 @@ export default function NavBar() {
                   <li><Link to="/create">Create</Link></li>
                   <li><button className='red btn' onClick={()=>{
                       localStorage.removeItem("token")
-                      navigate('/log')
+                      navigate('/')
                   }}>Logout</button></li>
                   </> :
                   
