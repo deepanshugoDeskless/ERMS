@@ -1,5 +1,7 @@
 import { useState } from "react";
 import * as XLSX from 'xlsx';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 function App() {
 
@@ -41,7 +43,7 @@ function App() {
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(data.slice(0,10));
+      setExcelData(data.slice(0,1000));
     }
   }
 
@@ -89,6 +91,7 @@ function App() {
           <div>No File is uploaded yet!</div>
         )}
       </div>
+
     </div>
     
   );
