@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.font-link {
+  font-family: 'Kanit', sans-serif;
+}
+
+.font-link2 {
+  font-family: 'Saira Condensed', sans-serif;
+  display: flex;
+  margin-top: 120px;
+  margin-left: 40px;
+}
+

@@ -9,11 +9,19 @@ export default function Login() {
   const [formData, setFormData] = useState({});
   const [SigninUser, { error, loading, data }] = useMutation(LOGIN_USER);
 
-  if (loading) return <h1>Loading</h1>;
-  if (data) {
-    localStorage.setItem("token", data.user.token);
-    navigate("/");
-  }
+    if(loading) return <h1>Loading</h1>
+    if(data){
+        localStorage.setItem("token",data.user.token)
+        navigate('/home')
+    }
+    
+    const handleChange = (e)=>{
+        setFormData({
+         ...formData,
+         [e.target.name]:e.target.value
+        })
+    
+    }
 
   const handleChange = (e) => {
     setFormData({

@@ -10,6 +10,8 @@ import {routes } from './routes'
 import { useRoutes } from 'react-router';
 import Sidebar from './scenes/global/Sidebar';
 import Addemployee from './components/Addemployee';
+import { ColorModeContext, useMode } from "../src/theme";
+import { useState } from "react";
 
 function App() {
   const element = useRoutes(routes)
@@ -17,7 +19,6 @@ function App() {
    <>
     <NavBar></NavBar>
     {element}
-    {/* <Sidebar></Sidebar> */}
     </>
   );
 }
