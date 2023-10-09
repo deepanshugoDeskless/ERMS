@@ -5,7 +5,7 @@ import CreateQuote from './components/CreateQuote';
 import Home from './components/Home';
 import Team from './components/team';
 import Addemployee from './components/Addemployee';
-import Pagenotfound from './components/data/Pagenotfound';
+import Pagenotfound from './components/Pagenotfound';
 import Welcome from './components/Welcome';
 
 export const routes = [
@@ -17,5 +17,5 @@ export const routes = [
     {path : "/team", element:<Team />},
     {path: "/addemployee", element:<Addemployee />},
     {path: "/*", element:<Pagenotfound />},
-    {path: "/",element:<Welcome />}
+    {path: "",element:<Welcome />}
 ]

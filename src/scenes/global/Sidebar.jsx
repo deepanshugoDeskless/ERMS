@@ -16,6 +16,8 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import QuizIcon from '@mui/icons-material/Quiz';
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -144,7 +146,7 @@ const Sidebar = () => {
             <Item
               title="Add Employee"
               to="/addemployee"
-              icon={<PeopleOutlinedIcon />}
+              icon={<PersonAddAltIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -179,7 +181,7 @@ const Sidebar = () => {
             <Item
               title="FAQ Page"
               to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
+              icon={<QuizIcon />}
               selected={selected}
               setSelected={setSelected}
             />

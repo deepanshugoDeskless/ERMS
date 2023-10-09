@@ -67,7 +67,7 @@ const ImageWithText = () => {
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
-    marginLeft:'125px',
+    marginLeft:'45px',
     marginTop:'180px'
   };
 
@@ -77,7 +77,7 @@ const ImageWithText = () => {
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
-    marginLeft:'90px',
+    marginLeft:'160px',
     // marginBottom: '0px',
     color: '#ffffff', // White text color
     backgroundColor: 'transparent', // Transparent background

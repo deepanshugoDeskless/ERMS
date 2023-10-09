@@ -24,12 +24,34 @@ export default function Signup() {
     });
   };
   return (
-    <div className="container my-container">
+    <div className="container my-container" style={{
+      display: 'flex',
+      flexDirection:'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '40.5em',
+      // flexDirection: 'column',
+      // padding: '50px',
+      // backgroundColor:'black',
+      // marginTop:'45px',
+      // borderRadius:'20px',
+      width: '380px', /* Adjust the width as needed */
+      margin: '0 auto', /* Center the container horizontally */
+      padding: '10px 40px 0px 40px',
+      backgroundColor: '#ffffff', /* Background color */
+      borderTopLeftRadius: '20px',   // Adjust the value as needed
+      borderTopRightRadius: '20px',
+      // borderRadius: '30px', /* Rounded corners */
+      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)', /* Box shadow for a subtle elevation effect */
+      transition: 'backgroundColor 0.3s ease, transform 0.3s ease', /* Add transitions */
+      marginTop:'3.3em',
+      marginLeft:'55em',
+    }}>
       {error && <div className="red card-panel">{error.message}</div>}
 
       {data && data.user && (
         <div className="green card-panel">
-          {data.user.firstName} is signedUp. You can login now!
+          {data.user.firstName} is Signed Up. You can login now!
         </div>
       )}
       <h5>Signup!!</h5>
@@ -90,3 +112,4 @@ export default function Signup() {
     </div>
   );
 }
+

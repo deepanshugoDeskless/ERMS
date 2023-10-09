@@ -2,6 +2,8 @@ import { useState } from "react";
 import * as XLSX from 'xlsx';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { Button } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 
 function App() {
 
@@ -50,16 +52,21 @@ function App() {
   return (
     <div className="wrapper">
 
-      <h3>Upload Employee Excel Sheet</h3>
 
-      {/* form */}
+      <h3 style={{marginLeft:'11em'}}>Employee Excel Sheet</h3>
+      <div className="panel" style={{backgroundColor:'yellow',padding:'20px'}}>
+          <div className="internalelem" style={{marginLeft:'29em'}}>
       <form className="form-group custom-form" onSubmit={handleFileSubmit}>
         <input type="file" className="form-control" required onChange={handleFile} />
-        <button type="submit" className="btn btn-success btn-md">UPLOAD</button>
+        <button type="submit" className="btn btn-success btn-md" style={{marginLeft:'0em'}}>VIEW UPLOAD</button>
+        <Button variant="contained" style={{padding:'0.64em',marginLeft:'4em', width:'10em'}}>Submit Upload</Button>
         {typeError&&(
           <div className="alert alert-danger" role="alert">{typeError}</div>
         )}
       </form>
+      </div>
+      </div>
+      {/* form */}
 
       {/* view data */}
       <div className="viewer">
