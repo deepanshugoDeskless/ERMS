@@ -1,6 +1,9 @@
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { SIGNUP_USER } from "../gqloperations/mutations";
+import signup from '../Assets/signup.json';
+import Lottie from 'lottie-react'; 
+
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
@@ -24,6 +27,10 @@ export default function Signup() {
     });
   };
   return (
+    <>
+    <div className="leftcontainer" style={{width:'30em',marginLeft:'10em'}}>
+      <Lottie animationData={signup} />
+      </div>
     <div className="container my-container" style={{
       display: 'flex',
       flexDirection:'column',
@@ -44,7 +51,7 @@ export default function Signup() {
       // borderRadius: '30px', /* Rounded corners */
       boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)', /* Box shadow for a subtle elevation effect */
       transition: 'backgroundColor 0.3s ease, transform 0.3s ease', /* Add transitions */
-      marginTop:'3.3em',
+      marginTop:'-28em',
       marginLeft:'55em',
     }}>
       {error && <div className="red card-panel">{error.message}</div>}
@@ -110,6 +117,7 @@ export default function Signup() {
         </button>
       </form>
     </div>
+    </>
   );
 }
 

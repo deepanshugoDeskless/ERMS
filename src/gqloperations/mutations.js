@@ -14,3 +14,9 @@ mutation SigninUser($userSignin:UserSigninInput!){
     }
   }
   `
+
+export const BULK_UPLOAD_USER = gql`
+mutation BulkUserCreate($bulkUserInput:[UserElement]){
+  String:bulkUserCreate(bulkUserInput:$bulkUserInput)
+}
+  `

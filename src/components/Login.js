@@ -4,7 +4,7 @@ import {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LOGIN_USER } from '../gqloperations/mutations'
 import React, { useEffect, useRef } from 'react';
-import login from '../Assets/loginfinal.json';
+import login from '../Assets/signinfinale.json';
 import Lottie from 'lottie-react'; 
 
 
@@ -15,7 +15,7 @@ export default function Login() {
     const [formData,setFormData] = useState({})
     const [SigninUser,{error,loading,data}]= useMutation(LOGIN_USER)
 
-    if(loading) return <h1>Loading</h1>
+    if(loading) return <div className="loading" style={{textAlign:'center',marginTop:'15em',}}><h1>Loading</h1> </div>
     if(data){
         localStorage.setItem("token",data.user.token)
         navigate('/home')
@@ -51,7 +51,7 @@ export default function Login() {
         <>
 
         <div className="wholepage" style={{display:'flex',flexDirection:'column'}}>
-        <div className="leftpart" style={{width:'30em',marginLeft:'10em'}}>
+        <div className="leftpart" style={{width:'30em',marginLeft:'10em',top:'20em'}}>
         <Lottie animationData={login} />
         </div>
 
