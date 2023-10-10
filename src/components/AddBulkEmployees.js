@@ -23,7 +23,9 @@ function AddBulkEmployee() {
     fileInputRef.current.click();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (bulkUserInput) => {
+    console.log("🚀 ~ file: AddBulkEmployees.js:27 ~ handleSubmit ~ bulkUserInput:", bulkUserInput)
+
     bulkUserCreate({
       context: {
         headers: {
@@ -34,35 +36,7 @@ function AddBulkEmployee() {
 
       variables: {
         //   Need to put the Query variable as provided in the documentation
-        bulkUserInput: [
-          {
-            employeeCode: "098865445678",
-            firstName: "RAJ",
-            lastName: "PAL",
-            email: "paul123@gmail.com",
-            sex: "male",
-            username: "0987654321pal",
-            role: "user",
-          },
-          {
-            employeeCode: "12343245e2890",
-            firstName: "RAJ",
-            lastName: "PAL",
-            email: "paul098765098765678@gmail.com",
-            sex: "male",
-            username: "pal4567899876",
-            role: "user",
-          },
-          {
-            employeeCode: "34567852352343",
-            firstName: "RAJ",
-            lastName: "PAL",
-            email: "paul098987654567821@gmail.com",
-            sex: "male",
-            username: "dilipe89r9yr80",
-            role: "user",
-          },
-        ],
+        bulkUserInput
       },
     });
   };
@@ -102,7 +76,7 @@ function AddBulkEmployee() {
       setErrorMessage("Thank you for uploading the file");
       console.log("Functional Bulk User Input:", parsedData);
 
-      handleSubmit();
+      handleSubmit({bulkUserInput: parsedData});
       console.log(
         "🚀 ~ file: AddBulkEmployees.js:99 ~ readFile ~ handleSubmit:"
       );
