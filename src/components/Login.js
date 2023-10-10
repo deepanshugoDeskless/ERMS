@@ -77,22 +77,22 @@ export default function Login() {
             // borderRadius: '30px', /* Rounded corners */
             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)', /* Box shadow for a subtle elevation effect */
             transition: 'backgroundColor 0.3s ease, transform 0.3s ease', /* Add transitions */
-            marginTop:'-28em',
+            marginTop:'-27em',
             marginLeft:'55em',
           }}>
             {
                 error &&
-                <div className="red card-panel">{error.message}</div>
+                <div className="red card-panel" style={{marginTop:'-2em'}}>{error.message}</div>
             }
             <img style={{
     maxWidth: '30%',
     height: '20em',
     marginLeft: '0em',
-    marginTop:'-12em'
+    marginTop:'-7em'
   }} src="https://godeskless.com/wp-content/uploads/2023/05/icon-q2.svg">
       </img>
-             <h5 style={{marginTop:'-60px',marginLeft:'0px'}}> Reimburesment Portal </h5>
-            <h5 style={{marginTop:'25px',marginBottom:'30px'}}>Login! </h5>
+             <h5 style={{marginTop:'-75px',marginLeft:'0px'}}> Reimburesment Portal </h5>
+            <h5 style={{marginTop:'15px',marginBottom:'30px'}}>Login! </h5>
             <form onSubmit={handleSubmit}>
                 <input
                  type="email" 
@@ -101,7 +101,9 @@ export default function Login() {
                  onChange={handleChange}
                  required
                  style={{
-                    marginTop: '10px'
+                    marginTop: '10px',
+                    border:'2px solid #cc3366',
+                    borderRadius:'6px'
                 }}
                  />
                 <input
@@ -111,7 +113,9 @@ export default function Login() {
                  onChange={handleChange}
                  required
                  style={{
-                    marginTop: '40px'
+                    marginTop: '40px',
+                    border:'2px solid #cc3366',
+                    borderRadius:'6px'
                 }}
                  />
                  <button className="btn #673ab7 deep-purple" type="submit" style={{
@@ -120,7 +124,8 @@ export default function Login() {
                      position: 'relative',
                      top: '50px',
                      left: '15px',
-                     width:'200px'
+                     width:'200px',
+                     marginTop:'-10px'
                      
                  }}>Login</button>
             </form>

@@ -57,62 +57,76 @@ export default function Signup() {
       {error && <div className="red card-panel">{error.message}</div>}
 
       {data && data.user && (
-        <div className="green card-panel">
+        <div className="green card-panel" style={{padding:'-5em'}}>
           {data.user.firstName} is Signed Up. You can login now!
         </div>
       )}
+      <img style={{
+    maxWidth: '30%',
+    height: '20em',
+    marginLeft: '0em',
+    marginTop:'0em'
+  }} src="https://godeskless.com/wp-content/uploads/2023/05/icon-q2.svg">
+      </img>
       <h5>Signup!!</h5>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="First Name"
+          placeholder="                         First Name"
           name="firstName"
           onChange={handleChange}
-          required
+          required style={{border:'2px solid #cc3366',
+          borderRadius:'6px'}}
         />
         <input
           type="text"
-          placeholder="Last Name"
+          placeholder="                           Last Name"
           name="lastName"
           onChange={handleChange}
-          required
+          required style={{border:'2px solid #cc3366',
+          borderRadius:'6px'}}
         />
         <input
           type="email"
-          placeholder="email"
+          placeholder="                               email"
           name="email"
           onChange={handleChange}
-          required
+          required style={{border:'2px solid #cc3366',
+          borderRadius:'6px'}}
         />
         <input
           type="text"
-          placeholder="Username"
+          placeholder="                             Username"
           name="username"
           onChange={handleChange}
-          required
+          required style={{border:'2px solid #cc3366',
+          borderRadius:'6px'}}
         />
         <input
           type="text"
-          placeholder="EmployeeID"
+          placeholder="                           EmployeeID"
           name="employeeCode"
           onChange={handleChange}
-          required
+          required style={{border:'2px solid #cc3366',
+          borderRadius:'6px'}}
         />
         <input
           type="password"
-          placeholder="password"
+          placeholder="                             password"
           name="password"
           onChange={handleChange}
-          required
+          required style={{border:'2px solid #cc3366',
+          borderRadius:'6px'}}
         />
         <input
           type="password"
-          placeholder="confirm password"
+          placeholder="                       confirm password"
           name="password"
           onChange={handleChange}
-          required
+          required style={{border:'2px solid #cc3366',
+          borderRadius:'6px'}}
         />
-        <button className="btn #673ab7 deep-purple" type="submit">
+        <button className="btn #673ab7 deep-purple" type="submit" style={{marginLeft:'8em'}}>
           Submit
         </button>
       </form>
