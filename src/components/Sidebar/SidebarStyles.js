@@ -94,6 +94,7 @@ export const SidebarContainer = styled.div`
   transition: width 350ms ease;
   border-right: 1px solid #d4d8dd;
   overflow-x: hidden;
+  margin-top: -1.2em;
   ${({ displaySidebar }) =>
     displaySidebar && "box-shadow: 8px 0px 12px 0px rgba(0,0,0,0.1)"};
   ${ItemWrapper} {

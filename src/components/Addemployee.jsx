@@ -191,8 +191,12 @@
 // }
 
 // export default exceltojson;
+
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
 class ExcelToJson extends React.Component {
   constructor(props) {
@@ -200,6 +204,9 @@ class ExcelToJson extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       file: "",
+      jsonData: [],
+      displayTable: false,
+      errorMessage: "Please Enter Excel File",
     };
   }
 
@@ -212,17 +219,19 @@ class ExcelToJson extends React.Component {
     e.preventDefault();
     var file = e.target.files[0];
     console.log(file);
-    this.setState({ file });
-
-    console.log(this.state.file);
+    this.setState({ file, errorMessage: null }); // Clear error message when a file is selected
   }
 
   readFile() {
     var f = this.state.file;
+    if (!f) {
+      // If no file is selected, set an error message
+      this.setState({ errorMessage: "No file selected" });
+      return;
+    }
     var name = f.name;
     const reader = new FileReader();
     reader.onload = (evt) => {
-      // evt = on_file_select event
       /* Parse data */
       const bstr = evt.target.result;
       const wb = XLSX.read(bstr, { type: "binary" });
@@ -232,23 +241,17 @@ class ExcelToJson extends React.Component {
       /* Convert array of arrays */
       const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
       /* Update state */
-      console.log("Data>>>" + data);// shows that excel data is read
-      const jsonBulk = JSON.parse(this.convertToJson(data));
-      var jsonBulkNew = {
-        "bulkUserInput" : jsonBulk
-      }
-      console.log(this.convertToJson(data)); // shows data in json format
-      console.log(jsonBulk); // shows data in json format
-      console.log(jsonBulkNew); // shows data in json format
+      const jsonData = this.convertToJson(data);
+      this.setState({ jsonData, displayTable: true, errorMessage: "Thank you for uploading the file" }, () => {
+        console.log("Bulk User Input:", this.state.jsonData);
+      });
     };
     reader.readAsBinaryString(f);
   }
 
   convertToJson(csv) {
     var lines = csv.split("\n");
-
     var result = [];
-
     var headers = lines[0].split(",");
 
     for (var i = 1; i < lines.length; i++) {
@@ -262,32 +265,221 @@ class ExcelToJson extends React.Component {
       result.push(obj);
     }
 
-    //return result; //JavaScript object
-    return JSON.stringify(result); //JSON
+    return result;
   }
 
   render() {
+    const { jsonData, displayTable, errorMessage } = this.state;
+
+    const tableStyle = {
+      fontSize: "9px",
+      borderCollapse: "collapse",
+      overflowX: "auto",
+      minWidth: "100%",
+    };
+
+    const tableContainerStyle = {
+      maxHeight: "400px",
+      overflowY: "auto",
+      overflowX: "auto",
+    };
+
+    const thStyle = {
+      border: "1px solid #ddd",
+      padding: "6px",
+      textAlign: "left",
+    };
+
+    const tdStyle = {
+      border: "1px solid #ddd",
+      padding: "6px",
+      textAlign: "left",
+    };
+
+    const horizontalScrollStyle = {
+      overflowX: "auto",
+    };
+
     return (
-      <div>
+      <div className="addemployee">
+        <div className="h1">Add Employees</div>
+        <Stack sx={{ width: "100%", marginTop: "-05%" }} spacing={2}>
+          {errorMessage ? (
+            <Alert severity="error">{errorMessage}</Alert>
+          ) : (
+            <Alert severity="success">Thank you for uploading the file</Alert>
+          )}
+        </Stack>
         <input
           type="file"
           id="file"
           ref="fileUploader"
           onChange={this.filePathset.bind(this)}
+          className="uploadfile"
         />
-        <button
-          onClick={() => {
-            this.readFile();
-          }}
-        >
-          Read File
-        </button>
+        <Stack spacing={2} direction="row">
+          <Button
+            variant="contained"
+            onClick={() => {
+              this.readFile();
+            }}
+            style={{ fontSize: "medium", marginLeft: "30%" }}
+          >
+            Submit File
+          </Button>
+        </Stack>
+
+        {displayTable && (
+          <div style={tableContainerStyle}>
+            <div style={horizontalScrollStyle}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    {Object.keys(jsonData[0]).map((key) => (
+                      <th key={key} style={thStyle}>
+                        {key}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {jsonData.map((row, index) => (
+                    <tr key={index}>
+                      {Object.values(row).map((value, index) => (
+                        <td key={index} style={tdStyle}>
+                          {value}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 }
 
 export default ExcelToJson;
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import * as XLSX from "xlsx";
+// import Alert from '@mui/material/Alert';
+// import Stack from '@mui/material/Stack';
+// import Button from '@mui/material/Button';
+
+// class ExcelToJson extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleClick = this.handleClick.bind(this);
+//     this.state = {
+//       file: "",
+//     };
+//   }
+
+//   handleClick(e) {
+//     this.refs.fileUploader.click();
+//   }
+
+//   filePathset(e) {
+//     e.stopPropagation();
+//     e.preventDefault();
+//     var file = e.target.files[0];
+//     console.log(file);
+//     this.setState({ file });
+
+//     console.log(this.state.file);
+//   }
+
+//   readFile() {
+//     var f = this.state.file;
+//     var name = f.name;
+//     const reader = new FileReader();
+//     reader.onload = (evt) => {
+//       // evt = on_file_select event
+//       /* Parse data */
+//       const bstr = evt.target.result;
+//       const wb = XLSX.read(bstr, { type: "binary" });
+//       /* Get first worksheet */
+//       const wsname = wb.SheetNames[0];
+//       const ws = wb.Sheets[wsname];
+//       /* Convert array of arrays */
+//       const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+//       /* Update state */
+//       console.log("Data>>>" + data);// shows that excel data is read
+//       const jsonBulk = JSON.parse(this.convertToJson(data));
+//       var jsonBulkNew = {
+//         "bulkUserInput" : jsonBulk
+//       }
+//       console.log(this.convertToJson(data)); // shows data in json format
+//       console.log(jsonBulk); // shows data in json format
+//       console.log(jsonBulkNew); // shows data in json format
+//     };
+//     reader.readAsBinaryString(f);
+//   }
+
+//   convertToJson(csv) {
+//     var lines = csv.split("\n");
+
+//     var result = [];
+
+//     var headers = lines[0].split(",");
+
+//     for (var i = 1; i < lines.length; i++) {
+//       var obj = {};
+//       var currentline = lines[i].split(",");
+
+//       for (var j = 0; j < headers.length; j++) {
+//         obj[headers[j]] = currentline[j];
+//       }
+
+//       result.push(obj);
+//     }
+
+//     //return result; //JavaScript object
+//     return JSON.stringify(result); //JSON
+//   }
+
+//   render() {
+//     return (
+//       <div className="addemployee">
+//         <div className="h1">Add Employees</div>
+//         <Stack sx={{ width: '100%' , marginTop:'-05%'}} spacing={2}>
+//       <Alert severity="info">Please Enter the Employee Excel Sheet</Alert>
+//     </Stack>
+//         <input
+//           type="file"
+//           id="file"
+//           ref="fileUploader"
+//           onChange={this.filePathset.bind(this)}
+//           className="uploadfile"
+//         />
+//         <Stack spacing={2} direction="row">
+//           <Button variant="contained"
+//           onClick={() => {
+//             this.readFile();
+//           }} style={{fontSize:'medium', marginLeft}}> Submit File
+//         </Button>
+//         </Stack>
+
+//       </div>
+//     );
+//   }
+// }
+
+// export default ExcelToJson;
 // // import { useState } from "react";
 // // import * as XLSX from 'xlsx';
 // // import Pagination from '@mui/material/Pagination';
@@ -358,36 +550,8 @@ export default ExcelToJson;
 // //       </div>
 // //       {/* form */}
 
-// //       {/* view data */}
-// //       <div className="viewer">
-// //         {excelData?(
-// //           <div className="table-responsive">
-// //             <table className="table">
-
-// //               <thead>
-// //                 <tr>
-// //                   {Object.keys(excelData[0]).map((key)=>(
-// //                     <th key={key}>{key}</th>
-// //                   ))}
-// //                 </tr>
-// //               </thead>
-
-// //               <tbody>
-// //                 {excelData.map((individualExcelData, index)=>(
-// //                   <tr key={index}>
-// //                     {Object.keys(individualExcelData).map((key)=>(
-// //                       <td key={key}>{individualExcelData[key]}</td>
-// //                     ))}
-// //                   </tr>
-// //                 ))}
-// //               </tbody>
-
-// //             </table>
-// //           </div>
-// //         ):(
-// //           <div>No File is uploaded yet!</div>
-// //         )}
-// //       </div>
+      {/* view data */}
+      
 
 // //     </div>
     

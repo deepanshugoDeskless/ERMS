@@ -28,13 +28,13 @@ function App() {
           <NavBar></NavBar> 
           <Sidebar>
           <Routes>
-          <Route path="/" element={<DynamicItem page="homepage" />} />
+          <Route path="/" element={<DynamicItem page={< Home />}/>} />
           {dummyData &&
             dummyData.map((item, index) => (
               <Route
                 key={index}
                 path={item.path}
-                element={<DynamicItem page={item.name} />}
+                element={<DynamicItem page={item.page} />}
               />
             ))}
             
