@@ -42,7 +42,7 @@ export default function Sidebar({ children }) {
                 displaySidebar={displaySidebar}
                 className="app__brand__text"
               >
-                Frest
+                Godeskless
               </SidebarBrand>
             </SidebarLogo>
             {/* Logo wrapper ends */}

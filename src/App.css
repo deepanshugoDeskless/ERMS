@@ -70,8 +70,8 @@
 .app__brand__text {
   font-size: 2rem;
   font-weight: 700;
-  color: #5a8dee;
-  margin-left: 0.5rem;
+  color: #2e2b81;
+  margin-left: -1rem;
 }
 
 /* Sidebar toggle button starts */
@@ -80,10 +80,11 @@
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
-  background-color: #5f97ef;
+  background-color: #eb0c70;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 1em;
 }
 
 .outer__circle::after {
@@ -102,7 +103,7 @@
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 50%;
-  background-color: #5f97ef;
+  background-color: #2e2b81;
   z-index: 100;
 }
 
