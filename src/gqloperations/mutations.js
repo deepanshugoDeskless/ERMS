@@ -20,3 +20,9 @@ export const BULK_UPLOAD_USER = gql`
     String: bulkUserCreate(bulkUserInput: $bulkUserInput)
   }
 `;
+
+export const GENERATE_OTP = gql`
+  mutation GenerateOTP($email: String) {
+    String: sendOtp(email: $email)
+  }
+`;
