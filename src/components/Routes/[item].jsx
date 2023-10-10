@@ -1,5 +1,6 @@
 // src/components/Routes/[item].jsx
 import { Link } from "react-router-dom";
+import Home from "../Home";
 import { ArrowBackIcon } from "../Icons";
 
 const Item = (props) => {

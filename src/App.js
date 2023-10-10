@@ -37,6 +37,7 @@ function App() {
                 element={<DynamicItem page={item.name} />}
               />
             ))}
+            
         </Routes>
       </Sidebar>
         </>
