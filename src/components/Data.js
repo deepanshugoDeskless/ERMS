@@ -18,6 +18,7 @@ import {
 import Addemployee from "./Addemployee";
 import Home from "./Home";
 import Team from "./team";
+import AddBulkEmployee from "./AddBulkEmployees";
 
 export const SIDEBAR_DATA = [
   {
@@ -44,7 +45,7 @@ export const SIDEBAR_DATA = [
   {
     id: 4,
     name: "Add Employees",
-    page: <Addemployee />,
+    page: <AddBulkEmployee/>,
     path: "users",
     icon: <BulkUpload />,
   },
