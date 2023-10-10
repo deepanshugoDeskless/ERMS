@@ -16,8 +16,8 @@ export const routes = [
   { path: "/addemployee", element: <Addemployee /> },
   { path: "/*", element: <Pagenotfound /> },
   { path: "", element: <Welcome /> },
+  {path:"/contacts", element: <Welcome></Welcome>}
 ];
-
 export const publicRoutes = [
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },

@@ -145,7 +145,7 @@ const Sidebar = () => {
             />
             <Item
               title="Add Employee"
-              to="/addemployee"
+              to="/contacts"
               icon={<PersonAddAltIcon />}
               selected={selected}
               setSelected={setSelected}

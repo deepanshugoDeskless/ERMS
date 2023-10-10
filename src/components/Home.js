@@ -1,7 +1,7 @@
 import React from "react";
 import { GET_ALL_QUOTES } from "../gqloperations/queries";
 import { useQuery } from "@apollo/client";
-import Sidebar from "../scenes/global/Sidebar";
+import Sidebar from "../scenes/global/Sidebars";
 import { ColorModeContext, useMode } from "../theme";
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
