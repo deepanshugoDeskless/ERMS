@@ -23,7 +23,7 @@ function AddBulkEmployee() {
     fileInputRef.current.click();
   };
 
-  const handleSubmit = (bulkUserInput) => {
+  const handleSubmit = ({bulkUserInput}) => {
     console.log("🚀 ~ file: AddBulkEmployees.js:27 ~ handleSubmit ~ bulkUserInput:", bulkUserInput)
 
     bulkUserCreate({
