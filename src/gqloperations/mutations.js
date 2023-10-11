@@ -1,16 +1,22 @@
-import {gql} from '@apollo/client'
+import { gql } from "@apollo/client";
 export const SIGNUP_USER = gql`
-    mutation createUser($userNew:UserInput!){
-        user:signupUser(userNew:$userNew){ 
-           firstName
-        }
+  mutation createUser($userNew: UserInput!) {
+    user: signupUser(userNew: $userNew) {
+      firstName
     }
-`
+  }
+`;
 
 export const LOGIN_USER = gql`
-mutation SigninUser($userSignin:UserSigninInput!){
-    user:signinUser(userSignin:$userSignin){ 
+  mutation SigninUser($userSignin: UserSigninInput!) {
+    user: signinUser(userSignin: $userSignin) {
       token
     }
   }
-  `
+`;
+
+export const BULK_UPLOAD_USER = gql`
+  mutation BulkUserCreate($bulkUserInput: [UserElement]) {
+    String: bulkUserCreate(bulkUserInput: $bulkUserInput)
+  }
+`;

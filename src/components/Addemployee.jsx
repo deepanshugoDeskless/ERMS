@@ -1,100 +1,173 @@
-import { useState } from "react";
-import * as XLSX from 'xlsx';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import React, { useState } from "react";
+import * as XLSX from "xlsx";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
-function App() {
-
-  // onchange states
-  const [excelFile, setExcelFile] = useState(null);
-  const [typeError, setTypeError] = useState(null);
-
-  // submit state
-  const [excelData, setExcelData] = useState(null);
-
-  // onchange event
-  const handleFile=(e)=>{
-    let fileTypes = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/csv'];
-    let selectedFile = e.target.files[0];
-    if(selectedFile){
-      if(selectedFile&&fileTypes.includes(selectedFile.type)){
-        setTypeError(null);
-        let reader = new FileReader();
-        reader.readAsArrayBuffer(selectedFile);
-        reader.onload=(e)=>{
-          setExcelFile(e.target.result);
-        }
-      }
-      else{
-        setTypeError('Please select only excel file types');
-        setExcelFile(null);
-      }
-    }
-    else{
-      console.log('Please select your file');
-    }
+class ExcelToJson extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      file: "",
+      jsonData: [],
+      displayTable: false,
+      errorMessage: "Please Enter Excel File",
+    };
   }
-  
-  // submit event
-  const handleFileSubmit=(e)=>{
+
+  handleClick(e) {
+    this.refs.fileUploader.click();
+  }
+
+  filePathset(e) {
+    e.stopPropagation();
     e.preventDefault();
-    if(excelFile!==null){
-      const workbook = XLSX.read(excelFile,{type: 'buffer'});
-      const worksheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[worksheetName];
-      const data = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(data.slice(0,1500000));
-    }
+    var file = e.target.files[0];
+    console.log(file);
+    this.setState({ file, errorMessage: null }); // Clear error message when a file is selected
   }
 
-  return (
-    <div className="wrapper">
+  readFile() {
+    var f = this.state.file;
+    if (!f) {
+      // If no file is selected, set an error message
+      this.setState({ errorMessage: "No file selected" });
+      return;
+    }
+    var name = f.name;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      /* Parse data */
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      /* Get first worksheet */
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      /* Convert array of arrays */
+      const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+      /* Update state */
+      const jsonData = this.convertToJson(data);
+      this.setState({ jsonData, displayTable: true, errorMessage: "Thank you for uploading the file" }, () => {
+        console.log("Bulk User Input:", this.state.jsonData);
+        // Need to call the GraphQL API with the data 
 
-      <h3>Upload Employee Excel Sheet</h3>
+      });
+    };
+    reader.readAsBinaryString(f);
+  }
 
-      {/* form */}
-      <form className="form-group custom-form" onSubmit={handleFileSubmit}>
-        <input type="file" className="form-control" required onChange={handleFile} />
-        <button type="submit" className="btn btn-success btn-md">UPLOAD</button>
-        {typeError&&(
-          <div className="alert alert-danger" role="alert">{typeError}</div>
-        )}
-      </form>
+  convertToJson(csv) {
+    var lines = csv.split("\n");
+    var result = [];
+    var headers = lines[0].split(",");
 
-      {/* view data */}
-      <div className="viewer">
-        {excelData?(
-          <div className="table-responsive">
-            <table className="table">
+    for (var i = 1; i < lines.length; i++) {
+      var obj = {};
+      var currentline = lines[i].split(",");
 
-              <thead>
-                <tr>
-                  {Object.keys(excelData[0]).map((key)=>(
-                    <th key={key}>{key}</th>
-                  ))}
-                </tr>
-              </thead>
+      for (var j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentline[j];
+      }
 
-              <tbody>
-                {excelData.map((individualExcelData, index)=>(
-                  <tr key={index}>
-                    {Object.keys(individualExcelData).map((key)=>(
-                      <td key={key}>{individualExcelData[key]}</td>
+      result.push(obj);
+    }
+
+    return result;
+  }
+
+  render() {
+    const { jsonData, displayTable, errorMessage } = this.state;
+
+    const tableStyle = {
+      fontSize: "9px",
+      borderCollapse: "collapse",
+      overflowX: "auto",
+      minWidth: "100%",
+    };
+
+    const tableContainerStyle = {
+      maxHeight: "400px",
+      overflowY: "auto",
+      overflowX: "auto",
+    };
+
+    const thStyle = {
+      border: "1px solid #ddd",
+      padding: "6px",
+      textAlign: "left",
+    };
+
+    const tdStyle = {
+      border: "1px solid #ddd",
+      padding: "6px",
+      textAlign: "left",
+    };
+
+    const horizontalScrollStyle = {
+      overflowX: "auto",
+    };
+
+    return (
+      <div className="addemployee">
+        <div className="h1">Add Employees</div>
+        <Stack sx={{ width: "100%", marginTop: "-05%" }} spacing={2}>
+          {errorMessage ? (
+            <Alert severity="error">{errorMessage}</Alert>
+          ) : (
+            <Alert severity="success">Thank you for uploading the file</Alert>
+          )}
+        </Stack>
+        <input
+          type="file"
+          id="file"
+          ref="fileUploader"
+          onChange={this.filePathset.bind(this)}
+          className="uploadfile"
+        />
+        <Stack spacing={2} direction="row">
+          <Button
+            variant="contained"
+            onClick={() => {
+              this.readFile();
+            }}
+            style={{ fontSize: "medium", marginLeft: "30%" }}
+          >
+            Submit File
+          </Button>
+        </Stack>
+
+        {displayTable && (
+          <div style={tableContainerStyle}>
+            <div style={horizontalScrollStyle}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    {Object.keys(jsonData[0]).map((key) => (
+                      <th key={key} style={thStyle}>
+                        {key}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-
-            </table>
+                </thead>
+                <tbody>
+                  {jsonData.map((row, index) => (
+                    <tr key={index}>
+                      {Object.values(row).map((value, index) => (
+                        <td key={index} style={tdStyle}>
+                          {value}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        ):(
-          <div>No File is uploaded yet!</div>
         )}
       </div>
-
-    </div>
-    
-  );
+    );
+  }
 }
 
-export default App;
+export default ExcelToJson;

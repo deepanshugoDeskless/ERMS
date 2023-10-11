@@ -6,8 +6,14 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "./Header";
+import { ColorModeContext,useMode } from "../../src/theme";
+import { ThemeProvider } from "@emotion/react";
+import { CssBaseline } from "@mui/material";
+import { useState } from "react";
 
 const Team = () => {
+  const [colorMode] = useMode();
+  const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
@@ -69,6 +75,10 @@ const Team = () => {
   ];
 
   return (
+    <>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
     <Box m="20px">
       <Header title="TEAM" subtitle="Managing the Team Members" />
       <Box
@@ -103,6 +113,9 @@ const Team = () => {
         <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
       </Box>
     </Box>
+    </ThemeProvider>
+    </ColorModeContext.Provider>
+    </>
   );
 };
 
