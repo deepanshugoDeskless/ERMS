@@ -104,11 +104,11 @@ const ImageWithText = () => {
       <img style={{
     maxWidth: '80%',
     height: '20em',
-    marginLeft: '50px',
+    marginLeft: '45px',
     marginTop:'50px'
   }} src="https://godeskless.com/wp-content/uploads/2023/05/icon-q2.svg">
       </img>
-      <h2 className='font-link3'> Godeskless</h2>
+      <h2 className='font-link3' style={{position:'absolute',left:'0em',top:'09em'}}> Godeskless</h2>
       </div>
       <div style={textContainerStyle}>
         <h2 className='font-link'> Welcome to GoDeskless Employee Reimbursement Portal</h2>
@@ -118,7 +118,7 @@ const ImageWithText = () => {
                 autoStart: true,
                 loop: true,
                 delay : 40,
-                strings: ["Empowering employees with seamless reimbursement management at GoDeskless.","Log in, get reimbursed. GoDeskless keeps it simple!","New hire? Signup, Activate, Reimburse, and thrive with GoDeskless!"]
+                strings: ["Empowering employees with seamless reimbursement at GoDeskless.","Log in, get reimbursed. GoDeskless keeps it simple!","New hire? Signup, Activate, Reimburse, and thrive with GoDeskless!"]
             }}/>
         </h5>
         <div className="buttonsforloginsignup">
