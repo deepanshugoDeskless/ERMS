@@ -5,15 +5,18 @@ import signup from "../Assets/signup.json";
 import Lottie from "lottie-react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { VALIDATE_OTP } from "../gqloperations/mutations";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
   const [emailData, setEmailData] = useState("");
   const [signupUser, { data, loading, error }] = useMutation(SIGNUP_USER);
   const [sendOtp, { otpData, otpLoading, otpError }] = useMutation(GENERATE_OTP);
+  const [reSetPassword,{otpvalid,otpchecking,otpverifyError}]=useMutation(VALIDATE_OTP);
 
   // State to manage OTP input fields
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [completeOtp, setCompleteOtp] = useState("");
   const [displayOtp, setDisplayOtp] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -28,12 +31,20 @@ export default function Signup() {
     });
   };
 
+  
   // Handle OTP input changes
   const handleOtpChange = (e, index) => {
     const newOtp = [...otp];
     newOtp[index] = e.target.value;
     setOtp(newOtp);
+    var password = "";
+    newOtp.forEach((dig) => {
+        password = password + dig;
+    })
 
+    setCompleteOtp(password)
+    // console.log("🚀 ~ file: Signup.js:38 ~ handleOtpChange ~ completeOtp:", newOtp)
+    
     // Automatically move to the next digit field
     if (index < 5 && e.target.value !== "") {
       document.getElementById(`otpInput-${index + 1}`).focus();
@@ -69,6 +80,18 @@ export default function Signup() {
       if (password === confirmPassword) {
         // Passwords match, continue with activation logic
         console.log("Activation logic here");
+
+        reSetPassword({
+          variables:{
+            reSetPasswordInput:{
+              email: emailData,
+              password: password,
+              otp: completeOtp,
+            }
+          }
+        })
+
+
       } else {
         // Passwords do not match, show an error or handle accordingly
         alert("Passwords do not match.");
@@ -213,6 +236,7 @@ export default function Signup() {
                   type="text"
                   value={digit}
                   maxLength="1"
+                  
                   onChange={(e) => handleOtpChange(e, index)}
                   style={{
                     width: "2em",

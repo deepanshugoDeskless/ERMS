@@ -26,3 +26,10 @@ export const GENERATE_OTP = gql`
     String: sendOtp(email: $email)
   }
 `;
+
+export const VALIDATE_OTP = gql`
+mutation ReSetUserPassword($reSetPasswordInput: ReSetPasswordInput) {
+  String: reSetPassword(reSetPasswordInput: $reSetPasswordInput)
+}
+`;
+
