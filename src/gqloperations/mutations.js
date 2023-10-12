@@ -33,3 +33,18 @@ mutation ReSetUserPassword($reSetPasswordInput: ReSetPasswordInput) {
 }
 `;
 
+export const GET_TEAM_MEMBERS = gql`
+query GetAllUsers {
+  users {
+    _id
+    firstName
+    lastName
+    email
+    role
+    username
+    employeeCode
+    sex
+  }
+}`;
+
+

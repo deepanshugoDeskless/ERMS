@@ -8,7 +8,7 @@ import login from '../Assets/signinfinale.json';
 import Lottie from 'lottie-react'; 
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-
+import loginupdated from '../Assets/loginupdated.json'
 
 export default function Login() {
 
@@ -53,8 +53,8 @@ export default function Login() {
         <>
 
         <div className="wholepage" style={{display:'flex',flexDirection:'column'}}>
-        <div className="leftpart" style={{width:'30em',marginLeft:'10em',top:'20em'}}>
-        <Lottie animationData={login} />
+        <div className="leftpart" style={{width:'30em',marginLeft:'10em'}}>
+        <Lottie style={{position:'absolute',width:'35%',top:'09em'}} animationData={loginupdated} />
         </div>
 
 
@@ -340,3 +340,4 @@ export default function Login() {
 //     </>
 //   );
 // }
+

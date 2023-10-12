@@ -1,9 +1,12 @@
+mockData.js
+
 import {tokens} from "../../theme"
 
 export const mockDataTeam = [
   {
     id: 1,
-    name: "Jon Snow",
+    firstname: "Jon",
+    lastname:"Snow",
     email: "jonsnow@gmail.com",
     age: 35,
     phone: "(665)121-5454",
@@ -11,7 +14,8 @@ export const mockDataTeam = [
   },
   {
     id: 2,
-    name: "Cersei Lannister",
+    firstname: "Cersei",
+    lastname:"Lannister",
     email: "cerseilannister@gmail.com",
     age: 42,
     phone: "(421)314-2288",
@@ -19,7 +23,8 @@ export const mockDataTeam = [
   },
   {
     id: 3,
-    name: "Jaime Lannister",
+    firstname: "Jaime",
+    lastname:"Lannister",
     email: "jaimelannister@gmail.com",
     age: 45,
     phone: "(422)982-6739",
@@ -27,7 +32,8 @@ export const mockDataTeam = [
   },
   {
     id: 4,
-    name: "Anya Stark",
+    firstname: "Anya",
+    lastname:"Stark",
     email: "anyastark@gmail.com",
     age: 16,
     phone: "(921)425-6742",
@@ -35,7 +41,8 @@ export const mockDataTeam = [
   },
   {
     id: 5,
-    name: "Daenerys Targaryen",
+    firstname: "Daenerys",
+    lastname:"Targaryen",
     email: "daenerystargaryen@gmail.com",
     age: 31,
     phone: "(421)445-1189",
@@ -43,7 +50,8 @@ export const mockDataTeam = [
   },
   {
     id: 6,
-    name: "Ever Melisandre",
+    firstname: "Ever",
+    lastname:"Melisandre",
     email: "evermelisandre@gmail.com",
     age: 150,
     phone: "(232)545-6483",
@@ -51,7 +59,8 @@ export const mockDataTeam = [
   },
   {
     id: 7,
-    name: "Ferrara Clifford",
+    firstname: "Ferrara",
+    lastname:"Clifford",
     email: "ferraraclifford@gmail.com",
     age: 44,
     phone: "(543)124-0123",
@@ -59,7 +68,8 @@ export const mockDataTeam = [
   },
   {
     id: 8,
-    name: "Rossini Frances",
+    firstname: "Rossini",
+    lastname:"Frances",
     email: "rossinifrances@gmail.com",
     age: 36,
     phone: "(222)444-5555",
@@ -67,7 +77,8 @@ export const mockDataTeam = [
   },
   {
     id: 9,
-    name: "Harvey Roxie",
+    firstname: "Harvey",
+    lastname:"Roxie",
     email: "harveyroxie@gmail.com",
     age: 65,
     phone: "(444)555-6239",
@@ -78,7 +89,8 @@ export const mockDataTeam = [
 export const mockDataContacts = [
   {
     id: 1,
-    name: "Jon Snow",
+    firstname: "Jon Snow",
+    lastname:"",
     email: "jonsnow@gmail.com",
     age: 35,
     phone: "(665)121-5454",
@@ -89,7 +101,8 @@ export const mockDataContacts = [
   },
   {
     id: 2,
-    name: "Cersei Lannister",
+    firstname: "Cersei Lannister",
+    lastname:"",
     email: "cerseilannister@gmail.com",
     age: 42,
     phone: "(421)314-2288",
@@ -100,7 +113,8 @@ export const mockDataContacts = [
   },
   {
     id: 3,
-    name: "Jaime Lannister",
+    firstname: "Jaime Lannister",
+    lastname:"",
     email: "jaimelannister@gmail.com",
     age: 45,
     phone: "(422)982-6739",
@@ -111,7 +125,8 @@ export const mockDataContacts = [
   },
   {
     id: 4,
-    name: "Anya Stark",
+    firstname: "Anya Stark",
+    lastname:"",
     email: "anyastark@gmail.com",
     age: 16,
     phone: "(921)425-6742",
@@ -122,7 +137,8 @@ export const mockDataContacts = [
   },
   {
     id: 5,
-    name: "Daenerys Targaryen",
+    firstname: "Daenerys Targaryen",
+    lastname:"",
     email: "daenerystargaryen@gmail.com",
     age: 31,
     phone: "(421)445-1189",
@@ -133,7 +149,8 @@ export const mockDataContacts = [
   },
   {
     id: 6,
-    name: "Ever Melisandre",
+    firstname: "Ever Melisandre",
+    lastname:"",
     email: "evermelisandre@gmail.com",
     age: 150,
     phone: "(232)545-6483",
@@ -144,7 +161,8 @@ export const mockDataContacts = [
   },
   {
     id: 7,
-    name: "Ferrara Clifford",
+    firstname: "Ferrara Clifford",
+    lastname:"",
     email: "ferraraclifford@gmail.com",
     age: 44,
     phone: "(543)124-0123",
@@ -155,7 +173,8 @@ export const mockDataContacts = [
   },
   {
     id: 8,
-    name: "Rossini Frances",
+    firstname: "Rossini Frances",
+    lastname:"",
     email: "rossinifrances@gmail.com",
     age: 36,
     phone: "(222)444-5555",
@@ -166,7 +185,8 @@ export const mockDataContacts = [
   },
   {
     id: 9,
-    name: "Harvey Roxie",
+    firstname: "Harvey Roxie",
+    lastname:"",
     email: "harveyroxie@gmail.com",
     age: 65,
     phone: "(444)555-6239",
@@ -177,7 +197,8 @@ export const mockDataContacts = [
   },
   {
     id: 10,
-    name: "Enteri Redack",
+    firstname: "Enteri Redack",
+    lastname:"",
     email: "enteriredack@gmail.com",
     age: 42,
     phone: "(222)444-5555",
@@ -188,7 +209,8 @@ export const mockDataContacts = [
   },
   {
     id: 11,
-    name: "Steve Goodman",
+    firstname: "Steve Goodman",
+    lastname:"",
     email: "stevegoodmane@gmail.com",
     age: 11,
     phone: "(444)555-6239",
@@ -202,7 +224,8 @@ export const mockDataContacts = [
 export const mockDataInvoices = [
   {
     id: 1,
-    name: "Jon Snow",
+    firstname: "Jon Snow",
+    lastname:"",
     email: "jonsnow@gmail.com",
     cost: "21.24",
     phone: "(665)121-5454",
@@ -210,7 +233,8 @@ export const mockDataInvoices = [
   },
   {
     id: 2,
-    name: "Cersei Lannister",
+    firstname: "Cersei Lannister",
+    lastname:"",
     email: "cerseilannister@gmail.com",
     cost: "1.24",
     phone: "(421)314-2288",
@@ -218,7 +242,8 @@ export const mockDataInvoices = [
   },
   {
     id: 3,
-    name: "Jaime Lannister",
+    firstname: "Jaime Lannister",
+    lastname:"",
     email: "jaimelannister@gmail.com",
     cost: "11.24",
     phone: "(422)982-6739",
@@ -226,7 +251,8 @@ export const mockDataInvoices = [
   },
   {
     id: 4,
-    name: "Anya Stark",
+    firstname: "Anya Stark",
+    lastname:"",
     email: "anyastark@gmail.com",
     cost: "80.55",
     phone: "(921)425-6742",
@@ -234,7 +260,8 @@ export const mockDataInvoices = [
   },
   {
     id: 5,
-    name: "Daenerys Targaryen",
+    firstname: "Daenerys Targaryen",
+    lastname:"",
     email: "daenerystargaryen@gmail.com",
     cost: "1.24",
     phone: "(421)445-1189",
@@ -242,7 +269,8 @@ export const mockDataInvoices = [
   },
   {
     id: 6,
-    name: "Ever Melisandre",
+    firstname: "Ever Melisandre",
+    lastname:"",
     email: "evermelisandre@gmail.com",
     cost: "63.12",
     phone: "(232)545-6483",
@@ -250,7 +278,8 @@ export const mockDataInvoices = [
   },
   {
     id: 7,
-    name: "Ferrara Clifford",
+    firstname: "Ferrara Clifford",
+    lastname:"",
     email: "ferraraclifford@gmail.com",
     cost: "52.42",
     phone: "(543)124-0123",
@@ -258,7 +287,8 @@ export const mockDataInvoices = [
   },
   {
     id: 8,
-    name: "Rossini Frances",
+    firstname: "Rossini Frances",
+    lastname:"",
     email: "rossinifrances@gmail.com",
     cost: "21.24",
     phone: "(222)444-5555",
@@ -1281,3 +1311,4 @@ export const mockGeographyData = [
     value: 171135,
   },
 ];
+

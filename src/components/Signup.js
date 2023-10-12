@@ -6,6 +6,8 @@ import Lottie from "lottie-react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { VALIDATE_OTP } from "../gqloperations/mutations";
+import { useNavigate } from "react-router-dom";
+import Home from "../components/Home";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
@@ -13,6 +15,7 @@ export default function Signup() {
   const [signupUser, { data, loading, error }] = useMutation(SIGNUP_USER);
   const [sendOtp, { otpData, otpLoading, otpError }] = useMutation(GENERATE_OTP);
   const [reSetPassword,{otpvalid,otpchecking,otpverifyError}]=useMutation(VALIDATE_OTP);
+  const navigate = useNavigate();
 
   // State to manage OTP input fields
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -518,3 +521,4 @@ export default function Signup() {
 //     </>
 //   );
 // }
+
