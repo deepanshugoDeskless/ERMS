@@ -12,6 +12,7 @@ import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { useState } from "react";
 
+
 const Team = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);

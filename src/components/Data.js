@@ -26,6 +26,7 @@ import AddBulkEmployee from "./AddBulkEmployees";
 import { AddReimbursement } from "./AddReimbursement";
 import {ApprovedExpenses} from "./ApprovedExpenses";
 import { AddTravel } from "./AddTravel";
+import ClaimReimbursement, {claimReimbursement} from "./claimReimbursement"
 
 
 
@@ -61,8 +62,8 @@ export const SIDEBAR_DATA = [
   {
     id: 5,
     name: "Claim Reimbursement",
-    page: <AddReimbursement />,
-    path: "addreimbursement",
+    page: <ClaimReimbursement />,
+    path: "claimreimbursement",
     icon: <AddmoneyIcon />
   },
   {

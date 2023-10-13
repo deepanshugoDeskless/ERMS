@@ -16,6 +16,11 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 import HistoryIcon from '@mui/icons-material/History';
+import { useMutation, useQuery, gql } from '@apollo/client';
+import {CREATE_REIMBURSEMENT} from '../gqloperations/mutations'
+import { GET_REIMBURSEMENTS } from '../gqloperations/mutations';
+
+
 
 export const AddTravel = () => {
   const [request, setRequest] = useState({
@@ -56,7 +61,36 @@ export const AddTravel = () => {
     setRequest({ ...request, [name]: value });
   };
 
-  // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
+  const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
+    refetchQueries: [{ query: GET_REIMBURSEMENTS }],
+  });
+
+  const handleSubmit = () => {
+    createReimbursement({ variables: { reimbursementNew: request } })
+      .then(() => {
+        // Data submitted successfully, you can perform any additional actions here
+        setRequest({
+          name: '',
+          fromDate: '',
+          toDate: '',
+          description: '',
+          place: '',
+        });
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error(error);
+      });
+  };
+
+  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS);
+
+  if (loading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
+
+  const dataRows = data.reimbursements;
+
+
 const top100Films = [
   { label: 'Travel Expense' },
   { label: 'Food Expense',},
@@ -64,25 +98,25 @@ const top100Films = [
   { label: 'Purchase Expense', },
 ];
 
-const dataRows = [
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+// const dataRows = [
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
+//   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
 
-  // Add more data rows as needed
-];
+//   // Add more data rows as needed
+// ];
 
   
 

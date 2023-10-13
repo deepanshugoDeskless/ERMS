@@ -47,4 +47,35 @@ query GetAllUsers {
   }
 }`;
 
+export const CREATE_REIMBURSEMENT = gql `
+mutation CreateReimbursement($reimbursementNew: ReimbursementInput!) {
+  createReimbursement(input: $reimbursementNew) {
+    id
+    title
+    description
+    type
+    visitLocation
+    noOfDays
+    fromDate
+    toDate
+    askedAmount
+  }
+}
+`
+export const GET_REIMBURSEMENTS = gql `
+query {
+  reimbursements {
+    id
+    fromDate
+    toDate
+    description
+    place
+    status
+    # Adjust the name field if it has a different name in the schema
+    name
+  }
+}
+
+`
+
 
