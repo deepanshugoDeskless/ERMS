@@ -7,8 +7,8 @@ export default function NavBar() {
   return (
     <nav>
       <div className="nav-wrapper " style={{ backgroundColor: "#eb0c70" }}>
-        <Link to="/" className="brand-logo left">
-          GoDeskless ERMS
+        <Link to="/" className="brand-logo left" >
+          goDeskless ERMS
         </Link>
         <ul id="nav-mobile" className="right">
           {token ? (

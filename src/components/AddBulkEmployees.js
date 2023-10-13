@@ -5,6 +5,10 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { BULK_UPLOAD_USER, SIGNUP_USER } from "../gqloperations/mutations";
 import { useMutation } from "@apollo/client";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateField } from '@mui/x-date-pickers/DateField';
 
 function AddBulkEmployee() {
   const [file, setFile] = useState("");
@@ -92,9 +96,9 @@ function AddBulkEmployee() {
   };
 
   const tableStyle = {
-    fontSize: "9px",
+    fontSize: "09px",
     borderCollapse: "collapse",
-    overflowX: "auto",
+    overflowX: "scroll",
     minWidth: "100%",
   };
 
@@ -107,13 +111,13 @@ function AddBulkEmployee() {
   const thStyle = {
     border: "1px solid #ddd",
     padding: "6px",
-    textAlign: "left",
+    textAlign: "center",
   };
 
   const tdStyle = {
     border: "1px solid #ddd",
     padding: "6px",
-    textAlign: "left",
+    textAlign: "center",
   };
 
   const horizontalScrollStyle = {

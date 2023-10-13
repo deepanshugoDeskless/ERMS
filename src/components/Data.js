@@ -53,14 +53,14 @@ export const SIDEBAR_DATA = [
   },
   {
     id: 4,
-    name: "Add Travel",
+    name: "Raise Request",
     page: <AddTravel/>,
     path: "addtravel",
     icon: <TravelIcon />,
   },
   {
     id: 5,
-    name: "Add Reimbursement",
+    name: "Claim Reimbursement",
     page: <AddReimbursement />,
     path: "addreimbursement",
     icon: <AddmoneyIcon />
