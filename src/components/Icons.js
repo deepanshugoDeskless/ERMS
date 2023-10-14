@@ -15,6 +15,9 @@ import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import CardTravelIcon from '@mui/icons-material/CardTravel';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import HistoryIcon from '@mui/icons-material/History';
 
 export {
   HomeOutlinedIcon as HomeIcon,
@@ -33,4 +36,7 @@ export {
   GroupAddIcon as BulkUpload,
   ContactsOutlinedIcon as ContactIcon,
   HelpOutlineOutlinedIcon as FaqIcon,
+  CardTravelIcon as TravelIcon,
+  AddCircleOutlineIcon as AddmoneyIcon,
+  HistoryIcon as HistoryIcon,
 };

@@ -14,11 +14,21 @@ import {
   BulkUpload,
   ContactIcon,
   FaqIcon,
+  TravelIcon,
+  AddIcon,
+  AddmoneyIcon,
+  HistoryIcon,
 } from "./Icons";
 import Addemployee from "./Addemployee";
 import Home from "./Home";
 import Team from "./team";
 import AddBulkEmployee from "./AddBulkEmployees";
+import { AddReimbursement } from "./AddReimbursement";
+import {ApprovedExpenses} from "./ApprovedExpenses";
+import { AddTravel } from "./AddTravel";
+import ClaimReimbursement, {claimReimbursement} from "./claimReimbursement"
+
+
 
 export const SIDEBAR_DATA = [
   {
@@ -30,44 +40,61 @@ export const SIDEBAR_DATA = [
   },
   {
     id: 2,
-    name: "Manage Team",
+    name: "View Team",
     page: <Team />,
-    path: "layouts",
+    path: "team",
     icon: <PeopleIcon />,
   },
   {
     id: 3,
-    name: "Contact Information",
-    page: <Addemployee />,
-    path: "contact",
-    icon: <ContactIcon />,
-  },
-  {
-    id: 4,
     name: "Add Employees",
     page: <AddBulkEmployee/>,
     path: "users",
     icon: <BulkUpload />,
   },
   {
+    id: 4,
+    name: "Raise Request",
+    page: <AddTravel/>,
+    path: "addtravel",
+    icon: <TravelIcon />,
+  },
+  {
     id: 5,
-    name: "invoice",
-    page: <Addemployee />,
-    path: "invoice",
-    icon: <InvoiceIcon />,
+    name: "Claim Reimbursement",
+    page: <ClaimReimbursement />,
+    path: "claimreimbursement",
+    icon: <AddmoneyIcon />
   },
   {
     id: 6,
-    name: "calendar",
-    page: <Addemployee />,
-    path: "calendar",
-    icon: <CalendarIcon />,
+    name: "Approved Expenses",
+    page: <ApprovedExpenses/>,
+    path: "expensesapproved",
+    icon: <HistoryIcon />
   },
-  {
-    id: 8,
-    name: "FAQ",
-    page: <Addemployee />,
-    path: "faq",
-    icon: <FaqIcon />,
-  },
+
+  // ,
+  // {
+  //   id: 6,
+  //   name: "invoice",
+  //   page: <Addemployee />,
+  //   path: "invoice",
+  //   icon: <InvoiceIcon />,
+  // },
+  // {
+  //   id: 7,
+  //   name: "calendar",
+  //   page: <Addemployee />,
+  //   path: "calendar",
+  //   icon: <CalendarIcon />,
+  // },
+  // {
+  //   id: 8,
+  //   name: "FAQ",
+  //   page: <Addemployee />,
+  //   path: "faq",
+  //   icon: <FaqIcon />,
+  // },
 ];
+
