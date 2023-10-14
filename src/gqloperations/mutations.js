@@ -63,19 +63,11 @@ mutation CreateReimbursement($reimbursementNew: ReimbursementInput!) {
 }
 `
 export const GET_REIMBURSEMENTS = gql `
-query {
-  reimbursements {
-    id
-    fromDate
-    toDate
-    description
-    place
-    status
-    # Adjust the name field if it has a different name in the schema
-    name
+query GetMyReimbursements{
+  ireimbursements{
+    _id
   }
 }
-
 `
 
 

@@ -43,9 +43,12 @@ export default function Sidebar({ children }) {
                 displaySidebar={displaySidebar}
                 className="app__brand__text"
               >
-                <img src={require('../../Assets/GD Logo 128px 1.png')} style={{
-                  height: 60
-                }}/>
+                <img
+                  src={require("../../Assets/GD Logo 128px 1.png")}
+                  style={{
+                    height: 60,
+                  }}
+                />
               </SidebarBrand>
             </SidebarLogo>
             {/* <SidebarToggler
