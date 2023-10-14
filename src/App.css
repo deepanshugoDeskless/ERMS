@@ -143,3 +143,45 @@ body {margin: 0; height: 100%; overflow: hidden;}
   margin-left: 36%;
   margin-bottom: 02%;
 }
+
+.app {
+  width: 40vw;
+  height: 40vh;
+  align-items: center;
+  justify-content: center;
+  background: #e9f3fe;
+}
+.parent {
+  width: 250px;
+  margin: auto;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 25px;
+  box-shadow: 7px 20px 20px rgb(210, 227, 244);
+}
+.file-upload {
+  text-align: center;
+  border: 3px dashed rgb(210, 227, 244);
+  padding: 1rem;
+  cursor: pointer;
+}
+.file-upload p {
+  font-size: 0.87rem;
+  margin-top: 10px;
+  color: #bbcada;
+}
+.file-upload p {
+  font-size: 0.87rem;
+  margin-top: 10px;
+  color: #bbcada;
+}
+.file-upload input {
+  display: block;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+}
