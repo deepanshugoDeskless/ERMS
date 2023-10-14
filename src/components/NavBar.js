@@ -6,34 +6,39 @@ export default function NavBar() {
   const navigate = useNavigate();
   return (
     <nav>
-      <div className="nav-wrapper " style={{ backgroundColor: "#eb0c70" }}>
-        <Link to="/" className="brand-logo left" >
-          goDeskless ERMS
-        </Link>
-        <ul id="nav-mobile" className="right">
-          {token ? (
-            <>
-              {/* <li><Link to="/profile">Profile</Link></li>
-                  <li><Link to="/create">Create</Link></li> */}
-              <li>
-                <button
-                  className="red btn"
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    navigate("/");
-                  }}
-                >
-                  Logout
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              {/* <li><Link to="/login">Login</Link></li>
-                  <li><Link to="/signup">Signup</Link></li> */}
-            </>
-          )}
-        </ul>
+      <div
+        className="nav-wrapper"
+        style={{
+          backgroundColor: "#eb0c70",
+          flexDirection: "row",
+          flex: 1,
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        <h2
+          style={{
+            // backgroundColor: "yellow",
+            color: "white",
+            marginLeft: 10,
+            fontSize: 32,
+          }}
+        >
+          Employee Reimburesment Management Portal
+        </h2>
+
+        {token ? (
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/");
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
     </nav>
   );

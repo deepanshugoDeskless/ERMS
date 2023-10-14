@@ -16,30 +16,27 @@ import Addemployee from "./components/Addemployee";
 import { DynamicItem, Sidebar, dummyData } from "./components";
 
 function App() {
-  
   const element = useRoutes(routes);
   const publicElement = useRoutes(publicRoutes);
   const token = localStorage.getItem("token");
   return (
     <>
-
       {token ? (
         <>
           <NavBar></NavBar> 
           <Sidebar>
-          <Routes>
-          <Route path="/" element={<DynamicItem page={< Home />}/>} />
-          {dummyData &&
-            dummyData.map((item, index) => (
-              <Route
-                key={index}
-                path={item.path}
-                element={<DynamicItem page={item.page} />}
-              />
-            ))}
-            
-        </Routes>
-      </Sidebar>
+            <Routes>
+              <Route path="/" element={<DynamicItem page={<Home />} />} />
+              {dummyData &&
+                dummyData.map((item, index) => (
+                  <Route
+                    key={index}
+                    path={item.path}
+                    element={<DynamicItem page={item.page} />}
+                  />
+                ))}
+            </Routes>
+          </Sidebar>
         </>
       ) : (
         <>
@@ -52,4 +49,3 @@ function App() {
 }
 
 export default App;
-

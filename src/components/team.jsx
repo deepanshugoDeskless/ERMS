@@ -12,7 +12,6 @@ import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { useState } from "react";
 
-
 const Team = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -68,14 +67,14 @@ const Team = () => {
           >
             {row.role === "admin"}
             {row.role === "manager"}
-            {row.role === "user" }
+            {row.role === "user"}
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
               {row.role}
             </Typography>
           </Box>
         );
       },
-    },  
+    },
     {
       field: "username",
       headerName: "Username",
@@ -95,11 +94,32 @@ const Team = () => {
           <CssBaseline />
           {/* <h1 style={{ position: 'absolute', top: '0.3em', left: '11em' }}>Team</h1>
           <h5 style={{ position: 'absolute', top: '4.8em', left: '25em' }}>Managing the Team Members</h5> */}
-          <Box style={{ position: 'absolute', bottom: '0px', left: '5em', width: '84%' }}>
-          <div style={{backgroundColor:'black',color:'white',width:'84vw',position:'fixed',top:'01.425em',height:'3.15em',display:'flex',textAlign:'center',justifyContent:'center'}} className="banner"><h4 style={{position:'absolute',top:'0.5em'}}>Godeskless Workforce</h4></div>
+          <Box
+            style={{
+              position: "absolute",
+              bottom: "0px",
+              left: "5em",
+              width: "84%",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: colors.blueAccent[800],
+                color: colors.blueAccent[200],
+                width: "84vw",
+                position: "fixed",
+                top: "01.5em",
+                height: "2em",
+                display: "flex",
+                textAlign: "center",
+                justifyContent: "center",
+              }}
+              className="banner"
+            >
+              <h4 style={{}}>Godeskless Workforce</h4>
+            </div>
             <Box
-              m="-1em 0 0 0"
-              height="75vh"
+              height="80vh"
               sx={{
                 "& .MuiDataGrid-root": {
                   border: "none",
@@ -127,11 +147,11 @@ const Team = () => {
               }}
             >
               <DataGrid
-  checkboxSelection
-  rows={data.users}
-  columns={columns}
-  getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
-/>
+                checkboxSelection
+                rows={data.users}
+                columns={columns}
+                getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
+              />
             </Box>
           </Box>
         </ThemeProvider>
@@ -166,7 +186,7 @@ export default Team;
 
 //   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
 //   if (loading) return <p>Loading...</p>;
-//   if (error) return <p>Error: {error.message} </p>; 
+//   if (error) return <p>Error: {error.message} </p>;
 //   const teamMembers = data.teamMembers;
 
 //   const columns = [
@@ -247,7 +267,7 @@ export default Team;
 //         <h5 style={{position:'absolute',top:'4.8em',left:'25em'}}>Managing the Team Members</h5>
 //         {/* <Header title="TEAM" subtitle="Managing the Team Members"  /> */}
 //     <Box style={{position:'absolute',bottom: '0px',left:'5em',width:'84%'}}>
-      
+
 //       <Box
 //         m="-1em 0 0 0"
 //         height="75vh"
@@ -287,4 +307,3 @@ export default Team;
 // };
 
 // export default Team;
-

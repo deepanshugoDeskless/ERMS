@@ -13,6 +13,7 @@ import {
 // import BrandLogo from "./BrandLogo.svg";
 
 import { SidebarItems } from "..";
+import { requirePropFactory } from "@mui/material";
 
 const MOBILE_VIEW = window.innerWidth < 468;
 
@@ -42,25 +43,24 @@ export default function Sidebar({ children }) {
                 displaySidebar={displaySidebar}
                 className="app__brand__text"
               >
-                goDeskless
+                <img src={require('../../Assets/GD Logo 128px 1.png')} style={{
+                  height: 60
+                }}/>
               </SidebarBrand>
             </SidebarLogo>
-            {/* Logo wrapper ends */}
-            {/* Toggle button */}
-            <SidebarToggler
+            {/* <SidebarToggler
               displaySidebar={displaySidebar}
               onClick={handleSidebarDisplay}
             >
               <div className="outer__circle">
                 <div className="inner__circle" />
               </div>
-            </SidebarToggler>
+            </SidebarToggler> */}
           </SidebarLogoWrapper>
-            {/* Render the SidebarItems component */}
+          {/* Render the SidebarItems component */}
           <SidebarItems displaySidebar={displaySidebar} />
         </SidebarWrapper>
       </SidebarContainer>
-            {/* Render the children */}
       <Children displaySidebar={displaySidebar}>{children}</Children>
     </React.Fragment>
   );
