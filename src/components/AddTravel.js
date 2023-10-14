@@ -135,7 +135,7 @@ export const AddTravel = () => {
     {
       field: "firstName",
       headerName: "First Name",
-      flex: 0.7,
+      flex: 1,
       cellClassName: "name-column--cell",
     },
     {

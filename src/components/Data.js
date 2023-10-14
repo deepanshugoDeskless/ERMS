@@ -22,6 +22,7 @@ import {
 import Addemployee from "./Addemployee";
 import Home from "./Home";
 import Team from "./team";
+import RaiseRequest from "./raiseRequest";
 import AddBulkEmployee from "./AddBulkEmployees";
 import { AddReimbursement } from "./AddReimbursement";
 import {ApprovedExpenses} from "./ApprovedExpenses";
@@ -72,6 +73,13 @@ export const SIDEBAR_DATA = [
     page: <ApprovedExpenses/>,
     path: "expensesapproved",
     icon: <HistoryIcon />
+  },
+  {
+    id: 7,
+    name: "Raise Request",
+    page: <RaiseRequest/>,
+    path: "raiseRequest",
+    icon: <TravelIcon />,
   },
 
   // ,
