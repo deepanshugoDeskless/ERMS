@@ -443,65 +443,86 @@ function Form({ key, showPlusButton, addExpense }) {
     <div
       key={key}
       style={{
-        width: "71%",
-        marginBottom: "20px",
-        padding: "10px",
+        width: "100%",
         border: "1px solid #ccc",
         marginTop: "0.55em",
-        height: "40%",
+        height: "20%",
       }}
     >
       <form>
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={top100Films}
-          sx={{ width: "100%" }}
-          style={{ position: "relative" }}
-          renderInput={(params) => (
-            <TextField {...params} label="Expense Type" />
-          )}
-        />
-        <TextField
-          id="standard-basic"
-          label="Amount"
-          variant="standard"
-          value="100"
-          sx={{
-            "&.Mui-focused": {
-              "& .MuiInput-underline:before": {
-                borderBottom: "none !important",
-              },
-            },
+        <div
+          style={{
+            flexDirection: "row",
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
           }}
-          style={{ width: "05em", position: "relative", marginLeft: "9em" }}
-        />
-        <Box
-          component="form"
-          sx={{
-            "& .MuiTextField-root": {
-              m: 1,
-              width: "2ch",
-              height: "1ch",
-              position: "relative",
-              top: "-2.65em",
-              left: "1em",
-            },
-          }}
-          noValidate
-          autoComplete="off"
         >
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1 },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={top100Films}
+              sx={{ width: "100%" }}
+              style={{ position: "relative" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Expense Type" />
+              )}
+            />
+          </Box>
           <div>
-            <TextField id="outlined-select-currency" select defaultValue="INR">
-              {currencies.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { m: 1, width: "25ch" },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-multiline-static"
+                label="Description"
+                multiline
+                style={{
+                  width: "5.55em",
+                }}
+              />
+            </Box>
           </div>
-        </Box>
-        <div>
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": {
+                m: 1,
+                width: "2ch",
+                height: "1ch",
+                position: "relative",
+              },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div>
+              <TextField
+                id="outlined-select-currency"
+                select
+                defaultValue="INR"
+              >
+                {currencies.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+          </Box>
           <Box
             component="form"
             sx={{
@@ -512,32 +533,25 @@ function Form({ key, showPlusButton, addExpense }) {
           >
             <TextField
               id="outlined-multiline-static"
-              label="Description"
+              label="Amount"
               multiline
-              rows={2}
               style={{
-                position: "relative",
-                marginLeft: "-8.27em",
                 width: "5.55em",
-                top: "-2.2em",
               }}
             />
           </Box>
-        </div>
-        <div style={{ position: "relative", marginLeft: "9em", top: "-4.5em" }}>
-          <Button
-            variant="contained"
-            style={{
-              width: "11em",
-              position: "relative",
-              left: "-8.5em",
-              top: "-1.4em",
-            }}
-            onClick={addExpense}
-          >
-            Add Expense
-          </Button>
-          <Stack spacing={2} direction="row" />
+
+          {showPlusButton && (
+            <Button
+              variant="contained"
+              style={{
+                width: "8em",
+              }}
+              onClick={addExpense}
+            >
+              Add Expense
+            </Button>
+          )}
         </div>
       </form>
     </div>
