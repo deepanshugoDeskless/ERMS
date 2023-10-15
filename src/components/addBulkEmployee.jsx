@@ -195,16 +195,175 @@ const AddEmployee = () => {
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
-        backgroundColor: "blue",
-        width: "85%",
-        marginTop: "-1.2em",
-        alignItems: "center",
-        justifyContent: "center",
+        flex: 1,
+        flexDirection: "row",
+        // backgroundColor: "blue",
+        width: "90%",
+        justifyContent: "flex-start",
       }}
     >
-      <h4>React drop files input</h4>
-      <DropFileInput onFileChange={(files) => onFileChange(files)} />
+      <div
+        style={{
+          display: "flex",
+          flex: 0.2,
+          marginLeft: 30,
+          flexDirection: "column",
+          // backgroundColor: "red",
+          width: "90%",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          marginRight: 20,
+        }}
+      >
+        <h6
+          style={{
+            marginBottom: 20,
+          }}
+        >
+          Upload Excel
+        </h6>
+
+        <DropFileInput onFileChange={(files) => onFileChange(files)} />
+      </div>
+      <div
+        style={{
+          flex: 0.6,
+          display: "flex",
+          flexDirection: "column",
+          // backgroundColor: "yellow",
+          width: "80%",
+          alignItems: "start",
+          justifyContent: "flex-start",
+        }}
+      >
+        <h6>Add Individually</h6>
+        <div
+          style={{
+            // backgroundColor: "palegreen",
+            flexDirection: "column",
+            display: "flex",
+            width: "80%",
+            height: 120,
+            margin: 4,
+            justifyContent: "center",
+            flex: 1,
+          }}
+        >
+          <div
+            style={{
+              // backgroundColor: "orange",
+              flexDirection: "row",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              type="text"
+              placeholder="Enter First Name"
+              name="firstName"
+              // onChange={(e) => handleEmailChange(e.target.value)}
+              required
+              style={{
+                width: "60%",
+                margin: 4,
+              }}
+              id="outlined-basic"
+              label="First Name"
+              variant="outlined"
+            />
+            <TextField
+              id="outlined-basic"
+              label="Last Name"
+              variant="outlined"
+              type="text"
+              placeholder="Enter Last Name"
+              name="lastName"
+              // onChange={(e) => handlePasswordChange(e.target.value)}
+              required
+              style={{
+                width: "60%",
+                margin: 4,
+              }}
+            />
+          </div>
+
+          <div
+            style={{
+              // backgroundColor: "orange",
+              flexDirection: "row",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              type="email"
+              placeholder="Enter Email"
+              name="email"
+              // onChange={(e) => handleEmailChange(e.target.value)}
+              required
+              style={{
+                width: "60%",
+                margin: 4,
+              }}
+              id="outlined-basic"
+              label="Email"
+              variant="outlined"
+            />
+            <TextField
+              id="outlined-basic"
+              label="Phone"
+              variant="outlined"
+              type="number"
+              placeholder="Enter Number"
+              name="phone"
+              // onChange={(e) => handlePasswordChange(e.target.value)}
+              required
+              style={{
+                width: "60%",
+                margin: 4,
+              }}
+            />
+          </div>
+          <TextField
+            id="outlined-basic"
+            label="Employee Code"
+            variant="outlined"
+            type="number"
+            placeholder="Enter Employee Code"
+            name="employeeCode"
+            // onChange={(e) => handlePasswordChange(e.target.value)}
+            required
+            style={{
+              width: "100%",
+              marginTop: 4,
+            }}
+          />
+          <div
+            style={{
+              // backgroundColor: "orange",
+              flexDirection: "column",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={() => {
+                // callLogIn();
+              }}
+              style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
+            >
+              Add Employee
+            </Button>
+          </div>
+        </div>
+
+        {/* <DropFileInput onFileChange={(files) => onFileChange(files)} /> */}
+      </div>
     </div>
   );
 };
