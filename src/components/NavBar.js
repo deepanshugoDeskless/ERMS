@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 export default function NavBar() {
   const token = localStorage.getItem("token");
@@ -22,21 +23,22 @@ export default function NavBar() {
             // backgroundColor: "yellow",
             color: "white",
             marginLeft: 10,
-            fontSize: 32,
+            padding: 20,
           }}
         >
           Employee Reimburesment Management Portal
         </h2>
 
         {token ? (
-          <button
+          <Button
+            variant="outlined"
             onClick={() => {
               localStorage.removeItem("token");
               navigate("/");
             }}
           >
             Logout
-          </button>
+          </Button>
         ) : (
           <></>
         )}

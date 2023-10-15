@@ -443,7 +443,8 @@ function Form({ key, showPlusButton, addExpense }) {
       style={{
         // backgroundColor: colors.primary[900],
         width: "100%",
-        border: "1px solid #ccc",
+        border: "2px solid #ccc",
+        borderRadius: 4,
         marginTop: "0.2em",
         height: "20%",
         padding: 10,
