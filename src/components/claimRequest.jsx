@@ -220,7 +220,7 @@ const ClaimRequest = () => {
             <Box
               style={{
                 flexDirection: "row",
-                backgroundColor: "gray",
+                // backgroundColor: "gray",
                 display: "flex",
               }}
             >
@@ -229,7 +229,7 @@ const ClaimRequest = () => {
                   marginTop: "1.5em",
                   width: "33%",
                   flexDirection: "column",
-                  backgroundColor: "yellow",
+                  // backgroundColor: "yellow",
                   display: "flex",
                   height: "95%",
                 }}
@@ -289,10 +289,6 @@ const ClaimRequest = () => {
                 >
                   <DataGrid
                     onRowSelectionModelChange={(newRowSelectionModel) => {
-                      console.log(
-                        "🚀 ~ file: claimRequest.jsx:291 ~ ClaimRequest ~ newRowSelectionModel:",
-                        newRowSelectionModel
-                      );
                       setRowSelectionModel(newRowSelectionModel);
                       selectReimbursement(newRowSelectionModel);
                     }}
@@ -306,9 +302,9 @@ const ClaimRequest = () => {
               <Box
                 style={{
                   marginTop: "1.5em",
-                  width: "100%",
+                  width: "90%",
                   flexDirection: "column",
-                  backgroundColor: "red",
+                  // backgroundColor: "red",
                   display: "flex",
                   height: "100%",
                 }}
@@ -411,11 +407,13 @@ const styles = {
 
 function Form({ key, showPlusButton, addExpense }) {
   const top100Films = [
-    { label: "Travel Expense" },
-    { label: "Food Expense" },
-    { label: "Accommodation Expense" },
-    { label: "Purchase Expense" },
+    { label: "Travel" },
+    { label: "Food" },
+    { label: "Accommodation" },
+    { label: "Purchase" },
   ];
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const currencies = [
     {
       value: "INR",
@@ -443,10 +441,12 @@ function Form({ key, showPlusButton, addExpense }) {
     <div
       key={key}
       style={{
+        // backgroundColor: colors.primary[900],
         width: "100%",
         border: "1px solid #ccc",
-        marginTop: "0.55em",
+        marginTop: "0.2em",
         height: "20%",
+        padding: 10,
       }}
     >
       <form>
@@ -456,12 +456,14 @@ function Form({ key, showPlusButton, addExpense }) {
             display: "flex",
             width: "100%",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <Box
+            width="20vh"
             component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1 },
+              "& .MuiTextField-root": {},
             }}
             noValidate
             autoComplete="off"
@@ -472,84 +474,102 @@ function Form({ key, showPlusButton, addExpense }) {
               options={top100Films}
               sx={{ width: "100%" }}
               style={{ position: "relative" }}
-              renderInput={(params) => (
-                <TextField {...params} label="Expense Type" />
-              )}
+              renderInput={(params) => <TextField {...params} label="Type" />}
             />
           </Box>
-          <div>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                multiline
-                style={{
-                  width: "5.55em",
-                }}
-              />
-            </Box>
-          </div>
+
           <Box
             component="form"
             sx={{
-              "& .MuiTextField-root": {
-                m: 1,
-                width: "2ch",
-                height: "1ch",
-                position: "relative",
-              },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <div>
-              <TextField
-                id="outlined-select-currency"
-                select
-                defaultValue="INR"
-              >
-                {currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
-          </Box>
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
+              "& .MuiTextField-root": { width: "25ch" },
             }}
             noValidate
             autoComplete="off"
           >
             <TextField
               id="outlined-multiline-static"
-              label="Amount"
+              label="Description"
               multiline
               style={{
-                width: "5.55em",
+                width: "3em",
               }}
             />
           </Box>
+
+          <div
+            style={{
+              paddingBottom: 24,
+            }}
+          >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker label="Payment Date" />
+              </DemoContainer>
+            </LocalizationProvider>
+          </div>
+          <div
+            style={{
+              flexDirection: "row",
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": {
+                  width: "2ch",
+                  height: "1ch",
+                  position: "relative",
+                },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <div>
+                <TextField
+                  id="outlined-select-currency"
+                  select
+                  defaultValue="INR"
+                >
+                  {currencies.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { width: "25ch" },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-multiline-static"
+                label="Amount"
+                multiline
+                style={{
+                  width: "3em",
+                }}
+              />
+            </Box>
+          </div>
 
           {showPlusButton && (
             <Button
               variant="contained"
               style={{
-                width: "8em",
+                width: "1em",
               }}
               onClick={addExpense}
             >
-              Add Expense
+              Add More
             </Button>
           )}
         </div>
