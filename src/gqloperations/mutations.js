@@ -11,6 +11,12 @@ export const LOGIN_USER = gql`
   mutation SigninUser($userSignin: UserSigninInput!) {
     user: signinUser(userSignin: $userSignin) {
       token
+      user {
+        _id
+        firstName
+        lastName
+        role
+      }
     }
   }
 `;
@@ -28,57 +34,56 @@ export const GENERATE_OTP = gql`
 `;
 
 export const VALIDATE_OTP = gql`
-mutation ReSetUserPassword($reSetPasswordInput: ReSetPasswordInput) {
-  String: reSetPassword(reSetPasswordInput: $reSetPasswordInput)
-}
+  mutation ReSetUserPassword($reSetPasswordInput: ReSetPasswordInput) {
+    String: reSetPassword(reSetPasswordInput: $reSetPasswordInput)
+  }
 `;
 
 export const GET_TEAM_MEMBERS = gql`
-query GetAllUsers {
-  users {
-    _id
-    firstName
-    lastName
-    email
-    role
-    username
-    employeeCode
-    sex
+  query GetAllUsers {
+    users {
+      _id
+      firstName
+      lastName
+      email
+      role
+      username
+      employeeCode
+      sex
+    }
   }
-}`;
+`;
 
-export const CREATE_REIMBURSEMENT = gql `
-mutation CreateReimbursement($reimbursementNew: ReimbursementInput!) {
-  createReimbursement(input: $reimbursementNew) {
-    id
-    title
-    description
-    type
-    visitLocation
-    noOfDays
-    fromDate
-    toDate
-    askedAmount
+export const CREATE_REIMBURSEMENT = gql`
+  mutation CreateReimbursement($reimbursementNew: ReimbursementInput!) {
+    createReimbursement(input: $reimbursementNew) {
+      id
+      title
+      description
+      type
+      visitLocation
+      noOfDays
+      fromDate
+      toDate
+      askedAmount
+    }
   }
-}
-`
-export const GET_REIMBURSEMENTS = gql `
-query GetMyReimbursements{
-  ireimbursements{
-    _id
-    title
-    description
-    type
-    visitLocation
-    noOfDays
-    fromDate
-    toDate
-    askedAmount
-    totalAmount
-    by
-    isPreApproved
+`;
+export const GET_REIMBURSEMENTS = gql`
+  query GetMyReimbursements {
+    ireimbursements {
+      _id
+      title
+      description
+      type
+      visitLocation
+      noOfDays
+      fromDate
+      toDate
+      askedAmount
+      totalAmount
+      by
+      isPreApproved
+    }
   }
-}
-`
-
-
+`;
