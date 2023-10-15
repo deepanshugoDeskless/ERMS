@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 
+import Button from "@mui/material/Button";
 import "./drop-file-input.css";
 
 import { ImageConfig } from "../../config/ImageConfig";
@@ -64,7 +65,17 @@ const DropFileInput = (props) => {
         <div className="drop-file-preview">
           {/* <p className="drop-file-preview__title">Ready to upload</p> */}
           {fileList.map((item, index) => (
-            <div key={index} className="drop-file-preview__item">
+            <div
+              key={index}
+              className="drop-file-preview__item"
+              style={{
+                flex: 1,
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
               <img
                 src={
                   ImageConfig[item.type.split("/")[1]] || ImageConfig["default"]
@@ -72,14 +83,35 @@ const DropFileInput = (props) => {
                 alt=""
               />
               <div className="drop-file-preview__item__info">
-                <h6>{item.name}</h6>
+                <h6
+                  style={{
+                    // fontFamily: "Bebas Neue,sans-serif",
+                    fontSize: "small",
+                  }}
+                >
+                  {item.name}
+                </h6>
               </div>
-              <span
-                className="drop-file-preview__item__del"
-                onClick={() => fileRemove(item)}
+              <div
+                style={{
+                  flexDirection: "row",
+                }}
               >
-                x
-              </span>
+                <Button
+                  variant="outlined"
+                  onClick={() => fileRemove(item)}
+                  style={{ fontSize: "small" }}
+                >
+                  Remove
+                </Button>
+                <Button
+                  variant="contained"
+                  // onClick={readFile}
+                  style={{ fontSize: "small" }}
+                >
+                  Upload
+                </Button>
+              </div>
             </div>
           ))}
         </div>
