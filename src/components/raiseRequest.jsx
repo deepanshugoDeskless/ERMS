@@ -117,66 +117,63 @@ const RaiseRequest = () => {
   ];
 
   const columns = [
-    { field: "_id", headerName: "ID", flex: 1 },
+    // { field: "_id", headerName: "ID", flex: 1 },
     {
-      field: "firstName",
-      headerName: "First Name",
+      field: "title",
+      headerName: "Title",
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    // {
-    //   field: "lastName",
-    //   headerName: "Last Name",
-    //   flex: 1,
-    //   cellClassName: "name-column--cell",
-    // },
-    // {
-    //   field: "email",
-    //   headerName: "Email",
-    //   flex: 1.8,
-    //   valueFormatter: (params) => params.value.toLowerCase(),
-    // },
-    // {
-    //   field: "role",
-    //   headerName: "Access Level",
-    //   flex: 1,
-    //   renderCell: ({ row }) => {
-    //     return (
-    //       <Box
-    //         width="60%"
-    //         m="0 auto"
-    //         p="5px"
-    //         display="flex"
-    //         justifyContent="center"
-    //         backgroundColor={
-    //           row.role === "admin"
-    //             ? colors.greenAccent[600]
-    //             : row.role === "manager"
-    //             ? colors.greenAccent[700]
-    //             : colors.greenAccent[700]
-    //         }
-    //         borderRadius="4px"
-    //       >
-    //         {row.role === "admin"}
-    //         {row.role === "manager"}
-    //         {row.role === "user"}
-    //         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-    //           {row.role}
-    //         </Typography>
-    //       </Box>
-    //     );
-    //   },
-    // },
-    // {
-    //   field: "username",
-    //   headerName: "Username",
-    //   flex: 1.5,
-    // },
-    // {
-    //   field: "sex",
-    //   headerName: "Gender",
-    //   flex: 1,
-    // },
+    {
+      field: "description",
+      headerName: "Description",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "fromDate",
+      headerName: "FromDate",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "toDate",
+      headerName: "ToDate",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "askedAmount",
+      headerName: "Asked For",
+      flex: 0.5,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "isPreApproved",
+      headerName: "Pre Approved",
+      flex: 1,
+      renderCell: ({ row }) => {
+        return (
+          <Box
+            width="60%"
+            m="0 auto"
+            p="5px"
+            display="flex"
+            justifyContent="center"
+            backgroundColor={
+              row.isPreApproved
+                ? colors.greenAccent[600]
+                : colors.greenAccent[700]
+            }
+            borderRadius="4px"
+          >
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              {row.isPreApproved ? " Approved " : "Pending"}
+            </Typography>
+          </Box>
+        );
+      },
+    },
   ];
 
   return (

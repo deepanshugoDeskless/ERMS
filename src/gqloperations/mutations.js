@@ -66,6 +66,17 @@ export const GET_REIMBURSEMENTS = gql `
 query GetMyReimbursements{
   ireimbursements{
     _id
+    title
+    description
+    type
+    visitLocation
+    noOfDays
+    fromDate
+    toDate
+    askedAmount
+    totalAmount
+    by
+    isPreApproved
   }
 }
 `
