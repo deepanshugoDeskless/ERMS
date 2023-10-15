@@ -63,6 +63,31 @@ const ClaimRequest = () => {
     place: "",
   });
 
+  const [expenses, setExpenses] = useState([]);
+  const [reimbursement, setReimbursement] = useState({});
+  const [rowSelectionModel, setRowSelectionModel] = useState();
+
+  const addExpense = (expense) => {
+    const formId = Date.now();
+    setExpenses([
+      ...expenses,
+      {
+        formId,
+        expense,
+      },
+    ]);
+  };
+
+  const selectReimbursement = (reimbursement) => {
+    setReimbursement(reimbursement);
+    const formId = Date.now();
+    setExpenses([
+      {
+        formId,
+      },
+    ]);
+  };
+
   const currencies = [
     ,
     {
@@ -123,13 +148,13 @@ const ClaimRequest = () => {
     {
       field: "title",
       headerName: "Title",
-      flex: 1,
+      flex: 1.2,
       cellClassName: "name-column--cell",
     },
     {
       field: "askedAmount",
       headerName: "Approved",
-      flex: 0.6,
+      flex: 0.8,
       cellClassName: "name-column--cell",
     },
     {
@@ -139,7 +164,7 @@ const ClaimRequest = () => {
       renderCell: ({ row }) => {
         return (
           <Box
-            width="60%"
+            width="90%"
             m="0 auto"
             p="5px"
             display="flex"
@@ -167,12 +192,11 @@ const ClaimRequest = () => {
           <CssBaseline />
           <Box
             style={{
-              position: "absolute",
               bottom: "0px",
               left: "5em",
-              top: "2em",
-              width: "84%",
-              flex: 1,
+              marginRight: "5em",
+              top: "1.5em",
+              width: "100%",
               flexDirection: "column",
               display: "flex",
               height: "100%",
@@ -182,21 +206,19 @@ const ClaimRequest = () => {
               style={{
                 backgroundColor: colors.blueAccent[800],
                 color: colors.blueAccent[200],
-                width: "84vw",
+                width: "100%",
                 position: "fixed",
-                top: "1.5em",
+                top: "1em",
                 height: "2em",
                 display: "flex",
                 textAlign: "center",
                 justifyContent: "center",
               }}
-              className="banner"
             >
               <h4 style={{}}>Claim Reimbursement</h4>
             </div>
             <Box
               style={{
-                flex: 1,
                 flexDirection: "row",
                 backgroundColor: "gray",
                 display: "flex",
@@ -205,12 +227,11 @@ const ClaimRequest = () => {
               <Box
                 style={{
                   marginTop: "1.5em",
-                  width: "30%",
-                  flex: 0.3,
+                  width: "33%",
                   flexDirection: "column",
                   backgroundColor: "yellow",
                   display: "flex",
-                  height: "100%",
+                  height: "95%",
                 }}
               >
                 <div
@@ -239,7 +260,7 @@ const ClaimRequest = () => {
                   </h4>
                 </div>
                 <Box
-                  height="75%"
+                  height="77vh"
                   sx={{
                     "& .MuiDataGrid-root": {
                       border: "none",
@@ -267,7 +288,15 @@ const ClaimRequest = () => {
                   }}
                 >
                   <DataGrid
-                    checkboxSelection
+                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                      console.log(
+                        "🚀 ~ file: claimRequest.jsx:291 ~ ClaimRequest ~ newRowSelectionModel:",
+                        newRowSelectionModel
+                      );
+                      setRowSelectionModel(newRowSelectionModel);
+                      selectReimbursement(newRowSelectionModel);
+                    }}
+                    rowSelectionModel={rowSelectionModel}
                     rows={data.ireimbursements}
                     columns={columns}
                     getRowId={(row) => row._id}
@@ -277,8 +306,7 @@ const ClaimRequest = () => {
               <Box
                 style={{
                   marginTop: "1.5em",
-                  width: "0%",
-                  flex: 1,
+                  width: "100%",
                   flexDirection: "column",
                   backgroundColor: "red",
                   display: "flex",
@@ -309,6 +337,22 @@ const ClaimRequest = () => {
                   >
                     Add Expenses
                   </h4>
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    padding: "20px",
+                    overflowY: "scroll",
+                    height: "70%",
+                  }}
+                >
+                  {expenses.map((expense, index) => (
+                    <Form
+                      key={expense.formId}
+                      showPlusButton={index === expenses.length - 1}
+                      addExpense={addExpense}
+                    />
+                  ))}
                 </div>
               </Box>
             </Box>
@@ -364,5 +408,140 @@ const styles = {
     fontSize: "small", // Adjust the font size as needed
   },
 };
+
+function Form({ key, showPlusButton, addExpense }) {
+  const top100Films = [
+    { label: "Travel Expense" },
+    { label: "Food Expense" },
+    { label: "Accommodation Expense" },
+    { label: "Purchase Expense" },
+  ];
+  const currencies = [
+    {
+      value: "INR",
+      label: "₹",
+    },
+    {
+      value: "USD",
+      label: "$",
+    },
+    {
+      value: "EUR",
+      label: "€",
+    },
+    {
+      value: "BTC",
+      label: "฿",
+    },
+    {
+      value: "JPY",
+      label: "¥",
+    },
+  ];
+
+  return (
+    <div
+      key={key}
+      style={{
+        width: "71%",
+        marginBottom: "20px",
+        padding: "10px",
+        border: "1px solid #ccc",
+        marginTop: "0.55em",
+        height: "40%",
+      }}
+    >
+      <form>
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={top100Films}
+          sx={{ width: "100%" }}
+          style={{ position: "relative" }}
+          renderInput={(params) => (
+            <TextField {...params} label="Expense Type" />
+          )}
+        />
+        <TextField
+          id="standard-basic"
+          label="Amount"
+          variant="standard"
+          value="100"
+          sx={{
+            "&.Mui-focused": {
+              "& .MuiInput-underline:before": {
+                borderBottom: "none !important",
+              },
+            },
+          }}
+          style={{ width: "05em", position: "relative", marginLeft: "9em" }}
+        />
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": {
+              m: 1,
+              width: "2ch",
+              height: "1ch",
+              position: "relative",
+              top: "-2.65em",
+              left: "1em",
+            },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <div>
+            <TextField id="outlined-select-currency" select defaultValue="INR">
+              {currencies.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+        </Box>
+        <div>
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              id="outlined-multiline-static"
+              label="Description"
+              multiline
+              rows={2}
+              style={{
+                position: "relative",
+                marginLeft: "-8.27em",
+                width: "5.55em",
+                top: "-2.2em",
+              }}
+            />
+          </Box>
+        </div>
+        <div style={{ position: "relative", marginLeft: "9em", top: "-4.5em" }}>
+          <Button
+            variant="contained"
+            style={{
+              width: "11em",
+              position: "relative",
+              left: "-8.5em",
+              top: "-1.4em",
+            }}
+            onClick={addExpense}
+          >
+            Add Expense
+          </Button>
+          <Stack spacing={2} direction="row" />
+        </div>
+      </form>
+    </div>
+  );
+}
 
 export default ClaimRequest;

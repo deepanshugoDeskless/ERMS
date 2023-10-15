@@ -12,6 +12,7 @@ export default function NavBar() {
           backgroundColor: "#eb0c70",
           flexDirection: "row",
           flex: 1,
+          display: "flex",
           width: "100%",
           justifyContent: "space-between",
         }}
