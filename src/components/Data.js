@@ -25,11 +25,10 @@ import Team from "./team";
 import RaiseRequest from "./raiseRequest";
 import AddBulkEmployee from "./AddBulkEmployees";
 import { AddReimbursement } from "./AddReimbursement";
-import {ApprovedExpenses} from "./ApprovedExpenses";
+import { ApprovedExpenses } from "./ApprovedExpenses";
 import { AddTravel } from "./AddTravel";
-import ClaimReimbursement, {claimReimbursement} from "./claimReimbursement"
-
-
+import ClaimReimbursement, { claimReimbursement } from "./claimReimbursement";
+import ClaimRequest from "./claimRequest";
 
 export const SIDEBAR_DATA = [
   {
@@ -49,14 +48,14 @@ export const SIDEBAR_DATA = [
   {
     id: 3,
     name: "Add Employees",
-    page: <AddBulkEmployee/>,
+    page: <AddBulkEmployee />,
     path: "users",
     icon: <BulkUpload />,
   },
   {
     id: 4,
     name: "Raise Request",
-    page: <AddTravel/>,
+    page: <AddTravel />,
     path: "addtravel",
     icon: <TravelIcon />,
   },
@@ -65,21 +64,28 @@ export const SIDEBAR_DATA = [
     name: "Claim Reimbursement",
     page: <ClaimReimbursement />,
     path: "claimreimbursement",
-    icon: <AddmoneyIcon />
+    icon: <AddmoneyIcon />,
   },
   {
     id: 6,
     name: "Approved Expenses",
-    page: <ApprovedExpenses/>,
+    page: <ApprovedExpenses />,
     path: "expensesapproved",
-    icon: <HistoryIcon />
+    icon: <HistoryIcon />,
   },
   {
     id: 7,
     name: "Raise Request",
-    page: <RaiseRequest/>,
+    page: <RaiseRequest />,
     path: "raiseRequest",
     icon: <TravelIcon />,
+  },
+  {
+    id: 8,
+    name: "Claim Request",
+    page: <ClaimRequest />,
+    path: "claimRequest",
+    icon: <AddmoneyIcon />,
   },
 
   // ,
@@ -105,4 +111,3 @@ export const SIDEBAR_DATA = [
   //   icon: <FaqIcon />,
   // },
 ];
-
