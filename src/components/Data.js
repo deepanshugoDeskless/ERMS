@@ -29,6 +29,8 @@ import { ApprovedExpenses } from "./ApprovedExpenses";
 import { AddTravel } from "./AddTravel";
 import ClaimReimbursement, { claimReimbursement } from "./claimReimbursement";
 import ClaimRequest from "./claimRequest";
+import AirplaneTicketRoundedIcon from "@mui/icons-material/AirplaneTicketRounded";
+import PriceCheckRoundedIcon from "@mui/icons-material/PriceCheckRounded";
 
 export const ADMIN_SIDEBAR_DATA = [
   {
@@ -57,14 +59,14 @@ export const ADMIN_SIDEBAR_DATA = [
     name: "Preapprove Reimbursements",
     page: <ApprovedExpenses />,
     path: "expensesapproved",
-    icon: <HistoryIcon />,
+    icon: <AirplaneTicketRoundedIcon />,
   },
   {
     id: 5,
     name: "Approve Reimbursements",
     page: <ApprovedExpenses />,
     path: "expensesapproved",
-    icon: <HistoryIcon />,
+    icon: <PriceCheckRoundedIcon />,
   },
   // {
   //   id: 6,
@@ -127,5 +129,4 @@ export const USER_SIDEBAR_DATA = [
     path: "claimRequest",
     icon: <AddmoneyIcon />,
   },
-
 ];

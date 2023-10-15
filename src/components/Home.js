@@ -19,28 +19,14 @@ export default function Home() {
   }
 
   return (
-    // <div className="container">
-    <>
-      {/* <blockquote>
-        <h6>if it works dont touch it</h6>
-        <p className="right-align">~ram</p>
-      </blockquote>
-      <blockquote>
-        <h6>if it works dont touch it</h6>
-        <p className="right-align">~ram</p>
-      </blockquote> */}
-    </>
-
-    // </div>
+    <div
+      style={{
+        width: "100%",
+        hight: "100%",
+        flex: 1,
+        display: "flex",
+        backgroundColor: "red",
+      }}
+    />
   );
-}
-{
-  /* <blockquote>
-<h6>if it works dont touch it</h6>
-<p className="right-align">~ram</p>
-</blockquote>
-<blockquote>
-<h6>if it works dont touch it</h6>
-<p className="right-align">~ram</p>
-</blockquote> */
 }
