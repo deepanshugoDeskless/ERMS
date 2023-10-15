@@ -14,6 +14,10 @@ import Button from "@mui/material/Button";
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
+  const [loginRequest, setLoginRequest] = useState({
+    email: "",
+    password: "",
+  });
   const [SigninUser, { error, loading, data }] = useMutation(LOGIN_USER);
 
   if (loading)
@@ -30,10 +34,22 @@ export default function Login() {
     navigate("/home");
   }
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+  const handleEmailChange = (email) => {
+    console.log("🚀 ~ file: Login.js:38 ~ handleEmailChange ~ email:", email);
+    setLoginRequest({
+      ...loginRequest,
+      email: email,
+    });
+  };
+
+  const handlePasswordChange = (password) => {
+    console.log(
+      "🚀 ~ file: Login.js:46 ~ handlePasswordChange ~ password:",
+      password
+    );
+    setLoginRequest({
+      ...loginRequest,
+      password: password,
     });
   };
 
@@ -42,6 +58,19 @@ export default function Login() {
     SigninUser({
       variables: {
         userSignin: formData,
+      },
+    });
+  };
+
+  const callLogIn = () => {
+    console.log(
+      "🚀 ~ file: Login.js:73 ~ callLogIn ~ loginRequest:",
+      loginRequest
+    );
+
+    SigninUser({
+      variables: {
+        userSignin: loginRequest,
       },
     });
   };
@@ -77,18 +106,12 @@ export default function Login() {
               alignItems: "center",
               justifyContent: "center",
               height: "40.5em",
-              // flexDirection: 'column',
-              // padding: '50px',
-              // backgroundColor:'black',
-              // marginTop:'45px',
-              // borderRadius:'20px',
               width: "380px" /* Adjust the width as needed */,
               margin: "0 auto" /* Center the container horizontally */,
               padding: "10px 40px 0px 40px",
               backgroundColor: "#ffffff" /* Background color */,
               borderTopLeftRadius: "20px", // Adjust the value as needed
               borderTopRightRadius: "20px",
-              // borderRadius: '30px', /* Rounded corners */
               boxShadow:
                 "0px 0px 10px rgba(0, 0, 0, 0.2)" /* Box shadow for a subtle elevation effect */,
               transition:
@@ -138,7 +161,7 @@ export default function Login() {
             >
               <div
                 style={{
-                //   backgroundColor: "yellow",
+                  //   backgroundColor: "yellow",
                   flexDirection: "column",
                   display: "flex",
                   width: "100%",
@@ -150,7 +173,7 @@ export default function Login() {
                   type="email"
                   placeholder="Enter your EmailID"
                   name="email"
-                  onChange={handleChange}
+                  onChange={(e) => handleEmailChange(e.target.value)}
                   required
                   style={{
                     marginTop: "10px",
@@ -167,7 +190,7 @@ export default function Login() {
                   type="password"
                   placeholder="Enter Your Password"
                   name="password"
-                  onChange={handleChange}
+                  onChange={(e) => handlePasswordChange(e.target.value)}
                   required
                   style={{
                     marginTop: "20px",
@@ -178,9 +201,9 @@ export default function Login() {
                   variant="contained"
                   type="submit"
                   onClick={() => {
-                    this.readFile();
+                    callLogIn();
                   }}
-                  style={{ fontSize: "medium", marginTop: 40 , width: "100%" }}
+                  style={{ fontSize: "medium", marginTop: 40, width: "100%" }}
                 >
                   Login
                 </Button>
