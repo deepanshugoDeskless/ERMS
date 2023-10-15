@@ -215,7 +215,7 @@ const RaiseRequest = () => {
             </div>
             <div
               style={{
-                backgroundColor: colors.blueAccent[900],
+                // backgroundColor: colors.blueAccent[900],
                 marginTop: "1.5em",
                 padding: "0.5em",
                 width: "84vw",
@@ -238,13 +238,7 @@ const RaiseRequest = () => {
                   maxRows={6}
                   options={top100Films}
                   sx={{ width: 200, height: 80 }}
-                  style={
-                    (styles.input,
-                    {
-                      textAlign: "center",
-                      justifyContent: "center",
-                    })
-                  }
+                  style={styles.input}
                   renderInput={(params) => (
                     <TextField {...params} label="Expense Type" />
                   )}
@@ -253,25 +247,31 @@ const RaiseRequest = () => {
                   id="outlined-basic"
                   label="Title of Request"
                   variant="outlined"
-                  style={{
-                    width: "20vw",
-                  }}
-                />
-              </div>
-                <TextField
-                  id="outlined-multiline-static"
-                  label="Description"
-                  multiline
-                  sx={{
-                    width: 200,
-                    height: 80,
-                  }}
                   style={styles.input}
                 />
+              </div>
+              <TextField
+                id="outlined-multiline-static"
+                label="Description"
+                multiline
+                sx={{
+                  width: 200,
+                  height: 80,
+                }}
+                style={styles.input}
+              />
+
+              <TextField
+                id="outlined-multiline-static"
+                label="Place of Visit"
+                variant="outlined"
+                style={styles.input}
+                sx={{}}
+              />
             </div>
             <div
               style={{
-                backgroundColor: colors.blueAccent[900],
+                // backgroundColor: colors.blueAccent[900],
                 padding: "0.5em",
                 width: "100%",
                 height: 120,
@@ -283,39 +283,39 @@ const RaiseRequest = () => {
             >
               <div
                 style={{
+                  margin: 4,
+                  marginBottom: 5,
                   display: "flex",
                   flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker"]}>
-                      <DatePicker label="From Date" />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker label="From Date" />
+                  </DemoContainer>
+                </LocalizationProvider>
 
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker"]}>
-                      <DatePicker label="To Date" />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker label="To Date" />
+                  </DemoContainer>
+                </LocalizationProvider>
               </div>
-
-              <Box
-                component="form"
-                sx={{
-                  "& .MuiTextField-root": {
-                    m: 1,
-                    width: "2ch",
-                    height: "1ch",
-                  },
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                noValidate
-                autoComplete="off"
               >
                 <TextField
                   id="outlined-select-currency"
                   select
                   defaultValue="INR"
+                  style={{ ...styles.input, width: 60 }}
                 >
                   {currencies.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -323,36 +323,53 @@ const RaiseRequest = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-              </Box>
-              <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                <div>
+
                 <TextField
                   id="outlined-basic"
                   label="Amount"
                   variant="outlined"
-                  style={{
-                    width: "20vw",
-                  }}
+                  style={styles.input}
                 />
-                </div>
-              </Box>
+              </div>
 
-              <Button variant="contained" style={{}}>
+              <Button
+                variant="contained"
+                style={{
+                  width: 180,
+                  height: 60,
+                }}
+              >
                 Submit
               </Button>
-
-              {/* 
-              <TextField
-                id="standard-basic"
-                label="Place of Visit"
-                variant="standard"
-                style={styles.input}
-                sx={{}}
-              /> */}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginLeft: 8,
+              }}
+            >
+              <HistoryIcon
+                style={{
+                  marginRight: 4,
+                  transform: "scale(1.5)",
+                }}
+              />
+              <h4
+                style={{
+                  marginLeft: 4,
+                  fontFamily: "Bebas Neue,sans-serif",
+                  fontSize: "xx-large",
+                }}
+              >
+                Request History
+              </h4>
             </div>
 
             <Box
-              height="55vh"
+              height="50vh"
               sx={{
                 "& .MuiDataGrid-root": {
                   border: "none",
@@ -416,6 +433,7 @@ const styles = {
   },
   input: {
     width: "08em",
+    margin: 4,
   },
   table: {
     width: "60%",
