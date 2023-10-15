@@ -26,11 +26,14 @@ export default function Login() {
         className="loading"
         style={{ textAlign: "center", marginTop: "15em" }}
       >
-        <h1>Loading</h1>{" "}
+        <h1>Loading</h1>
       </div>
     );
   if (data) {
     localStorage.setItem("token", data.user.token);
+    localStorage.setItem("user-firstname", data.user.user.firstName);
+    localStorage.setItem("user-lastname", data.user.user.lastName);
+    localStorage.setItem("user-role", data.user.user.role);
     navigate("/home");
   }
 

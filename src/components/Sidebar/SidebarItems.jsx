@@ -8,14 +8,21 @@ import {
   ItemName,
 } from "./SidebarStyles";
 
-import { dummyData } from "..";
+import { adminSideMenu, userSideMenu } from "..";
 
 const SidebarItems = ({ displaySidebar }) => {
   const [activeItem, setActiveItem] = useState(0);
 
+  const role = localStorage.getItem("user-role");
+  var sideMenu;
+  if (role == "admin") {
+    sideMenu = adminSideMenu;
+  } else {
+    sideMenu = userSideMenu;
+  }
   return (
     <ItemsList>
-      {dummyData.map((itemData, index) => (
+      {sideMenu.map((itemData, index) => (
         <ItemContainer
           key={index}
           onClick={() => setActiveItem(itemData.id)}

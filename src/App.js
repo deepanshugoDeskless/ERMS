@@ -13,12 +13,26 @@ import Team from "./components/team";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Welcome from "./components/Welcome";
 import Addemployee from "./components/Addemployee";
-import { DynamicItem, Sidebar, dummyData } from "./components";
+import {
+  DynamicItem,
+  Sidebar,
+  dummyData,
+  adminSideMenu,
+  userSideMenu,
+} from "./components";
 
 function App() {
   const element = useRoutes(routes);
   const publicElement = useRoutes(publicRoutes);
   const token = localStorage.getItem("token");
+
+  const role = localStorage.getItem("user-role");
+  var sideMenu;
+  if (role == "admin") {
+    sideMenu = adminSideMenu;
+  } else {
+    sideMenu = userSideMenu;
+  }
   return (
     <>
       {token ? (
@@ -27,8 +41,8 @@ function App() {
           <Sidebar>
             <Routes>
               <Route path="/" element={<DynamicItem page={<Home />} />} />
-              {dummyData &&
-                dummyData.map((item, index) => (
+              {sideMenu &&
+                sideMenu.map((item, index) => (
                   <Route
                     key={index}
                     path={item.path}

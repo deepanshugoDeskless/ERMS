@@ -30,7 +30,7 @@ import { AddTravel } from "./AddTravel";
 import ClaimReimbursement, { claimReimbursement } from "./claimReimbursement";
 import ClaimRequest from "./claimRequest";
 
-export const SIDEBAR_DATA = [
+export const ADMIN_SIDEBAR_DATA = [
   {
     id: 1,
     name: "dashboards",
@@ -40,53 +40,46 @@ export const SIDEBAR_DATA = [
   },
   {
     id: 2,
-    name: "View Team",
-    page: <Team />,
-    path: "team",
-    icon: <PeopleIcon />,
-  },
-  {
-    id: 3,
     name: "Add Employees",
     page: <AddBulkEmployee />,
     path: "users",
     icon: <BulkUpload />,
   },
   {
+    id: 3,
+    name: "View Team",
+    page: <Team />,
+    path: "team",
+    icon: <PeopleIcon />,
+  },
+  {
     id: 4,
-    name: "Raise Request",
-    page: <AddTravel />,
-    path: "addtravel",
-    icon: <TravelIcon />,
-  },
-  {
-    id: 5,
-    name: "Claim Reimbursement",
-    page: <ClaimReimbursement />,
-    path: "claimreimbursement",
-    icon: <AddmoneyIcon />,
-  },
-  {
-    id: 6,
-    name: "Approved Expenses",
+    name: "Preapprove Reimbursements",
     page: <ApprovedExpenses />,
     path: "expensesapproved",
     icon: <HistoryIcon />,
   },
   {
-    id: 7,
-    name: "Raise Request",
-    page: <RaiseRequest />,
-    path: "raiseRequest",
-    icon: <TravelIcon />,
+    id: 5,
+    name: "Approve Reimbursements",
+    page: <ApprovedExpenses />,
+    path: "expensesapproved",
+    icon: <HistoryIcon />,
   },
-  {
-    id: 8,
-    name: "Claim Request",
-    page: <ClaimRequest />,
-    path: "claimRequest",
-    icon: <AddmoneyIcon />,
-  },
+  // {
+  //   id: 6,
+  //   name: "Raise Request",
+  //   page: <AddTravel />,
+  //   path: "addtravel",
+  //   icon: <TravelIcon />,
+  // },
+  // {
+  //   id: 7,
+  //   name: "Claim Reimbursement",
+  //   page: <ClaimReimbursement />,
+  //   path: "claimreimbursement",
+  //   icon: <AddmoneyIcon />,
+  // },
 
   // ,
   // {
@@ -110,4 +103,29 @@ export const SIDEBAR_DATA = [
   //   path: "faq",
   //   icon: <FaqIcon />,
   // },
+];
+
+export const USER_SIDEBAR_DATA = [
+  {
+    id: 1,
+    name: "dashboards",
+    page: <Home />,
+    path: "home",
+    icon: <HomeIcon />,
+  },
+  {
+    id: 2,
+    name: "Raise Request",
+    page: <RaiseRequest />,
+    path: "raiseRequest",
+    icon: <TravelIcon />,
+  },
+  {
+    id: 3,
+    name: "Claim Request",
+    page: <ClaimRequest />,
+    path: "claimRequest",
+    icon: <AddmoneyIcon />,
+  },
+
 ];
