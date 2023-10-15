@@ -219,6 +219,7 @@ export default function Signup() {
                   style={{
                     width: "2.1em",
                     height: "3em",
+                    borderRadius: 4,
                     textAlign: "center",
                     margin: 4,
                     fontSize: "1.2em",

@@ -107,14 +107,14 @@ export default function Login() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               height: "40.5em",
               width: "380px" /* Adjust the width as needed */,
               margin: "0 auto" /* Center the container horizontally */,
               padding: "10px 40px 0px 40px",
               backgroundColor: "#ffffff" /* Background color */,
-              borderTopLeftRadius: "20px", // Adjust the value as needed
-              borderTopRightRadius: "20px",
+              borderTopLeftRadius: "30px", // Adjust the value as needed
+              borderTopRightRadius: "30px",
               boxShadow:
                 "0px 0px 10px rgba(0, 0, 0, 0.2)" /* Box shadow for a subtle elevation effect */,
               transition:
@@ -140,17 +140,13 @@ export default function Login() {
             )}
             <img
               style={{
-                maxWidth: "30%",
-                height: "20em",
-                marginLeft: "0em",
-                marginTop: "-07em",
+                width: 130,
+                marginTop: 30
               }}
-              src="https://godeskless.com/wp-content/uploads/2023/05/icon-q2.svg"
+              src={require("../Assets/gdklogo.png")}
             ></img>
-            <h3 style={{ marginTop: "-60px", marginLeft: "0px" }}>
-              Reimburesment Portal
-            </h3>
-            <h5 style={{ marginTop: "25px", marginBottom: "30px" }}>Login! </h5>
+            <h3 style={{marginTop: 30}}>Reimburesment Portal</h3>
+            <h3 style={{marginTop: 30}}>Login! </h3>
             <form
               onSubmit={handleSubmit}
               style={{
@@ -158,6 +154,7 @@ export default function Login() {
                 flexDirection: "red",
                 display: "flex",
                 width: "100%",
+                marginTop: 30,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -206,7 +203,7 @@ export default function Login() {
                   onClick={() => {
                     callLogIn();
                   }}
-                  style={{ fontSize: "medium", marginTop: 40, width: "100%" }}
+                  style={{ fontSize: "medium", marginTop: 60, width: "100%" }}
                 >
                   Login
                 </Button>
