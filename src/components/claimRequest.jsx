@@ -195,7 +195,7 @@ const ClaimRequest = () => {
               bottom: "0px",
               left: "5em",
               marginRight: "5em",
-              top: "1.5em",
+              top: "1em",
               width: "100%",
               flexDirection: "column",
               display: "flex",
@@ -207,8 +207,6 @@ const ClaimRequest = () => {
                 backgroundColor: colors.blueAccent[800],
                 color: colors.blueAccent[200],
                 width: "100%",
-                position: "fixed",
-                top: "1em",
                 height: "2em",
                 display: "flex",
                 textAlign: "center",
@@ -313,26 +311,78 @@ const ClaimRequest = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "flex-start",
+                    justifyContent: "space-between",
                     alignItems: "center",
                     marginLeft: 8,
                   }}
                 >
-                  <CurrencyRupeeRoundedIcon
+                  <div
                     style={{
-                      marginRight: 4,
-                      transform: "scale(1.5)",
-                    }}
-                  />
-                  <h4
-                    style={{
-                      marginLeft: 4,
-                      fontFamily: "Bebas Neue,sans-serif",
-                      fontSize: "xx-large",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
                   >
-                    Add Expenses
-                  </h4>
+                    <CurrencyRupeeRoundedIcon
+                      style={{
+                        marginRight: 4,
+                        transform: "scale(1.5)",
+                      }}
+                    />
+                    <h4
+                      style={{
+                        marginLeft: 4,
+                        fontFamily: "Bebas Neue,sans-serif",
+                        fontSize: "xx-large",
+                      }}
+                    >
+                      Add Expenses
+                    </h4>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4
+                      style={{
+                        marginLeft: 4,
+                        fontFamily: "Bebas Neue,sans-serif",
+                        fontSize: "xx-large",
+                      }}
+                    >
+                      Total =
+                    </h4>
+                    <h4
+                      style={{
+                        marginLeft: 4,
+                        fontFamily: "Bebas Neue,sans-serif",
+                        fontSize: "xx-large",
+                      }}
+                    >
+                      {"0"}
+                    </h4>
+                    <CurrencyRupeeRoundedIcon
+                      style={{
+                        marginRight: 4,
+                        transform: "scale(1.5)",
+                      }}
+                    />
+                  </div>
+
+                  <Button
+                    variant="contained"
+                    style={{
+                      borderRadius: 10,
+                      marginRight: 16,
+                    }}
+                    onClick={addExpense}
+                  >
+                    Submit For Reimbursement
+                  </Button>
                 </div>
                 <div
                   style={{
@@ -357,52 +407,6 @@ const ClaimRequest = () => {
       </ColorModeContext.Provider>
     </>
   );
-};
-
-const styles = {
-  container: {
-    position: "relative",
-    width: "30em",
-    marginLeft: "3.5em",
-    padding: "16px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    height: "20em",
-  },
-  title: {
-    textAlign: "center",
-    color: "#007BFF",
-    position: "relative",
-  },
-  formGroup: {},
-  label: {
-    display: "block",
-    marginBottom: "5px",
-    color: "#333",
-  },
-  input: {
-    width: "08em",
-    margin: 4,
-  },
-  table: {
-    width: "60%",
-    borderCollapse: "collapse",
-    marginTop: "1em",
-    marginLeft: "06em",
-  },
-  tableHeader: {
-    backgroundColor: "#f2f2f2",
-    padding: "18px",
-    fontSize: "x-small", // Adjust the font size as needed
-    position: "sticky",
-    top: 0,
-    zIndex: 1,
-  },
-  tableData: {
-    padding: "8px",
-    borderBottom: "1px solid #ddd",
-    fontSize: "small", // Adjust the font size as needed
-  },
 };
 
 function Form({ key, showPlusButton, addExpense }) {
@@ -441,13 +445,13 @@ function Form({ key, showPlusButton, addExpense }) {
     <div
       key={key}
       style={{
-        // backgroundColor: colors.primary[900],
+        // backgroundColor: colors.blueAccent[900],
         width: "100%",
         border: "2px solid #ccc",
-        borderRadius: 4,
+        borderRadius: 20,
         marginTop: "0.2em",
-        height: "20%",
-        padding: 10,
+        height: "70%",
+        padding: 8,
       }}
     >
       <form>
@@ -456,6 +460,7 @@ function Form({ key, showPlusButton, addExpense }) {
             flexDirection: "row",
             display: "flex",
             width: "100%",
+            marginTop: 10,
             justifyContent: "space-between",
             alignItems: "center",
           }}
@@ -473,7 +478,7 @@ function Form({ key, showPlusButton, addExpense }) {
               disablePortal
               id="combo-box-demo"
               options={top100Films}
-              sx={{ width: "100%" }}
+              sx={{ width: 160 }}
               style={{ position: "relative" }}
               renderInput={(params) => <TextField {...params} label="Type" />}
             />
@@ -514,7 +519,7 @@ function Form({ key, showPlusButton, addExpense }) {
               display: "flex",
               width: "100%",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Box
@@ -566,11 +571,11 @@ function Form({ key, showPlusButton, addExpense }) {
             <Button
               variant="contained"
               style={{
-                width: "1em",
+                borderRadius: 20,
               }}
               onClick={addExpense}
             >
-              Add More
+              Add
             </Button>
           )}
         </div>
