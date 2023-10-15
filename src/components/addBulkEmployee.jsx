@@ -3,6 +3,7 @@ import {
   CREATE_REIMBURSEMENT,
   GET_REIMBURSEMENTS,
   GET_TEAM_MEMBERS,
+  SIGNUP_USER,
 } from "../gqloperations/mutations"; // Import your GraphQL query
 import "../../src/App.css";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
@@ -46,9 +47,12 @@ const AddEmployee = () => {
 
   // Fetch data using the GraphQL query
 
-  const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
-    refetchQueries: [{ query: GET_REIMBURSEMENTS }],
-  });
+  const [individualFirstName, setIndividualFirstName] = useState("");
+  const [individualLasttName, setIndividualLasttName] = useState("");
+  const [individualEmail, setIndividualEmail] = useState("");
+  const [individualPhone, setIndividualPhone] = useState("");
+  const [individualEmployeeCode, setIndividualEmployeeCode] = useState("");
+
   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
     context: {
       headers: {
@@ -57,95 +61,51 @@ const AddEmployee = () => {
     },
   });
 
-  const [request, setRequest] = useState({
-    name: "",
-    fromDate: "",
-    toDate: "",
-    amount: "",
-    description: "",
-    place: "",
+  const [addEmployee] = useMutation(SIGNUP_USER, {
+    // refetchQueries: [{ query: GET_REIMBURSEMENTS }],
   });
 
-  const [expenses, setExpenses] = useState([]);
-  const [reimbursement, setReimbursement] = useState({});
-  const [rowSelectionModel, setRowSelectionModel] = useState();
+  const callAddIndividualEmployee = () => {
+    console.log("🚀 ~ file: addBulkEmployee.jsx:73 ~ callAddIndividualEmployee ~ individualFirstName:", individualFirstName)
+    console.log("🚀 ~ file: addBulkEmployee.jsx:75 ~ callAddIndividualEmployee ~ individualLasttName:", individualLasttName)
+    console.log("🚀 ~ file: addBulkEmployee.jsx:77 ~ callAddIndividualEmployee ~ individualEmail:", individualEmail)
+    console.log("🚀 ~ file: addBulkEmployee.jsx:79 ~ callAddIndividualEmployee ~ individualEmployeeCode:", individualEmployeeCode)
+    console.log("🚀 ~ file: addBulkEmployee.jsx:82 ~ callAddIndividualEmployee ~ individualPhone:", individualPhone)
 
-  const addExpense = (expense) => {
-    const formId = Date.now();
-    setExpenses([
-      ...expenses,
-      {
-        formId,
-        expense,
+    addEmployee({
+      variables: {
+        userNew: {
+          firstName: individualFirstName,
+          lastName: individualLasttName,
+          email: individualEmail,
+          employeeCode: individualEmployeeCode,
+          role: "user",
+          contactNumber: individualPhone,
+          username:
+            individualFirstName+
+            "-" +
+            individualLasttName+
+            "-" +
+            "godeskless",
+        },
       },
-    ]);
-  };
-
-  const selectReimbursement = (reimbursement) => {
-    setReimbursement(reimbursement);
-    const formId = Date.now();
-    setExpenses([
-      {
-        formId,
-      },
-    ]);
-  };
-
-  const currencies = [
-    ,
-    {
-      value: "INR",
-      label: "₹",
-    },
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
-  ];
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setRequest({ ...request, [name]: value });
-  };
-  const handleSubmit = () => {
-    createReimbursement({ variables: { reimbursementNew: request } })
+    })
       .then(() => {
+        console.log("🚀 ~ file: addBulkEmployee.jsx:82 ~ callAddIndividualEmployee ~ employee added successfully:")
         // Data submitted successfully, you can perform any additional actions here
-        setRequest({
-          name: "",
-          fromDate: "",
-          toDate: "",
-          description: "",
-          place: "",
-        });
+        setIndividualFirstName("")
+        setIndividualLasttName("")
+        setIndividualEmail("")
+        setIndividualPhone("")
+        setIndividualEmployeeCode("")
       })
       .catch((error) => {
-        // Handle errors
         console.error(error);
       });
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message} </p>;
-
-  const top100Films = [
-    { label: "Travel Expense" },
-    { label: "Food Expense" },
-    { label: "Accomodation Expense" },
-    { label: "Purchase Expense" },
-  ];
 
   const columns = [
     {
@@ -187,6 +147,7 @@ const AddEmployee = () => {
       },
     },
   ];
+  
   const onFileChange = (files) => {
     console.log(files);
   };
@@ -289,7 +250,8 @@ const AddEmployee = () => {
                   type="text"
                   placeholder="Enter First Name"
                   name="firstName"
-                  // onChange={(e) => handleEmailChange(e.target.value)}
+                  value={individualFirstName}
+                  onChange={(e) => setIndividualFirstName(e.target.value)}
                   required
                   style={{
                     width: "60%",
@@ -303,10 +265,11 @@ const AddEmployee = () => {
                   id="outlined-basic"
                   label="Last Name"
                   variant="outlined"
+                  value={individualLasttName}
                   type="text"
                   placeholder="Enter Last Name"
                   name="lastName"
-                  // onChange={(e) => handlePasswordChange(e.target.value)}
+                  onChange={(e) => setIndividualLasttName(e.target.value)}
                   required
                   style={{
                     width: "60%",
@@ -328,7 +291,8 @@ const AddEmployee = () => {
                   type="email"
                   placeholder="Enter Email"
                   name="email"
-                  // onChange={(e) => handleEmailChange(e.target.value)}
+                  value={individualEmail}
+                  onChange={(e) => setIndividualEmail(e.target.value)}
                   required
                   style={{
                     width: "60%",
@@ -344,8 +308,9 @@ const AddEmployee = () => {
                   variant="outlined"
                   type="number"
                   placeholder="Enter Number"
+                  value={individualPhone}
                   name="phone"
-                  // onChange={(e) => handlePasswordChange(e.target.value)}
+                  onChange={(e) => setIndividualPhone(e.target.value)}
                   required
                   style={{
                     width: "60%",
@@ -357,10 +322,11 @@ const AddEmployee = () => {
                 id="outlined-basic"
                 label="Employee Code"
                 variant="outlined"
+                value={individualEmployeeCode}
                 type="number"
                 placeholder="Enter Employee Code"
                 name="employeeCode"
-                // onChange={(e) => handlePasswordChange(e.target.value)}
+                onChange={(e) => setIndividualEmployeeCode(e.target.value)}
                 required
                 style={{
                   width: "100%",
@@ -380,7 +346,7 @@ const AddEmployee = () => {
                   variant="contained"
                   type="submit"
                   onClick={() => {
-                    // callLogIn();
+                    callAddIndividualEmployee();
                   }}
                   style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
                 >
@@ -396,225 +362,5 @@ const AddEmployee = () => {
     </div>
   );
 };
-
-const styles = {
-  container: {
-    position: "relative",
-    width: "30em",
-    marginLeft: "3.5em",
-    padding: "16px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    height: "20em",
-  },
-  title: {
-    textAlign: "center",
-    color: "#007BFF",
-    position: "relative",
-  },
-  formGroup: {},
-  label: {
-    display: "block",
-    marginBottom: "5px",
-    color: "#333",
-  },
-  input: {
-    width: "08em",
-    margin: 4,
-  },
-  table: {
-    width: "60%",
-    borderCollapse: "collapse",
-    marginTop: "1em",
-    marginLeft: "06em",
-  },
-  tableHeader: {
-    backgroundColor: "#f2f2f2",
-    padding: "18px",
-    fontSize: "x-small", // Adjust the font size as needed
-    position: "sticky",
-    top: 0,
-    zIndex: 1,
-  },
-  tableData: {
-    padding: "8px",
-    borderBottom: "1px solid #ddd",
-    fontSize: "small", // Adjust the font size as needed
-  },
-};
-
-function Form({ key, showPlusButton, addExpense }) {
-  const top100Films = [
-    { label: "Travel" },
-    { label: "Food" },
-    { label: "Accommodation" },
-    { label: "Purchase" },
-  ];
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const currencies = [
-    {
-      value: "INR",
-      label: "₹",
-    },
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
-  ];
-
-  return (
-    <div
-      key={key}
-      style={{
-        // backgroundColor: colors.primary[900],
-        width: "100%",
-        border: "2px solid #ccc",
-        borderRadius: 4,
-        marginTop: "0.2em",
-        height: "20%",
-        padding: 10,
-      }}
-    >
-      <form>
-        <div
-          style={{
-            flexDirection: "row",
-            display: "flex",
-            width: "100%",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Box
-            width="20vh"
-            component="form"
-            sx={{
-              "& .MuiTextField-root": {},
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={top100Films}
-              sx={{ width: "100%" }}
-              style={{ position: "relative" }}
-              renderInput={(params) => <TextField {...params} label="Type" />}
-            />
-          </Box>
-
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              style={{
-                width: "3em",
-              }}
-            />
-          </Box>
-
-          <div
-            style={{
-              paddingBottom: 24,
-            }}
-          >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker label="Payment Date" />
-              </DemoContainer>
-            </LocalizationProvider>
-          </div>
-          <div
-            style={{
-              flexDirection: "row",
-              display: "flex",
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": {
-                  width: "2ch",
-                  height: "1ch",
-                  position: "relative",
-                },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <div>
-                <TextField
-                  id="outlined-select-currency"
-                  select
-                  defaultValue="INR"
-                >
-                  {currencies.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="outlined-multiline-static"
-                label="Amount"
-                multiline
-                style={{
-                  width: "3em",
-                }}
-              />
-            </Box>
-          </div>
-
-          {showPlusButton && (
-            <Button
-              variant="contained"
-              style={{
-                width: "1em",
-              }}
-              onClick={addExpense}
-            >
-              Add More
-            </Button>
-          )}
-        </div>
-      </form>
-    </div>
-  );
-}
 
 export default AddEmployee;
