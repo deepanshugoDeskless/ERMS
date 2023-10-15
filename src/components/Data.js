@@ -19,11 +19,11 @@ import {
   AddmoneyIcon,
   HistoryIcon,
 } from "./Icons";
-import Addemployee from "./Addemployee";
+
 import Home from "./Home";
 import Team from "./team";
 import RaiseRequest from "./raiseRequest";
-import AddBulkEmployee from "./AddBulkEmployees";
+import AddEmployee from "./addBulkEmployee";
 import { AddReimbursement } from "./AddReimbursement";
 import { ApprovedExpenses } from "./ApprovedExpenses";
 import { AddTravel } from "./AddTravel";
@@ -43,7 +43,7 @@ export const ADMIN_SIDEBAR_DATA = [
   {
     id: 2,
     name: "Add Employees",
-    page: <AddBulkEmployee />,
+    page: <AddEmployee />,
     path: "users",
     icon: <BulkUpload />,
   },

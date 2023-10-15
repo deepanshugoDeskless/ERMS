@@ -12,7 +12,7 @@ import Home from "./components/Home";
 import Team from "./components/team";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Welcome from "./components/Welcome";
-import Addemployee from "./components/Addemployee";
+
 import {
   DynamicItem,
   Sidebar,
