@@ -147,7 +147,6 @@ const Team = () => {
               }}
             >
               <DataGrid
-                checkboxSelection
                 rows={data.users}
                 columns={columns}
                 getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
