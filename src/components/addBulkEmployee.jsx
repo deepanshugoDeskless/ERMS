@@ -4,6 +4,7 @@ import {
   GET_REIMBURSEMENTS,
   GET_TEAM_MEMBERS,
   SIGNUP_USER,
+  BULK_UPLOAD_USER,
 } from "../gqloperations/mutations"; // Import your GraphQL query
 import "../../src/App.css";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
@@ -52,6 +53,58 @@ const AddEmployee = () => {
   const [individualEmail, setIndividualEmail] = useState("");
   const [individualPhone, setIndividualPhone] = useState("");
   const [individualEmployeeCode, setIndividualEmployeeCode] = useState("");
+  const [
+    bulkUserCreate,
+    { bulkUploadData, bulkUploadLoading, bulkUploadEerror },
+  ] = useMutation(BULK_UPLOAD_USER);
+
+  const handleBulkSubmit = ({ bulkUserInput }) => {
+    bulkUserCreate({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: {
+        bulkUserInput,
+      },
+    });
+  };
+
+  const fileInputRef = React.createRef();
+
+  const filePathset = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const selectedFile = e.target.files[0];
+    console.log(selectedFile);
+    // setFile(selectedFile);
+
+    // if (selectedFile) {
+    //   setErrorMessage("Please submit the file"); // Show "Please submit the file" when the file is selected
+    // } else {
+    //   setErrorMessage("Please upload an Excel file"); // Show "Please upload an Excel file" when no file is selected
+    // }
+  };
+
+  const convertToJson = (csv) => {
+    const lines = csv.split("\n");
+    const result = [];
+    const headers = lines[0].split(",");
+
+    for (let i = 1; i < lines.length; i++) {
+      const obj = {};
+      const currentline = lines[i].split(",");
+
+      for (let j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentline[j];
+      }
+
+      result.push(obj);
+    }
+
+    return result;
+  };
 
   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
     context: {
@@ -66,12 +119,6 @@ const AddEmployee = () => {
   });
 
   const callAddIndividualEmployee = () => {
-    console.log("🚀 ~ file: addBulkEmployee.jsx:73 ~ callAddIndividualEmployee ~ individualFirstName:", individualFirstName)
-    console.log("🚀 ~ file: addBulkEmployee.jsx:75 ~ callAddIndividualEmployee ~ individualLasttName:", individualLasttName)
-    console.log("🚀 ~ file: addBulkEmployee.jsx:77 ~ callAddIndividualEmployee ~ individualEmail:", individualEmail)
-    console.log("🚀 ~ file: addBulkEmployee.jsx:79 ~ callAddIndividualEmployee ~ individualEmployeeCode:", individualEmployeeCode)
-    console.log("🚀 ~ file: addBulkEmployee.jsx:82 ~ callAddIndividualEmployee ~ individualPhone:", individualPhone)
-
     addEmployee({
       variables: {
         userNew: {
@@ -82,22 +129,21 @@ const AddEmployee = () => {
           role: "user",
           contactNumber: individualPhone,
           username:
-            individualFirstName+
+            individualFirstName +
             "-" +
-            individualLasttName+
+            individualLasttName +
             "-" +
             "godeskless",
         },
       },
     })
       .then(() => {
-        console.log("🚀 ~ file: addBulkEmployee.jsx:82 ~ callAddIndividualEmployee ~ employee added successfully:")
         // Data submitted successfully, you can perform any additional actions here
-        setIndividualFirstName("")
-        setIndividualLasttName("")
-        setIndividualEmail("")
-        setIndividualPhone("")
-        setIndividualEmployeeCode("")
+        setIndividualFirstName("");
+        setIndividualLasttName("");
+        setIndividualEmail("");
+        setIndividualPhone("");
+        setIndividualEmployeeCode("");
       })
       .catch((error) => {
         console.error(error);
@@ -147,7 +193,7 @@ const AddEmployee = () => {
       },
     },
   ];
-  
+
   const onFileChange = (files) => {
     console.log(files);
   };
