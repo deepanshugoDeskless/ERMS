@@ -7,6 +7,7 @@ import {
   BULK_UPLOAD_USER,
 } from "../gqloperations/mutations"; // Import your GraphQL query
 import "../../src/App.css";
+import * as XLSX from "xlsx";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
@@ -53,10 +54,56 @@ const AddEmployee = () => {
   const [individualEmail, setIndividualEmail] = useState("");
   const [individualPhone, setIndividualPhone] = useState("");
   const [individualEmployeeCode, setIndividualEmployeeCode] = useState("");
+  const [file, setFile] = useState("");
+  const [jsonData, setJsonData] = useState([]);
+  const [displayTable, setDisplayTable] = useState(false);
+
   const [
     bulkUserCreate,
     { bulkUploadData, bulkUploadLoading, bulkUploadEerror },
   ] = useMutation(BULK_UPLOAD_USER);
+
+  const readFile = () => {
+    if (!file) {
+      // setErrorMessage("Please submit the file"); // Show "Please submit the file" if no file is selected
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+      const parsedData = convertToJson(data);
+      setJsonData(parsedData);
+      setDisplayTable(true);
+      // setErrorMessage("Thank you for uploading the file"); // Show "Thank you for uploading the file" upon successful upload
+
+      handleBulkSubmit({ bulkUserInput: parsedData });
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const convertToJson = (csv) => {
+    const lines = csv.split("\n");
+    const result = [];
+    const headers = lines[0].split(",");
+
+    for (let i = 1; i < lines.length; i++) {
+      const obj = {};
+      const currentline = lines[i].split(",");
+
+      for (let j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentline[j];
+      }
+
+      result.push(obj);
+    }
+
+    return result;
+  };
 
   const handleBulkSubmit = ({ bulkUserInput }) => {
     bulkUserCreate({
@@ -78,33 +125,8 @@ const AddEmployee = () => {
     e.preventDefault();
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
-    // setFile(selectedFile);
-
-    // if (selectedFile) {
-    //   setErrorMessage("Please submit the file"); // Show "Please submit the file" when the file is selected
-    // } else {
-    //   setErrorMessage("Please upload an Excel file"); // Show "Please upload an Excel file" when no file is selected
-    // }
   };
 
-  const convertToJson = (csv) => {
-    const lines = csv.split("\n");
-    const result = [];
-    const headers = lines[0].split(",");
-
-    for (let i = 1; i < lines.length; i++) {
-      const obj = {};
-      const currentline = lines[i].split(",");
-
-      for (let j = 0; j < headers.length; j++) {
-        obj[headers[j]] = currentline[j];
-      }
-
-      result.push(obj);
-    }
-
-    return result;
-  };
 
   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
     context: {
@@ -194,8 +216,20 @@ const AddEmployee = () => {
     },
   ];
 
-  const onFileChange = (files) => {
-    console.log(files);
+  // const onFileChange = (files) => {
+  //   console.log(files);
+  // };
+
+  const onFileChange = (e) => {
+    const selectedFile = e[0];
+    console.log(selectedFile);
+    setFile(selectedFile);
+
+    // if (selectedFile) {
+    //   setErrorMessage("Please submit the file"); // Show "Please submit the file" when the file is selected
+    // } else {
+    //   setErrorMessage("Please upload an Excel file"); // Show "Please upload an Excel file" when no file is selected
+    // }
   };
 
   return (
@@ -236,6 +270,14 @@ const AddEmployee = () => {
         </h6>
 
         <DropFileInput onFileChange={(files) => onFileChange(files)} />
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={readFile}
+          style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
+        >
+          Upload
+        </Button>
       </div>
 
       <div
