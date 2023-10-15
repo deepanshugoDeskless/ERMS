@@ -269,15 +269,7 @@ const AddEmployee = () => {
           Upload Excel
         </h6>
 
-        <DropFileInput onFileChange={(files) => onFileChange(files)} />
-        <Button
-          variant="contained"
-          type="submit"
-          onClick={readFile}
-          style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
-        >
-          Upload
-        </Button>
+        <DropFileInput onFileChange={(files) => onFileChange(files)} uploadFile ={(files) => readFile(files)} />
       </div>
 
       <div

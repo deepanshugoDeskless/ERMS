@@ -106,7 +106,10 @@ const DropFileInput = (props) => {
                 </Button>
                 <Button
                   variant="contained"
-                  // onClick={readFile}
+                  onClick={() => {
+                    console.log("🚀 ~ file: DropFileInput.jsx:112 ~ DropFileInput ~ item:", item)
+                    props.uploadFile(item);
+                  }}
                   style={{ fontSize: "small" }}
                 >
                   Upload
