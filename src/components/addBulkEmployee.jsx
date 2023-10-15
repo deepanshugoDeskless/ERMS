@@ -199,6 +199,7 @@ const AddEmployee = () => {
         flexDirection: "row",
         // backgroundColor: "blue",
         width: "90%",
+        alignItems: "flex-start",
         justifyContent: "flex-start",
       }}
     >
@@ -209,6 +210,9 @@ const AddEmployee = () => {
           marginLeft: 30,
           flexDirection: "column",
           // backgroundColor: "red",
+          border: "2px solid #ddd",
+          padding: 4,
+          borderRadius: 20,
           width: "90%",
           alignItems: "flex-start",
           justifyContent: "center",
@@ -218,6 +222,7 @@ const AddEmployee = () => {
         <h6
           style={{
             marginBottom: 20,
+            marginLeft: 10,
           }}
         >
           Upload Excel
@@ -225,144 +230,168 @@ const AddEmployee = () => {
 
         <DropFileInput onFileChange={(files) => onFileChange(files)} />
       </div>
+
       <div
         style={{
-          flex: 0.6,
+          border: "2px solid #ddd",
+          padding: 4,
+          flex: 0.5,
+          borderRadius: 20,
           display: "flex",
           flexDirection: "column",
           // backgroundColor: "yellow",
-          width: "80%",
-          alignItems: "start",
-          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          justifyContent: "center",
         }}
       >
-        <h6>Add Individually</h6>
+        <h6
+          style={{
+            marginLeft: 10,
+          }}
+        >
+          Add Individually
+        </h6>
         <div
           style={{
-            // backgroundColor: "palegreen",
-            flexDirection: "column",
             display: "flex",
-            width: "80%",
-            height: 120,
-            margin: 4,
-            justifyContent: "center",
+            flexDirection: "column",
+            // backgroundColor: "yellow",
             flex: 1,
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <div
             style={{
-              // backgroundColor: "orange",
-              flexDirection: "row",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <TextField
-              type="text"
-              placeholder="Enter First Name"
-              name="firstName"
-              // onChange={(e) => handleEmailChange(e.target.value)}
-              required
-              style={{
-                width: "60%",
-                margin: 4,
-              }}
-              id="outlined-basic"
-              label="First Name"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-basic"
-              label="Last Name"
-              variant="outlined"
-              type="text"
-              placeholder="Enter Last Name"
-              name="lastName"
-              // onChange={(e) => handlePasswordChange(e.target.value)}
-              required
-              style={{
-                width: "60%",
-                margin: 4,
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              // backgroundColor: "orange",
-              flexDirection: "row",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <TextField
-              type="email"
-              placeholder="Enter Email"
-              name="email"
-              // onChange={(e) => handleEmailChange(e.target.value)}
-              required
-              style={{
-                width: "60%",
-                margin: 4,
-              }}
-              id="outlined-basic"
-              label="Email"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-basic"
-              label="Phone"
-              variant="outlined"
-              type="number"
-              placeholder="Enter Number"
-              name="phone"
-              // onChange={(e) => handlePasswordChange(e.target.value)}
-              required
-              style={{
-                width: "60%",
-                margin: 4,
-              }}
-            />
-          </div>
-          <TextField
-            id="outlined-basic"
-            label="Employee Code"
-            variant="outlined"
-            type="number"
-            placeholder="Enter Employee Code"
-            name="employeeCode"
-            // onChange={(e) => handlePasswordChange(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              marginTop: 4,
-            }}
-          />
-          <div
-            style={{
-              // backgroundColor: "orange",
+              // backgroundColor: "palegreen",
               flexDirection: "column",
               display: "flex",
+              width: "80%",
+              height: 120,
+              margin: 4,
+              marginTop: 12,
               justifyContent: "center",
-              alignItems: "center",
+              flex: 1,
             }}
           >
-            <Button
-              variant="contained"
-              type="submit"
-              onClick={() => {
-                // callLogIn();
-              }}
-              style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
-            >
-              Add Employee
-            </Button>
-          </div>
-        </div>
+            <div>
+              <div
+                style={{
+                  // backgroundColor: "orange",
+                  flexDirection: "row",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  type="text"
+                  placeholder="Enter First Name"
+                  name="firstName"
+                  // onChange={(e) => handleEmailChange(e.target.value)}
+                  required
+                  style={{
+                    width: "60%",
+                    margin: 4,
+                  }}
+                  id="outlined-basic"
+                  label="First Name"
+                  variant="outlined"
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Last Name"
+                  variant="outlined"
+                  type="text"
+                  placeholder="Enter Last Name"
+                  name="lastName"
+                  // onChange={(e) => handlePasswordChange(e.target.value)}
+                  required
+                  style={{
+                    width: "60%",
+                    margin: 4,
+                  }}
+                />
+              </div>
 
-        {/* <DropFileInput onFileChange={(files) => onFileChange(files)} /> */}
+              <div
+                style={{
+                  // backgroundColor: "orange",
+                  flexDirection: "row",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  type="email"
+                  placeholder="Enter Email"
+                  name="email"
+                  // onChange={(e) => handleEmailChange(e.target.value)}
+                  required
+                  style={{
+                    width: "60%",
+                    margin: 4,
+                  }}
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Phone"
+                  variant="outlined"
+                  type="number"
+                  placeholder="Enter Number"
+                  name="phone"
+                  // onChange={(e) => handlePasswordChange(e.target.value)}
+                  required
+                  style={{
+                    width: "60%",
+                    margin: 4,
+                  }}
+                />
+              </div>
+              <TextField
+                id="outlined-basic"
+                label="Employee Code"
+                variant="outlined"
+                type="number"
+                placeholder="Enter Employee Code"
+                name="employeeCode"
+                // onChange={(e) => handlePasswordChange(e.target.value)}
+                required
+                style={{
+                  width: "100%",
+                  marginTop: 4,
+                }}
+              />
+              <div
+                style={{
+                  // backgroundColor: "orange",
+                  flexDirection: "column",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  type="submit"
+                  onClick={() => {
+                    // callLogIn();
+                  }}
+                  style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
+                >
+                  Add Employee
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* <DropFileInput onFileChange={(files) => onFileChange(files)} /> */}
+        </div>
       </div>
     </div>
   );
