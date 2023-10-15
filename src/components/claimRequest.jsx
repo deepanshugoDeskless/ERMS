@@ -30,6 +30,9 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import HistoryIcon from "@mui/icons-material/History";
+import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
+import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
+
 import { useMutation, useQuery, gql } from "@apollo/client";
 
 const ClaimRequest = () => {
@@ -117,7 +120,6 @@ const ClaimRequest = () => {
   ];
 
   const columns = [
-    // { field: "_id", headerName: "ID", flex: 1 },
     {
       field: "title",
       headerName: "Title",
@@ -192,76 +194,122 @@ const ClaimRequest = () => {
             >
               <h4 style={{}}>Claim Reimbursement</h4>
             </div>
-
             <Box
               style={{
-                marginTop: "1.5em",
-                width: "30%",
                 flex: 1,
-                flexDirection: "column",
+                flexDirection: "row",
+                backgroundColor: "gray",
                 display: "flex",
-                height: "100%",
               }}
             >
-              <div
+              <Box
                 style={{
+                  marginTop: "1.5em",
+                  width: "30%",
+                  flex: 0.3,
+                  flexDirection: "column",
+                  backgroundColor: "yellow",
                   display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  marginLeft: 8,
+                  height: "100%",
                 }}
               >
-                <HistoryIcon
+                <div
                   style={{
-                    marginRight: 4,
-                    transform: "scale(1.5)",
-                  }}
-                />
-                <h4
-                  style={{
-                    marginLeft: 4,
-                    fontFamily: "Bebas Neue,sans-serif",
-                    fontSize: "xx-large",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: 8,
                   }}
                 >
-                  Approved For
-                </h4>
-              </div>
+                  <DoneAllRoundedIcon
+                    style={{
+                      marginRight: 4,
+                      transform: "scale(1.5)",
+                    }}
+                  />
+                  <h4
+                    style={{
+                      marginLeft: 4,
+                      fontFamily: "Bebas Neue,sans-serif",
+                      fontSize: "xx-large",
+                    }}
+                  >
+                    Approved For
+                  </h4>
+                </div>
+                <Box
+                  height="75%"
+                  sx={{
+                    "& .MuiDataGrid-root": {
+                      border: "none",
+                    },
+                    "& .MuiDataGrid-cell": {
+                      borderBottom: "none",
+                    },
+                    "& .name-column--cell": {
+                      color: colors.greenAccent[300],
+                    },
+                    "& .MuiDataGrid-columnHeaders": {
+                      backgroundColor: colors.blueAccent[700],
+                      borderBottom: "none",
+                    },
+                    "& .MuiDataGrid-virtualScroller": {
+                      backgroundColor: colors.primary[400],
+                    },
+                    "& .MuiDataGrid-footerContainer": {
+                      borderTop: "none",
+                      backgroundColor: colors.blueAccent[700],
+                    },
+                    "& .MuiCheckbox-root": {
+                      color: `${colors.greenAccent[200]} !important`,
+                    },
+                  }}
+                >
+                  <DataGrid
+                    checkboxSelection
+                    rows={data.ireimbursements}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                  />
+                </Box>
+              </Box>
               <Box
-                height="75%"
-                sx={{
-                  "& .MuiDataGrid-root": {
-                    border: "none",
-                  },
-                  "& .MuiDataGrid-cell": {
-                    borderBottom: "none",
-                  },
-                  "& .name-column--cell": {
-                    color: colors.greenAccent[300],
-                  },
-                  "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
-                    borderBottom: "none",
-                  },
-                  "& .MuiDataGrid-virtualScroller": {
-                    backgroundColor: colors.primary[400],
-                  },
-                  "& .MuiDataGrid-footerContainer": {
-                    borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
-                  },
-                  "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
-                  },
+                style={{
+                  marginTop: "1.5em",
+                  width: "0%",
+                  flex: 1,
+                  flexDirection: "column",
+                  backgroundColor: "red",
+                  display: "flex",
+                  height: "100%",
                 }}
               >
-                <DataGrid
-                  checkboxSelection
-                  rows={data.ireimbursements}
-                  columns={columns}
-                  getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: 8,
+                  }}
+                >
+                  <CurrencyRupeeRoundedIcon
+                    style={{
+                      marginRight: 4,
+                      transform: "scale(1.5)",
+                    }}
+                  />
+                  <h4
+                    style={{
+                      marginLeft: 4,
+                      fontFamily: "Bebas Neue,sans-serif",
+                      fontSize: "xx-large",
+                    }}
+                  >
+                    Add Expenses
+                  </h4>
+                </div>
               </Box>
             </Box>
           </Box>
