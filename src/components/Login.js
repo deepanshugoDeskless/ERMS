@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import loginupdated from "../Assets/loginupdated.json";
 import Button from "@mui/material/Button";
+import Loader from "./loader";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function Login() {
         className="loading"
         style={{ textAlign: "center", marginTop: "15em" }}
       >
-        <h1>Loading</h1>
+        <Loader/>
       </div>
     );
   if (data) {

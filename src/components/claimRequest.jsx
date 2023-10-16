@@ -111,7 +111,7 @@ const ClaimRequest = () => {
       expenses
     );
     console.log("Calling bulk upload");
-    expenses.shift()
+    expenses.shift();
     expenses.forEach((object) => {
       delete object["formId"];
     });
@@ -176,6 +176,14 @@ const ClaimRequest = () => {
       },
     },
   ];
+  const approvedReimbursements = data?.ireimbursement?.filter(
+    (reimbursement) => {
+      return (
+        reimbursement?.isPreApproved != null &&
+        reimbursement?.isPreApproved == true
+      );
+    }
+  );
 
   return (
     <>
@@ -282,7 +290,7 @@ const ClaimRequest = () => {
                       selectReimbursement(newRowSelectionModel);
                     }}
                     rowSelectionModel={rowSelectionModel}
-                    rows={data.ireimbursements}
+                    rows={data.ireimbursements.filter((element) => element.isPreApproved)}
                     columns={columns}
                     getRowId={(row) => row._id}
                   />
@@ -386,7 +394,7 @@ const ClaimRequest = () => {
                   {expenses.map((expense, index) => (
                     <Form
                       key={expense.formId}
-                      showPlusButton={index === expenses.length - 1}
+                      showPlusButton={index === expenses?.length - 1}
                       addExpense={addExpense}
                       reimbursement={reimbursement}
                     />
