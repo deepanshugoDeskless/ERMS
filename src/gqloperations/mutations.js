@@ -69,6 +69,17 @@ export const CREATE_REIMBURSEMENT = gql`
     }
   }
 `;
+
+export const UPDATE_REIMBURSEMENTS = gql`
+mutation UpdateReimbursments(
+  $reimbursementsUpdateInput: ReimbursementsUpdateInput!
+) {
+  String: updateReimbursments(
+    reimbursementsUpdateInput: $reimbursementsUpdateInput
+  )
+}
+
+`;
 export const GET_REIMBURSEMENTS = gql`
   query GetMyReimbursements {
     ireimbursements {

@@ -1,7 +1,11 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useQuery } from "@apollo/client"; // Import useQuery
-import { GET_TEAM_MEMBERS, GET_PRE_REQUESTS } from "../gqloperations/mutations"; // Import your GraphQL query
+import { useMutation, useQuery } from "@apollo/client"; // Import useQuery
+import {
+  GET_TEAM_MEMBERS,
+  GET_PRE_REQUESTS,
+  UPDATE_REIMBURSEMENTS,
+} from "../gqloperations/mutations"; // Import your GraphQL query
 import { tokens } from "../../src/theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
@@ -28,7 +32,7 @@ const PreApproveRequest = () => {
     );
     setSelectionModel(newSelection);
   };
-  const { loading, error, data } = useQuery(GET_PRE_REQUESTS, {
+  const { loading, error, data, refetch } = useQuery(GET_PRE_REQUESTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
@@ -36,8 +40,41 @@ const PreApproveRequest = () => {
     },
   });
 
+  const [updateReimbursements, { updateData, updateLoading, updateError }] =
+    useMutation(UPDATE_REIMBURSEMENTS, {
+      onCompleted: () => {
+        refetch({
+          // Additional fetch options
+          context: {
+            headers: {
+              // Your custom headers here
+              Authorization: `${localStorage.getItem("token")}`,
+            },
+          },
+        });
+      },
+    });
+
   if (loading) return <Loader />;
   if (error) return <Error />;
+
+  const handleBulkApproveSubmit = () => {
+    updateReimbursements({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: {
+        reimbursementsUpdateInput: {
+          ids: selectionModel,
+          reimbursementInput: {
+            isPreApproved: true,
+          },
+        },
+      },
+    });
+  };
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1 },
@@ -104,16 +141,7 @@ const PreApproveRequest = () => {
       flex: 1,
     },
   ];
-  const onRowsSelectionHandler = (ids) => {
-    console.log(
-      "🚀 ~ file: preApproveRequests.jsx:100 ~ onRowsSelectionHandler ~ ids:",
-      ids
-    );
-    const selectedRowsData = ids.map((id) =>
-      data.pendingPreRequests.find((row) => row.id === id)
-    );
-    console.log(selectedRowsData);
-  };
+
   return (
     <>
       <Box
@@ -153,11 +181,7 @@ const PreApproveRequest = () => {
             variant="contained"
             type="submit"
             onClick={() => {
-              // callAddIndividualEmployee();
-              console.log(
-                "🚀 ~ file: preApproveRequests.jsx:198 ~ PreApproveRequest ~ columns:",
-                selectionModel
-              );
+              handleBulkApproveSubmit();
             }}
             style={{
               marginRight: 40,
