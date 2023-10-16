@@ -38,23 +38,32 @@ const RaiseRequest = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
 
-  const [type, setType] = useState("");
+  const [type, setType] = useState({});
   const [title, setTitle] = useState("");
   const [description, setDescriopion] = useState("");
   const [place, setPlace] = useState("");
-  const [fromDate, setFormDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [fromDate, setFormDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   const [amount, setAmount] = useState("");
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   // Fetch data using the GraphQL query
-
   const [createReimbursement] = useMutation(RAISE_REIMBURSEMENT_REQUEST, {
-    refetchQueries: [{ query: GET_REIMBURSEMENTS }],
+    onCompleted: () => {
+      refetch({
+        // Additional fetch options
+        context: {
+          headers: {
+            // Your custom headers here
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        },
+      });
+    },
   });
-  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
+  const { loading, error, data, refetch } = useQuery(GET_REIMBURSEMENTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
@@ -110,7 +119,7 @@ const RaiseRequest = () => {
         reimbursementNew: {
           title: title,
           description: description,
-          type: "ta",
+          type: type.code,
           visitLocation: place,
           noOfDays: "2",
           fromDate: fromDate,
@@ -123,10 +132,10 @@ const RaiseRequest = () => {
         // Data submitted successfully, you can perform any additional actions here
         setTitle("");
         setDescriopion("");
-        setType("");
+        setType({});
         setPlace("");
-        setFormDate("");
-        setToDate("");
+        setFormDate(null);
+        setToDate(null);
         setAmount("");
       })
       .catch((error) => {
@@ -143,6 +152,13 @@ const RaiseRequest = () => {
     { label: "Food Expense" },
     { label: "Accomodation Expense" },
     { label: "Purchase Expense" },
+  ];
+
+  const TypeMap = [
+    { label: "Travel Expense", code: "ta" },
+    { label: "Food Expense", code: "fa" },
+    { label: "Accomodation Expense", code: "aa" },
+    { label: "Purchase Expense", code: "pa" },
   ];
 
   const columns = [
@@ -262,17 +278,17 @@ const RaiseRequest = () => {
                   disablePortal
                   id="combo-box-demo"
                   maxRows={6}
-                  options={top100Films}
+                  options={TypeMap}
                   sx={{ width: 200, height: 80 }}
                   style={styles.input}
+                  onChange={(event, selectedType) => {
+                    setType(selectedType);
+                  }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       label="Expense Type"
-                      value={type}
-                      onChange={(selectedType) => {
-                        setType(selectedType.target.value);
-                      }}
+                      value={type.label}
                     />
                   )}
                 />
@@ -463,7 +479,6 @@ const RaiseRequest = () => {
               }}
             >
               <DataGrid
-                checkboxSelection
                 rows={data.ireimbursements}
                 columns={columns}
                 getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
