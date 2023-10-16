@@ -3,6 +3,7 @@ import {
   CREATE_REIMBURSEMENT,
   GET_REIMBURSEMENTS,
   GET_TEAM_MEMBERS,
+  RAISE_REIMBURSEMENT_REQUEST,
 } from "../gqloperations/mutations"; // Import your GraphQL query
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
@@ -35,12 +36,21 @@ import { useMutation, useQuery, gql } from "@apollo/client";
 const RaiseRequest = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+
+  const [type, setType] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescriopion] = useState("");
+  const [place, setPlace] = useState("");
+  const [fromDate, setFormDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [amount, setAmount] = useState("");
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   // Fetch data using the GraphQL query
 
-  const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
+  const [createReimbursement] = useMutation(RAISE_REIMBURSEMENT_REQUEST, {
     refetchQueries: [{ query: GET_REIMBURSEMENTS }],
   });
   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
@@ -88,17 +98,35 @@ const RaiseRequest = () => {
     const { name, value } = e.target;
     setRequest({ ...request, [name]: value });
   };
-  const handleSubmit = () => {
-    createReimbursement({ variables: { reimbursementNew: request } })
+  const callRaiseReimbursementRequest = () => {
+    createReimbursement({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: {
+        reimbursementNew: {
+          title: title,
+          description: description,
+          type: "ta",
+          visitLocation: place,
+          noOfDays: "2",
+          fromDate: fromDate,
+          toDate: toDate,
+          askedAmount: amount,
+        },
+      },
+    })
       .then(() => {
         // Data submitted successfully, you can perform any additional actions here
-        setRequest({
-          name: "",
-          fromDate: "",
-          toDate: "",
-          description: "",
-          place: "",
-        });
+        setTitle("");
+        setDescriopion("");
+        setType("");
+        setPlace("");
+        setFormDate("");
+        setToDate("");
+        setAmount("");
       })
       .catch((error) => {
         // Handle errors
@@ -237,13 +265,24 @@ const RaiseRequest = () => {
                   sx={{ width: 200, height: 80 }}
                   style={styles.input}
                   renderInput={(params) => (
-                    <TextField {...params} label="Expense Type" />
+                    <TextField
+                      {...params}
+                      label="Expense Type"
+                      value={type}
+                      onChange={(selectedType) => {
+                        setType(selectedType.target.value);
+                      }}
+                    />
                   )}
                 />
                 <TextField
                   id="outlined-basic"
                   label="Title of Request"
                   variant="outlined"
+                  value={title}
+                  onChange={(titleInput) => {
+                    setTitle(titleInput.target.value);
+                  }}
                   style={styles.input}
                 />
               </div>
@@ -255,6 +294,10 @@ const RaiseRequest = () => {
                   width: 200,
                   height: 80,
                 }}
+                value={description}
+                onChange={(descriptionInput) => {
+                  setDescriopion(descriptionInput.target.value);
+                }}
                 style={styles.input}
               />
 
@@ -263,6 +306,10 @@ const RaiseRequest = () => {
                 label="Place of Visit"
                 variant="outlined"
                 style={styles.input}
+                value={place}
+                onChange={(placeInput) => {
+                  setPlace(placeInput.target.value);
+                }}
                 sx={{}}
               />
             </div>
@@ -290,13 +337,27 @@ const RaiseRequest = () => {
               >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker"]}>
-                    <DatePicker label="From Date" />
+                    <DatePicker
+                      value={fromDate}
+                      onChange={(fromDateInput) => {
+                        setFormDate(
+                          new Date(fromDateInput).toLocaleDateString()
+                        );
+                      }}
+                      label="From Date"
+                    />
                   </DemoContainer>
                 </LocalizationProvider>
 
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={["DatePicker"]}>
-                    <DatePicker label="To Date" />
+                    <DatePicker
+                      value={toDate}
+                      onChange={(toDateInput) => {
+                        setToDate(new Date(toDateInput).toLocaleDateString());
+                      }}
+                      label="To Date"
+                    />
                   </DemoContainer>
                 </LocalizationProvider>
               </div>
@@ -324,6 +385,10 @@ const RaiseRequest = () => {
                 <TextField
                   id="outlined-basic"
                   label="Amount"
+                  value={amount}
+                  onChange={(amountInput) => {
+                    setAmount(amountInput.target.value);
+                  }}
                   variant="outlined"
                   style={styles.input}
                 />
@@ -334,6 +399,9 @@ const RaiseRequest = () => {
                 style={{
                   width: 180,
                   height: 60,
+                }}
+                onClick={() => {
+                  callRaiseReimbursementRequest();
                 }}
               >
                 Submit

@@ -87,3 +87,11 @@ export const GET_REIMBURSEMENTS = gql`
     }
   }
 `;
+export const RAISE_REIMBURSEMENT_REQUEST = gql`
+  mutation RaiseRequest($reimbursementNew: ReimbursementInput!) {
+    Reimbursement: createReimbursment(reimbursementNew: $reimbursementNew) {
+      _id
+      by
+    }
+  }
+`;
