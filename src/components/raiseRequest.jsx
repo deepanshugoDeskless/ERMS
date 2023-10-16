@@ -228,7 +228,7 @@ const RaiseRequest = () => {
                 color: colors.blueAccent[200],
                 width: "84vw",
                 position: "fixed",
-                top: "1.5em",
+                top: "1.6em",
                 height: "2em",
                 display: "flex",
                 textAlign: "center",

@@ -195,7 +195,6 @@ const ClaimRequest = () => {
               bottom: "0px",
               left: "5em",
               marginRight: "5em",
-              top: "1em",
               width: "100%",
               flexDirection: "column",
               display: "flex",
