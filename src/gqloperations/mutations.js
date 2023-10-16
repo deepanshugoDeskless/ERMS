@@ -100,3 +100,28 @@ export const ADD_BULK_EXPENSE = gql`
     expense: createBulkExpense(expenseNewArray: $expenseNewArray)
   }
 `;
+
+export const GET_PRE_REQUESTS = gql`
+  query PendingPreApprovals {
+    pendingPreRequests {
+      _id
+      title
+      description
+      type
+      visitLocation
+      noOfDays
+      fromDate
+      toDate
+      askedAmount
+      totalAmount
+      isPreApproved
+      expenses{
+        amount
+      }
+      by {
+        firstName
+        lastName
+      }
+    }
+  }
+`;
