@@ -8,10 +8,11 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "./Header";
 import { ColorModeContext, useMode } from "../../src/theme";
+import Button from "@mui/material/Button";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { useState } from "react";
-import {Loader, Error} from "./loader";
+import { Loader, Error } from "./loader";
 
 const PreApproveRequest = () => {
   const [colorMode] = useMode();
@@ -19,10 +20,6 @@ const PreApproveRequest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Fetch data using the GraphQL query
-  //   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
-
-  // Fetch data using the GraphQL query
   const { loading, error, data } = useQuery(GET_PRE_REQUESTS, {
     context: {
       headers: {
@@ -45,76 +42,35 @@ const PreApproveRequest = () => {
     {
       field: "type",
       headerName: "Type",
+      flex: 0.5,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "by",
+      headerName: "Requester",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
       field: "visitLocation",
       headerName: "Place",
-      flex: 1,
-    },
-    {
-      field: "toDate",
-      headerName: "To",
-      flex: 1,
+      flex: 0.5,
     },
     {
       field: "fromDate",
       headerName: "From",
-      flex: 1,
+      flex: 0.7,
+    },
+    {
+      field: "toDate",
+      headerName: "To",
+      flex: 0.7,
     },
     {
       field: "askedAmount",
       headerName: "Ask",
       flex: 1,
     },
-    {
-      field: "isPreApproved",
-      headerName: "Approved",
-      flex: 1,
-    },
-
-    // {
-    //   field: "role",
-    //   headerName: "Access Level",
-    //   flex: 1,
-    //   renderCell: ({ row }) => {
-    //     return (
-    //       <Box
-    //         width="60%"
-    //         m="0 auto"
-    //         p="5px"
-    //         display="flex"
-    //         justifyContent="center"
-    //         backgroundColor={
-    //           row.role === "admin"
-    //             ? colors.greenAccent[600]
-    //             : row.role === "manager"
-    //             ? colors.greenAccent[700]
-    //             : colors.greenAccent[700]
-    //         }
-    //         borderRadius="4px"
-    //       >
-    //         {row.role === "admin"}
-    //         {row.role === "manager"}
-    //         {row.role === "user"}
-    //         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-    //           {row.role}
-    //         </Typography>
-    //       </Box>
-    //     );
-    //   },
-    // },
-    // {
-    //   field: "username",
-    //   headerName: "Username",
-    //   flex: 1.5,
-    // },
-    // {
-    //   field: "sex",
-    //   headerName: "Gender",
-    //   flex: 1,
-    // },
   ];
 
   return (
@@ -138,18 +94,35 @@ const PreApproveRequest = () => {
             height: "100%",
             display: "flex",
             textAlign: "center",
-            justifyContent: "center",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
           className="banner"
         >
           <h4
             style={{
+              marginLeft: 40,
               fontFamily: "Bebas Neue,sans-serif",
               fontSize: "xxx-large",
             }}
           >
             Pre Approval Requests
           </h4>
+          <Button
+            variant="contained"
+            type="submit"
+            onClick={() => {
+              // callAddIndividualEmployee();
+            }}
+            style={{
+              marginRight: 40,
+              fontSize: "small",
+              width: "10%",
+              height: "50%",
+            }}
+          >
+            Approve
+          </Button>
         </div>
         <Box
           height="85vh"
