@@ -34,6 +34,7 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 
 import { useMutation, useQuery, gql } from "@apollo/client";
+import Loader from "./loader";
 
 const ClaimRequest = () => {
   const [colorMode] = useMode();
@@ -134,8 +135,8 @@ const ClaimRequest = () => {
       });
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message} </p>;
+  if (loading) return <Loader/>;
+  if (error) return <Loader/>;
 
   const top100Films = [
     { label: "Travel Expense" },

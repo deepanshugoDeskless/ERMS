@@ -17,6 +17,7 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import { ColorModeContext, useMode } from "../../src/theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
+import Loader from "./loader";
 
 function AddBulkEmployee() {
   const [colorMode] = useMode();
@@ -32,8 +33,8 @@ function AddBulkEmployee() {
   const [bulkUserCreate, { data, loading, error }] =
     useMutation(BULK_UPLOAD_USER);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <Loader />;
+  if (error) return <Loader />;
 
   const handleClick = (e) => {
     fileInputRef.current.click();
@@ -285,7 +286,6 @@ function AddBulkEmployee() {
                       <body>Click box to upload</body>
                       <p>Maximun file size 10mb</p>
                       <input
-
                         type="file"
                         id="file"
                         style={{

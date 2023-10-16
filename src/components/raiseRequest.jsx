@@ -32,6 +32,7 @@ import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import HistoryIcon from "@mui/icons-material/History";
 import { useMutation, useQuery, gql } from "@apollo/client";
+import Loader from "./loader";
 
 const RaiseRequest = () => {
   const [colorMode] = useMode();
@@ -134,8 +135,8 @@ const RaiseRequest = () => {
       });
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message} </p>;
+  if (loading) return <Loader />;
+  if (error) return <Loader />;
 
   const top100Films = [
     { label: "Travel Expense" },

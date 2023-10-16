@@ -40,6 +40,7 @@ import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import { useMutation, useQuery, gql } from "@apollo/client";
 
 import DropFileInput from "./drop-file-input/DropFileInput";
+import Loader from "./loader";
 
 const AddEmployee = () => {
   const [colorMode] = useMode();
@@ -127,7 +128,6 @@ const AddEmployee = () => {
     console.log(selectedFile);
   };
 
-
   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
     context: {
       headers: {
@@ -172,8 +172,8 @@ const AddEmployee = () => {
       });
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message} </p>;
+  if (loading) return <Loader />;
+  if (error) return <Loader />;
 
   const columns = [
     {
@@ -269,7 +269,10 @@ const AddEmployee = () => {
           Upload Excel
         </h6>
 
-        <DropFileInput onFileChange={(files) => onFileChange(files)} uploadFile ={(files) => readFile(files)} />
+        <DropFileInput
+          onFileChange={(files) => onFileChange(files)}
+          uploadFile={(files) => readFile(files)}
+        />
       </div>
 
       <div

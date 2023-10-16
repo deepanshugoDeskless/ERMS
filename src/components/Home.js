@@ -7,13 +7,14 @@ import { colorMode } from "../theme";
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import Loader from "./loader";
 
 // Your code here
 
 export default function Home() {
   const { loading, error, data } = useQuery(GET_ALL_QUOTES);
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <Loader/>;
   if (error) {
     console.log(error.message);
   }

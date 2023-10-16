@@ -22,6 +22,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { CREATE_REIMBURSEMENT } from "../gqloperations/mutations";
 import { GET_REIMBURSEMENTS } from "../gqloperations/mutations";
+import Loader from "./loader";
 
 export const AddTravel = () => {
   const [colorMode] = useMode();
@@ -97,8 +98,8 @@ export const AddTravel = () => {
     },
   });
 
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
+  if (loading) return <Loader />;
+  if (error) return <Loader />;
 
   const dataRows = data.ireimbursements;
   console.log("🚀 ~ file: AddTravel.js:98 ~ AddTravel ~ dataRows:", dataRows);
@@ -109,26 +110,6 @@ export const AddTravel = () => {
     { label: "Accomodation Expense" },
     { label: "Purchase Expense" },
   ];
-
-  // const dataRows = [
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Not Approved'],
-  //   ['Sample Name', '2023-10-15', '2023-10-20', 'Sample Description', 'Sample Place', 'Approved'],
-
-  //   // Add more data rows as needed
-  // ];
 
   const columns = [
     { field: "_id", headerName: "Employee ID", flex: 1 },
@@ -144,67 +125,10 @@ export const AddTravel = () => {
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    // {
-    //   field: "email",
-    //   headerName: "Email",
-    //   flex: 1.8,
-    //   valueFormatter: (params) => params.value.toLowerCase(),
-    // },
-    // {
-    //   field: "role",
-    //   headerName: "Access Level",
-    //   flex: 1,
-    //   renderCell: ({ row }) => {
-    //     return (
-    //       <Box
-    //         width="60%"
-    //         m="0 auto"
-    //         p="5px"
-    //         display="flex"
-    //         justifyContent="center"
-    //         backgroundColor={
-    //           row.role === "admin"
-    //             ? colors.greenAccent[600]
-    //             : row.role === "manager"
-    //             ? colors.greenAccent[700]
-    //             : colors.greenAccent[700]
-    //         }
-    //         borderRadius="4px"
-    //       >
-    //         {row.role === "admin"}
-    //         {row.role === "manager"}
-    //         {row.role === "user"}
-    //         <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-    //           {row.role}
-    //         </Typography>
-    //       </Box>
-    //     );
-    //   },
-    // },
-    // {
-    //   field: "username",
-    //   headerName: "Username",
-    //   flex: 1.5,
-    // },
-    // {
-    //   field: "sex",
-    //   headerName: "Gender",
-    //   flex: 1,
-    // },
   ];
   return (
     <div style={styles.container}>
-      <h2
-        style={styles.title}
-        style={{
-          fontFamily: "Bebas Neue,sans-serif",
-          position: "absolute",
-          top: "-0.7em",
-          left: "8.5em",
-        }}
-      >
-        Add Request
-      </h2>
+      <h2 style={styles.title}>Add Request</h2>
       <Autocomplete
         disablePortal
         id="combo-box-demo"
@@ -230,12 +154,6 @@ export const AddTravel = () => {
             maxRows={4}
             onChange={handleInputChange}
             style={styles.input}
-            style={{
-              position: "absolute",
-              left: "8em",
-              width: "20vw",
-              top: "1.9em",
-            }}
           />
         </div>
       </Box>
@@ -256,10 +174,7 @@ export const AddTravel = () => {
           noValidate
           autoComplete="off"
         >
-          <div
-            style={styles.input}
-            style={{ position: "absolute", marginLeft: "21em", top: "1.7em" }}
-          >
+          <div style={styles.input}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker label="To Date" />
@@ -284,12 +199,6 @@ export const AddTravel = () => {
             multiline
             rows={2}
             style={styles.input}
-            style={{
-              position: "absolute",
-              marginLeft: "-13.27em",
-              width: "5.55em",
-              top: "4.2em",
-            }}
           />
         </Box>
       </div>
@@ -305,13 +214,6 @@ export const AddTravel = () => {
               borderBottom: "none !important",
             },
           },
-        }}
-        style={{
-          width: "06em",
-          position: "absolute",
-          marginLeft: "-6.5em",
-          top: "4.35em",
-          textDecoration: "none",
         }}
       />
       <Box
@@ -348,12 +250,6 @@ export const AddTravel = () => {
                 <InputAdornment position="start"></InputAdornment>
               }
               style={styles.input}
-              style={{
-                position: "absolute",
-                marginLeft: "49.5em",
-                width: "9em",
-                top: "11.85em",
-              }}
             />
           </FormControl>
         </div>

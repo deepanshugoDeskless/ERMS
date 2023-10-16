@@ -11,6 +11,7 @@ import { ColorModeContext, useMode } from "../../src/theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { useState } from "react";
+import Loader from "./loader";
 
 const Team = () => {
   const [colorMode] = useMode();
@@ -21,8 +22,8 @@ const Team = () => {
   // Fetch data using the GraphQL query
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message} </p>;
+  if (loading) return <Loader />;
+  if (error) return <Loader />;
 
   const columns = [
     { field: "employeeCode", headerName: "Employee ID", flex: 1 },
