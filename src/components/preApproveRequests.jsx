@@ -47,10 +47,34 @@ const PreApproveRequest = () => {
     },
     {
       field: "by",
-      headerName: "Requester",
+      headerName: "Requested By",
       flex: 1,
-      cellClassName: "name-column--cell",
+      renderCell: ({ row }) => {
+        return (
+          <Box
+            width="60%"
+            m="0 auto"
+            p="5px"
+            display="flex"
+            justifyContent="center"
+            backgroundColor={
+              row.role === "admin"
+                ? colors.greenAccent[600]
+                : row.role === "manager"
+                ? colors.greenAccent[700]
+                : colors.greenAccent[700]
+            }
+            borderRadius="4px"
+          >
+            {row.by.firstName + " " + row.by.lastName}
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              {row.role}
+            </Typography>
+          </Box>
+        );
+      },
     },
+
     {
       field: "visitLocation",
       headerName: "Place",
