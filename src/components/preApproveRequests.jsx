@@ -19,7 +19,15 @@ const PreApproveRequest = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [selectionModel, setSelectionModel] = useState([]);
 
+  const handleSelectionModelChange = (newSelection) => {
+    console.log(
+      "🚀 ~ file: preApproveRequests.jsx:25 ~ handleSelectionModelChange ~ newSelection:",
+      newSelection
+    );
+    setSelectionModel(newSelection);
+  };
   const { loading, error, data } = useQuery(GET_PRE_REQUESTS, {
     context: {
       headers: {
@@ -96,7 +104,16 @@ const PreApproveRequest = () => {
       flex: 1,
     },
   ];
-
+  const onRowsSelectionHandler = (ids) => {
+    console.log(
+      "🚀 ~ file: preApproveRequests.jsx:100 ~ onRowsSelectionHandler ~ ids:",
+      ids
+    );
+    const selectedRowsData = ids.map((id) =>
+      data.pendingPreRequests.find((row) => row.id === id)
+    );
+    console.log(selectedRowsData);
+  };
   return (
     <>
       <Box
@@ -137,6 +154,10 @@ const PreApproveRequest = () => {
             type="submit"
             onClick={() => {
               // callAddIndividualEmployee();
+              console.log(
+                "🚀 ~ file: preApproveRequests.jsx:198 ~ PreApproveRequest ~ columns:",
+                selectionModel
+              );
             }}
             style={{
               marginRight: 40,
@@ -178,6 +199,10 @@ const PreApproveRequest = () => {
         >
           <DataGrid
             checkboxSelection
+            onRowSelectionModelChange={(newRowSelectionModel) => {
+              handleSelectionModelChange(newRowSelectionModel);
+            }}
+            rowSelectionModel={selectionModel}
             rows={data.pendingPreRequests}
             columns={columns}
             getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
