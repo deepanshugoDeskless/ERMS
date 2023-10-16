@@ -25,9 +25,14 @@ export default function Login() {
     return (
       <div
         className="loading"
-        style={{ textAlign: "center", marginTop: "15em" }}
+        style={{
+          textAlign: "center",
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
-        <Loader/>
+        <Loader />
       </div>
     );
   if (data) {
@@ -142,12 +147,12 @@ export default function Login() {
             <img
               style={{
                 width: 130,
-                marginTop: 30
+                marginTop: 30,
               }}
               src={require("../Assets/gdklogo.png")}
             ></img>
-            <h3 style={{marginTop: 30}}>Reimburesment Portal</h3>
-            <h3 style={{marginTop: 30}}>Login! </h3>
+            <h3 style={{ marginTop: 30 }}>Reimburesment Portal</h3>
+            <h3 style={{ marginTop: 30 }}>Login! </h3>
             <form
               onSubmit={handleSubmit}
               style={{

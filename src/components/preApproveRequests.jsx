@@ -13,7 +13,7 @@ import { CssBaseline } from "@mui/material";
 import { useState } from "react";
 import Loader from "./loader";
 
-const Team = () => {
+const PreApproveRequest = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
@@ -93,71 +93,79 @@ const Team = () => {
       {/* <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline /> */}
-          {/* <h1 style={{ position: 'absolute', top: '0.3em', left: '11em' }}>Team</h1>
+      {/* <h1 style={{ position: 'absolute', top: '0.3em', left: '11em' }}>Team</h1>
           <h5 style={{ position: 'absolute', top: '4.8em', left: '25em' }}>Managing the Team Members</h5> */}
-          <Box
+      <Box
+        style={{
+          position: "absolute",
+          bottom: "0px",
+          left: "5em",
+          right: "0px",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: colors.blueAccent[800],
+            color: colors.blueAccent[200],
+            width: "100%",
+            top: "0px",
+            zIndex: -1,
+            flex: 1,
+            height: "100%",
+            display: "flex",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+          className="banner"
+        >
+          <h4
             style={{
-              position: "absolute",
-              bottom: "0px",
-              left: "5em",
-              width: "84%",
+              fontFamily: "Bebas Neue,sans-serif",
+              fontSize: "xxx-large",
             }}
           >
-            <div
-              style={{
-                backgroundColor: colors.blueAccent[800],
-                color: colors.blueAccent[200],
-                width: "84vw",
-                position: "fixed",
-                top: "01.5em",
-                height: "2em",
-                display: "flex",
-                textAlign: "center",
-                justifyContent: "center",
-              }}
-              className="banner"
-            >
-              <h4 style={{}}>Godeskless Workforce</h4>
-            </div>
-            <Box
-              height="80vh"
-              sx={{
-                "& .MuiDataGrid-root": {
-                  border: "none",
-                },
-                "& .MuiDataGrid-cell": {
-                  borderBottom: "none",
-                },
-                "& .name-column--cell": {
-                  color: colors.greenAccent[300],
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: colors.blueAccent[700],
-                  borderBottom: "none",
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: colors.primary[400],
-                },
-                "& .MuiDataGrid-footerContainer": {
-                  borderTop: "none",
-                  backgroundColor: colors.blueAccent[700],
-                },
-                "& .MuiCheckbox-root": {
-                  color: `${colors.greenAccent[200]} !important`,
-                },
-              }}
-            >
-              <DataGrid
-                rows={data.users}
-                columns={columns}
-                getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
-              />
-            </Box>
-          </Box>
-        {/* </ThemeProvider>
+            Pre Approval Requests
+          </h4>
+        </div>
+        <Box
+          height="85vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .name-column--cell": {
+              color: colors.greenAccent[300],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+          }}
+        >
+          <DataGrid
+            rows={data.users}
+            columns={columns}
+            getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
+          />
+        </Box>
+      </Box>
+      {/* </ThemeProvider>
       </ColorModeContext.Provider> */}
     </>
   );
 };
 
-export default Team;
+export default PreApproveRequest;

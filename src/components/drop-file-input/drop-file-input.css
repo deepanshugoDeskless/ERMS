@@ -32,8 +32,9 @@
 
 .drop-file-input__label {
     text-align: center;
-    color: peru;
+    color: rgb(63, 108, 205);
     font-weight: 600;
+    font-size:large;
     padding: 10px;
 }
 

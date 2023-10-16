@@ -5,7 +5,8 @@ import Button from "@mui/material/Button";
 import "./drop-file-input.css";
 
 import { ImageConfig } from "../../config/ImageConfig";
-import uploadImg from "../../Assets/cloud-upload-regular-240.png";
+// import uploadImg from "../../Assets/cloud-upload-regular-240.png";
+import uploadImg from "../../Assets/cloud-upload.png";
 
 const DropFileInput = (props) => {
   const wrapperRef = useRef(null);
