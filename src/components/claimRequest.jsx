@@ -1,5 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import {
+  ADD_BULK_EXPENSE,
   CREATE_REIMBURSEMENT,
   GET_REIMBURSEMENTS,
   GET_TEAM_MEMBERS,
@@ -47,6 +48,8 @@ const ClaimRequest = () => {
   const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
     refetchQueries: [{ query: GET_REIMBURSEMENTS }],
   });
+  const [createBulkExpenses] = useMutation(ADD_BULK_EXPENSE, {});
+
   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
     context: {
       headers: {
@@ -69,65 +72,60 @@ const ClaimRequest = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState();
 
   const addExpense = (expense) => {
+    console.log(
+      "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
+      expense
+    );
     const formId = Date.now();
     setExpenses([
       ...expenses,
       {
         formId,
-        expense,
+        ...expense,
       },
     ]);
+    console.log(
+      "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
+      expenses
+    );
   };
 
   const selectReimbursement = (reimbursement) => {
-    setReimbursement(reimbursement);
+    console.log(
+      "🚀 ~ file: claimRequest.jsx:94 ~ selectReimbursement ~ reimbursement:",
+      reimbursement[0]
+    );
+    setReimbursement(reimbursement[0]);
     const formId = Date.now();
     setExpenses([
       {
         formId,
+        reimbursement: reimbursement[0],
       },
     ]);
   };
 
-  const currencies = [
-    ,
-    {
-      value: "INR",
-      label: "₹",
-    },
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
-  ];
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setRequest({ ...request, [name]: value });
-  };
-  const handleSubmit = () => {
-    createReimbursement({ variables: { reimbursementNew: request } })
+  const callBulkExpenseUpload = () => {
+    console.log(
+      "🚀 ~ file: claimRequest.jsx:137 ~ callBulkExpenseUpload ~ expenses:",
+      expenses
+    );
+    console.log("Calling bulk upload");
+    expenses.shift()
+    expenses.forEach((object) => {
+      delete object["formId"];
+    });
+    createBulkExpenses({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: { expenseNewArray: expenses },
+    })
       .then(() => {
         // Data submitted successfully, you can perform any additional actions here
-        setRequest({
-          name: "",
-          fromDate: "",
-          toDate: "",
-          description: "",
-          place: "",
-        });
+        alert("Expenses uploaded successfully");
       })
       .catch((error) => {
         // Handle errors
@@ -135,15 +133,8 @@ const ClaimRequest = () => {
       });
   };
 
-  if (loading) return <Loader/>;
-  if (error) return <Loader/>;
-
-  const top100Films = [
-    { label: "Travel Expense" },
-    { label: "Food Expense" },
-    { label: "Accomodation Expense" },
-    { label: "Purchase Expense" },
-  ];
+  if (loading) return <Loader />;
+  if (error) return <Loader />;
 
   const columns = [
     {
@@ -379,7 +370,7 @@ const ClaimRequest = () => {
                       borderRadius: 10,
                       marginRight: 16,
                     }}
-                    onClick={addExpense}
+                    onClick={callBulkExpenseUpload}
                   >
                     Submit For Reimbursement
                   </Button>
@@ -397,6 +388,7 @@ const ClaimRequest = () => {
                       key={expense.formId}
                       showPlusButton={index === expenses.length - 1}
                       addExpense={addExpense}
+                      reimbursement={reimbursement}
                     />
                   ))}
                 </div>
@@ -409,14 +401,19 @@ const ClaimRequest = () => {
   );
 };
 
-function Form({ key, showPlusButton, addExpense }) {
-  const top100Films = [
-    { label: "Travel" },
-    { label: "Food" },
-    { label: "Accommodation" },
-    { label: "Purchase" },
+function Form({ key, showPlusButton, addExpense, reimbursement }) {
+  const expenseTypes = [
+    { label: "Travel", code: "te" },
+    { label: "Food", code: "fe" },
+    { label: "Accommodation", code: "ae" },
+    { label: "Purchase", code: "pe" },
   ];
   const theme = useTheme();
+  const [expenseType, setExpenseType] = useState({});
+  const [expenseDescription, setExpenseDescrption] = useState("");
+  const [expenseDate, setExpenseDate] = useState(null);
+  const [expenseAmount, setExpensesAmount] = useState("");
+
   const colors = tokens(theme.palette.mode);
   const currencies = [
     {
@@ -477,7 +474,11 @@ function Form({ key, showPlusButton, addExpense }) {
             <Autocomplete
               disablePortal
               id="combo-box-demo"
-              options={top100Films}
+              options={expenseTypes}
+              value={expenseType?.label ? expenseType?.label : ""}
+              onChange={(event, selectedType) => {
+                setExpenseType(selectedType);
+              }}
               sx={{ width: 160 }}
               style={{ position: "relative" }}
               renderInput={(params) => <TextField {...params} label="Type" />}
@@ -496,6 +497,8 @@ function Form({ key, showPlusButton, addExpense }) {
               id="outlined-multiline-static"
               label="Description"
               multiline
+              value={expenseDescription}
+              onChange={(e) => setExpenseDescrption(e.target.value)}
               style={{
                 width: "3em",
               }}
@@ -509,7 +512,15 @@ function Form({ key, showPlusButton, addExpense }) {
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
-                <DatePicker label="Payment Date" />
+                <DatePicker
+                  value={expenseDate}
+                  onChange={(expenseDateInput) => {
+                    setExpenseDate(
+                      new Date(expenseDateInput).toLocaleDateString()
+                    );
+                  }}
+                  label="Payment Date"
+                />
               </DemoContainer>
             </LocalizationProvider>
           </div>
@@ -560,6 +571,8 @@ function Form({ key, showPlusButton, addExpense }) {
                 id="outlined-multiline-static"
                 label="Amount"
                 multiline
+                value={expenseAmount}
+                onChange={(e) => setExpensesAmount(e.target.value)}
                 style={{
                   width: "3em",
                 }}
@@ -573,7 +586,40 @@ function Form({ key, showPlusButton, addExpense }) {
               style={{
                 borderRadius: 20,
               }}
-              onClick={addExpense}
+              onClick={() => {
+                console.log(
+                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseAmount:",
+                  expenseAmount
+                );
+                console.log(
+                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDate:",
+                  expenseDate
+                );
+                console.log(
+                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDescription:",
+                  expenseDescription
+                );
+                console.log(
+                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseType:",
+                  expenseType
+                );
+
+                if (
+                  expenseType &&
+                  expenseDescription &&
+                  expenseDate &&
+                  expenseAmount
+                ) {
+                  addExpense({
+                    type: expenseType.code,
+                    amount: expenseAmount,
+                    description: expenseDescription,
+                    reimbursement: reimbursement,
+                  });
+                } else {
+                  alert("Please Fill Details.");
+                }
+              }}
             >
               Add
             </Button>

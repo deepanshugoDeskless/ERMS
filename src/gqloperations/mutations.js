@@ -95,3 +95,8 @@ export const RAISE_REIMBURSEMENT_REQUEST = gql`
     }
   }
 `;
+export const ADD_BULK_EXPENSE = gql`
+  mutation CreateBulkExpense($expenseNewArray: [ExpenseInput]!) {
+    expense: createBulkExpense(expenseNewArray: $expenseNewArray)
+  }
+`;

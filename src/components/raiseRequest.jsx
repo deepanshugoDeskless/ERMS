@@ -147,13 +147,6 @@ const RaiseRequest = () => {
   if (loading) return <Loader />;
   if (error) return <Loader />;
 
-  const top100Films = [
-    { label: "Travel Expense" },
-    { label: "Food Expense" },
-    { label: "Accomodation Expense" },
-    { label: "Purchase Expense" },
-  ];
-
   const TypeMap = [
     { label: "Travel Expense", code: "ta" },
     { label: "Food Expense", code: "fa" },
