@@ -22,7 +22,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { CREATE_REIMBURSEMENT } from "../gqloperations/mutations";
 import { GET_REIMBURSEMENTS } from "../gqloperations/mutations";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 export const AddTravel = () => {
   const [colorMode] = useMode();
@@ -99,7 +99,7 @@ export const AddTravel = () => {
   });
 
   if (loading) return <Loader />;
-  if (error) return <Loader />;
+  if (error) return <Error />;
 
   const dataRows = data.ireimbursements;
   console.log("🚀 ~ file: AddTravel.js:98 ~ AddTravel ~ dataRows:", dataRows);

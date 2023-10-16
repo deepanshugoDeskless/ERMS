@@ -11,7 +11,7 @@ import { ColorModeContext, useMode } from "../../src/theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { useState } from "react";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 const Team = () => {
   const [colorMode] = useMode();
@@ -23,7 +23,7 @@ const Team = () => {
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
 
   if (loading) return <Loader />;
-  if (error) return <Loader />;
+  if (error) return <Error />;
 
   const columns = [
     { field: "employeeCode", headerName: "Employee ID", flex: 1 },

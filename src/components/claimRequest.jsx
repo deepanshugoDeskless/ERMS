@@ -35,7 +35,7 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 
 import { useMutation, useQuery, gql } from "@apollo/client";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 const ClaimRequest = () => {
   const [colorMode] = useMode();
@@ -134,7 +134,7 @@ const ClaimRequest = () => {
   };
 
   if (loading) return <Loader />;
-  if (error) return <Loader />;
+  if (error) return <Error/>;
 
   const columns = [
     {

@@ -40,7 +40,7 @@ import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import { useMutation, useQuery, gql } from "@apollo/client";
 
 import DropFileInput from "./drop-file-input/DropFileInput";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 const AddEmployee = () => {
   const [colorMode] = useMode();
@@ -173,7 +173,7 @@ const AddEmployee = () => {
   };
 
   if (loading) return <Loader />;
-  if (error) return <Loader />;
+  if (error) return <Error />;
 
   const columns = [
     {

@@ -32,7 +32,7 @@ import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import HistoryIcon from "@mui/icons-material/History";
 import { useMutation, useQuery, gql } from "@apollo/client";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 const RaiseRequest = () => {
   const [colorMode] = useMode();
@@ -145,7 +145,7 @@ const RaiseRequest = () => {
   };
 
   if (loading) return <Loader />;
-  if (error) return <Loader />;
+  if (error) return <Error />;
 
   const TypeMap = [
     { label: "Travel Expense", code: "ta" },

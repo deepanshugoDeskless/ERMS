@@ -7,7 +7,7 @@ import { colorMode } from "../theme";
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 // Your code here
 

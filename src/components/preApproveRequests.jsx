@@ -11,7 +11,7 @@ import { ColorModeContext, useMode } from "../../src/theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { useState } from "react";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 const PreApproveRequest = () => {
   const [colorMode] = useMode();
@@ -20,7 +20,7 @@ const PreApproveRequest = () => {
   const colors = tokens(theme.palette.mode);
 
   // Fetch data using the GraphQL query
-//   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
+  //   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
 
   // Fetch data using the GraphQL query
   const { loading, error, data } = useQuery(GET_PRE_REQUESTS, {
@@ -32,7 +32,7 @@ const PreApproveRequest = () => {
   });
 
   if (loading) return <Loader />;
-  if (error) return <Loader />;
+  if (error) return <Error />;
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1 },
@@ -52,31 +52,26 @@ const PreApproveRequest = () => {
       field: "visitLocation",
       headerName: "Place",
       flex: 1,
-      
     },
     {
       field: "toDate",
       headerName: "To",
       flex: 1,
-      
     },
     {
       field: "fromDate",
       headerName: "From",
       flex: 1,
-      
     },
     {
       field: "askedAmount",
       headerName: "Ask",
       flex: 1,
-      
     },
     {
       field: "isPreApproved",
       headerName: "Approved",
       flex: 1,
-      
     },
 
     // {
@@ -185,6 +180,7 @@ const PreApproveRequest = () => {
           }}
         >
           <DataGrid
+            checkboxSelection
             rows={data.pendingPreRequests}
             columns={columns}
             getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field

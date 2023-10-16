@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import loginupdated from "../Assets/loginupdated.json";
 import Button from "@mui/material/Button";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 export default function Login() {
   const navigate = useNavigate();

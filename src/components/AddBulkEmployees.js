@@ -17,7 +17,7 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import { ColorModeContext, useMode } from "../../src/theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
-import Loader from "./loader";
+import {Loader, Error} from "./loader";
 
 function AddBulkEmployee() {
   const [colorMode] = useMode();
@@ -34,7 +34,7 @@ function AddBulkEmployee() {
     useMutation(BULK_UPLOAD_USER);
 
   if (loading) return <Loader />;
-  if (error) return <Loader />;
+  if (error) return <Error />;
 
   const handleClick = (e) => {
     fileInputRef.current.click();
