@@ -112,7 +112,7 @@ export const ADMIN_SIDEBAR_DATA = [
 
 export const USER_SIDEBAR_DATA = [
   {
-    id: 1,
+     id: 1,
     name: "dashboards",
     page: <Home />,
     path: "home",
