@@ -234,7 +234,7 @@ const RaiseRequest = () => {
           >
             <div
               style={{
-                backgroundColor: colors.blueAccent[800],
+                // backgroundColor: colors.blueAccent[800],
                 color: colors.blueAccent[200],
                 width: "84vw",
                 position: "fixed",
