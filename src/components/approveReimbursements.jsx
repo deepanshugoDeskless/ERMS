@@ -153,7 +153,7 @@ const ApproveReimbursements = () => {
     {
       field: "title",
       headerName: "Title",
-      flex: 1.2,
+      flex: 0.8,
       cellClassName: "name-column--cell",
     },
     {
@@ -302,8 +302,8 @@ const ApproveReimbursements = () => {
           </Box>
           <Box
             style={{
-              marginTop: "1.5em",
-              width: "90%",
+              marginTop: "0.8em",
+              width: "70%",
               flexDirection: "column",
               // backgroundColor: "red",
               display: "flex",

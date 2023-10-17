@@ -117,7 +117,7 @@ const Team = () => {
               }}
               className="banner"
             >
-              <h4 style={{}}>Godeskless Workforce</h4>
+              <h4 style={{}}>goDeskless Workforce</h4>
             </div>
             <Box
               height="80vh"

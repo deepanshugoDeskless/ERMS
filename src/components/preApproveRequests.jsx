@@ -155,6 +155,7 @@ const PreApproveRequest = () => {
         <div
           style={{
             // backgroundColor: colors.blueAccent[800],
+            backgroundColor:'yellow',
             color: colors.blueAccent[200],
             width: "100%",
             top: "0px",
@@ -165,13 +166,13 @@ const PreApproveRequest = () => {
             textAlign: "center",
             alignItems: "center",
             justifyContent: "space-between",
+            
           }}
           className="banner"
         >
           <h4
             style={{
               marginLeft: 50,
-              marginTop:20,
               fontFamily: "Bebas Neue,sans-serif",
               fontSize: "xxx-large",
             }}
@@ -186,7 +187,6 @@ const PreApproveRequest = () => {
             }}
             style={{
               marginRight: 40,
-              marginTop:17,
               fontSize: "medium",
               width: "10%",
               height: "50%",
@@ -196,7 +196,7 @@ const PreApproveRequest = () => {
           </Button>
         </div>
         <Box
-          height="85vh"
+          height="80vh"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",

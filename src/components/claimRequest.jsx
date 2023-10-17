@@ -42,6 +42,7 @@ const ClaimRequest = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  
 
   // Fetch data using the GraphQL query
 
@@ -66,6 +67,8 @@ const ClaimRequest = () => {
     description: "",
     place: "",
   });
+
+  
 
   const [expenses, setExpenses] = useState([]);
   const [reimbursement, setReimbursement] = useState({});
