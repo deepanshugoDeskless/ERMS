@@ -154,6 +154,11 @@ const RaiseRequest = () => {
     { label: "Purchase Expense", code: "pa" },
   ];
 
+  const TypeNature = [
+    { label: "Internal", code: "in" },
+    { label: "Customer Visit", code: "cv" },
+  ];
+
   const columns = [
     // { field: "_id", headerName: "ID", flex: 1 },
     {
@@ -271,9 +276,29 @@ const RaiseRequest = () => {
                   disablePortal
                   id="combo-box-demo"
                   maxRows={6}
+                  options={TypeNature}
+                  sx={{ width: 200, height: 80 }}
+                  style={styles.input}
+                  style={{width:'4em',marginTop:'0.15em',marginLeft:'0.12em'}}
+                  onChange={(event, selectedType) => {
+                    setType(selectedType);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Nature of Travel"
+                      value={type.label}
+                    />
+                  )}
+                />
+                 <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  maxRows={6}
                   options={TypeMap}
                   sx={{ width: 200, height: 80 }}
                   style={styles.input}
+                  style={{width:'4.5em',marginLeft:'0.6em',marginTop:'0.1em'}}
                   onChange={(event, selectedType) => {
                     setType(selectedType);
                   }}
@@ -294,6 +319,7 @@ const RaiseRequest = () => {
                     setTitle(titleInput.target.value);
                   }}
                   style={styles.input}
+                  style={{width:'4em',marginTop:'0.1em',marginLeft:'1.3em'}}
                 />
               </div>
               <TextField
@@ -309,6 +335,7 @@ const RaiseRequest = () => {
                   setDescriopion(descriptionInput.target.value);
                 }}
                 style={styles.input}
+                style={{width:'4em',marginTop:'0.1em'}}
               />
 
               <TextField
@@ -320,7 +347,7 @@ const RaiseRequest = () => {
                 onChange={(placeInput) => {
                   setPlace(placeInput.target.value);
                 }}
-                sx={{}}
+                style={{width:'4em',marginTop:'0.1em'}}
               />
             </div>
             <div
@@ -384,6 +411,7 @@ const RaiseRequest = () => {
                   select
                   defaultValue="INR"
                   style={{ ...styles.input, width: 60 }}
+                  style={{marginLeft:'-0.3em'}}
                 >
                   {currencies.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -401,6 +429,7 @@ const RaiseRequest = () => {
                   }}
                   variant="outlined"
                   style={styles.input}
+                  style={{width:'7.8em'}}
                 />
               </div>
 

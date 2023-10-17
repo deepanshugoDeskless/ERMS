@@ -106,7 +106,7 @@ export const AddTravel = () => {
 
   const top100Films = [
     { label: "Travel Expense" },
-    { label: "Food Expense" },
+    { label: "Meal Expense" },
     { label: "Accomodation Expense" },
     { label: "Purchase Expense" },
   ];

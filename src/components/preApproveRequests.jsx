@@ -170,7 +170,8 @@ const PreApproveRequest = () => {
         >
           <h4
             style={{
-              marginLeft: 40,
+              marginLeft: 50,
+              marginTop:20,
               fontFamily: "Bebas Neue,sans-serif",
               fontSize: "xxx-large",
             }}
@@ -185,7 +186,8 @@ const PreApproveRequest = () => {
             }}
             style={{
               marginRight: 40,
-              fontSize: "small",
+              marginTop:17,
+              fontSize: "medium",
               width: "10%",
               height: "50%",
             }}

@@ -414,7 +414,7 @@ const ApproveReimbursements = () => {
 function Form({ key, showPlusButton, addExpense, reimbursement }) {
   const expenseTypes = [
     { label: "Travel", code: "te" },
-    { label: "Food", code: "fe" },
+    { label: "Meal", code: "fe" },
     { label: "Accommodation", code: "ae" },
     { label: "Purchase", code: "pe" },
   ];

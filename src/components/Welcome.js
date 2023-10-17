@@ -118,7 +118,7 @@ const ImageWithText = () => {
             marginTop: 220,
           }}
         >
-          Welcome to GoDeskless Employee Reimbursement Portal
+          Welcome to goDeskless Expense Reimbursement Portal
         </h1>
         <h3 className="font-link2">
           <Typewriter

@@ -203,7 +203,7 @@ const ClaimRequest = () => {
           >
             <div
               style={{
-                backgroundColor: colors.blueAccent[800],
+                // backgroundColor: colors.blueAccent[800],
                 color: colors.blueAccent[200],
                 width: "100%",
                 height: "2em",
@@ -412,7 +412,7 @@ const ClaimRequest = () => {
 function Form({ key, showPlusButton, addExpense, reimbursement }) {
   const expenseTypes = [
     { label: "Travel", code: "te" },
-    { label: "Food", code: "fe" },
+    { label: "Meal", code: "fe" },
     { label: "Accommodation", code: "ae" },
     { label: "Purchase", code: "pe" },
   ];
@@ -465,6 +465,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
             flexDirection: "row",
             display: "flex",
             width: "100%",
+            height:'20vh',
             marginTop: 10,
             justifyContent: "space-between",
             alignItems: "center",
@@ -487,7 +488,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               onChange={(event, selectedType) => {
                 setExpenseType(selectedType);
               }}
-              sx={{ width: 160 }}
+              sx={{ width: 120 }}
               style={{ position: "relative" }}
               renderInput={(params) => <TextField {...params} label="Type" />}
             />

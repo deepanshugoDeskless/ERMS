@@ -65,7 +65,7 @@ function ClaimReimbursement() {
 function Form({ key, showPlusButton, addForm }) {
   const top100Films = [
     { label: 'Travel Expense' },
-    { label: 'Food Expense' },
+    { label: 'Meal Expense' },
     { label: 'Accommodation Expense' },
     { label: 'Purchase Expense' },
   ];
