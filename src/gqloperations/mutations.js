@@ -136,3 +136,27 @@ export const GET_PRE_REQUESTS = gql`
     }
   }
 `;
+
+export const ADMIN_FETCH_REQUESTS = gql `
+query PendingReimbursements {
+  pendingReimbursements {
+    title
+    description
+    type
+    visitLocation
+    noOfDays
+    fromDate
+    toDate
+    askedAmount
+    totalAmount
+    isPreApproved
+    isApproved
+    expenses {
+      amount
+      description
+      approved
+      by
+    }
+  }
+}
+`

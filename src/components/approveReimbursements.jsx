@@ -5,12 +5,46 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { tokens } from "../../src/theme";
 import { useMode } from "../../src/theme";
-import { useQuery } from "@apollo/client";
-import {
-  GET_TEAM_MEMBERS,
-  GET_REIMBURSEMENTS,
-  UPDATE_REIMBURSEMENTS,
-} from "../gqloperations/mutations";
+import { useQuery, gql } from "@apollo/client";
+
+const ADMIN_FETCH_REQUESTS = gql`
+  query PendingReimbursements {
+    pendingReimbursements {
+      title
+      description
+      type
+      visitLocation
+      noOfDays
+      fromDate
+      toDate
+      askedAmount
+      totalAmount
+      isPreApproved
+      isApproved
+      expenses {
+        amount
+        description
+        approved
+        by
+      }
+    }
+  }
+`;
+
+const getTypeDescription = (type) => {
+  switch (type) {
+    case "ta":
+      return "Travel Expense";
+    case "pa":
+      return "Purchase Expense";
+    case "fa":
+      return "Meal Expense";
+    case "aa":
+      return "Accommodation Expense";
+    default:
+      return type;
+  }
+};
 
 const PreApproveRequest = (key, showPlusButton, addForm) => {
   const [colorMode] = useMode();
@@ -18,68 +52,62 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
   const [isFormOpen, setFormOpen] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
 
   const handleSelectionModelChange = (newSelection) => {
     setSelectionModel(newSelection);
-    // Open the form when a row is selected
+
     setFormOpen(true);
+
+    if (newSelection.length > 0) {
+      setSelectedRowData(reimbursements.find((row) => row.id === newSelection[0]));
+    }
   };
 
-  // Function to format date as "date, month"
-  const formatDate = (dateString) => {
-    const options = { day: "numeric", month: "long" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const calculateTotalAmount = (expenses) => {
+    return expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0);
   };
 
-  // Sample data
-  const sampleData = [
-    {
-      id: 1,
-      title: "Mumbai Visit",
-      name: "Souraj",
-      type: "Mumbai Visit",
-      fromDate: "2023-05-12",
-      askedAmount: 5000,
+  const { loading, error, data, refetch } = useQuery(ADMIN_FETCH_REQUESTS, {
+    context: {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     },
-    {
-      id: 2,
-      title: "Bangalore Visit",
-      name: "Deepanshu",
-      type: "Mumbai Travel",
-      fromDate: "2023-02-01",
-      askedAmount: 7000,
-    },
-    {
-      id: 2,
-      title: "SFO Visit",
-      name: "Punam",
-      type: "Mumbai Travel",
-      fromDate: "2023-02-01",
-      askedAmount: 7000,
-    },
-    {
-      id: 2,
-      title: "Delhi Visit",
-      name: "Ram",
-      type: "Mumbai Travel",
-      fromDate: "2023-02-01",
-      askedAmount: 7000,
-    },
+  });
 
-    // Add more sample data entries here
-  ];
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
-  // Update the fromDate in the sample data to display in "date, month" format
-  sampleData.forEach((item) => {
-    item.fromDate = formatDate(item.fromDate);
+  const reimbursements = data.pendingReimbursements.map((reimbursement, index) => {
+    // Date format change karne ke liye
+    const fromDate = new Date(reimbursement.fromDate);
+    const toDate = new Date(reimbursement.toDate);
+
+    const formattedFromDate = `${fromDate.getDate()} ${fromDate.toLocaleString('en-US', { month: 'short' })}`;
+    const formattedToDate = `${toDate.getDate()} ${toDate.toLocaleString('en-US', { month: 'short' })}`;
+
+    
+
+    return {
+      //API se data fetch karne ke liye to show in table and form
+      id: index,
+      title: reimbursement.title,
+      fromDate: formattedFromDate,
+      toDate: formattedToDate,
+      type: getTypeDescription(reimbursement.type), 
+      askedAmount: reimbursement.askedAmount,
+      expenses: reimbursement.expenses,
+      description: reimbursement.description,
+    };
   });
 
   const columns = [
-    { field: "title", headerName: "Title", flex: 0.6 },
-    { field: "name", headerName: "Requester", flex: 0.5 },
-    // { field: "type", headerName: "Type", flex: 1 },
-    { field: "fromDate", headerName: "Date", flex: 0.5 },
-    { field: "askedAmount", headerName: "Ask", flex: 0.5 },
+    { field: "title", headerName: "Title", flex: 1.4 },
+    { field: "type", headerName: "Type", flex: 1.2 }, 
+    { field: "fromDate", headerName: "From Date", flex: 1 },
+    { field: "toDate", headerName: "To Date", flex: 0.8 },
+    { field: "askedAmount", headerName: "Ask", flex: 0.7 },
   ];
 
   return (
@@ -132,7 +160,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
         </div>
         <Box
           height="82.3vh"
-          width="36vw"
+          width="42vw"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",
@@ -165,27 +193,27 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
               handleSelectionModelChange(newRowSelectionModel);
             }}
             rowSelectionModel={selectionModel}
-            rows={sampleData}
+            rows={reimbursements}
             columns={columns}
             getRowId={(row) => row.id}
           />
         </Box>
       </Box>
 
-      {isFormOpen && (
+      {isFormOpen && selectedRowData && (
         <div
-          style={{
-            position: "relative",
-            marginTop: "1em",
-            marginLeft: "5.8em",
-            width: "calc(70% - 7em)",
-            backgroundColor: "white",
-            maxHeight: "82vh",
-            overflow: "auto",
-            borderLeft: "2px solid #ccc", // Adding a border
-            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)", // Adding a box shadow
-          }}
-        >
+        style={{
+          position: "relative",
+          marginTop: "0.9em",
+          marginLeft: "7.6em",
+          width: "calc(70% - 8.8em)",
+          backgroundColor: "white",
+          maxHeight: "82vh",
+          overflowY: "auto", 
+          borderLeft: "2px solid #ccc",
+          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+        }}
+      >
           <h4
             style={{
               marginBottom: "0.5em",
@@ -197,362 +225,46 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
               color: colors.blueAccent[200],
             }}
           >
-            Mumbai Visit
+            {selectedRowData.description}
           </h4>
-          <h6
-            style={{
-              marginTop: "2.4em",
-              marginLeft: "-15.2em",
-              marginBottom: "1em",
-              fontSize: "0.6em",
-            }}
-          >
-            Flight Travel
-          </h6>
-          <div
-            className="innerbox"
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            ></Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Type"
-                defaultValue="Travel"
-                InputProps={{
-                  readOnly: true,
+          <Typography style={{ position :'relative',fontSize:'xx-large',marginTop: "0.4em", marginLeft: "10em",color:'#808080' }}>
+            Amount: ₹{calculateTotalAmount(selectedRowData.expenses)}
+          </Typography>
+          {selectedRowData.expenses.map((expense, index) => (
+            <div key={index}>
+              <h6
+                style={{
+                  marginTop: index === 0 ? "2.4em" : "1em",
+                  marginLeft: "-12em",
+                  marginBottom: "1em",
+                  fontSize: "0.6em",
                 }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Date "
-                defaultValue="12 May"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="#Invoice ID"
-                defaultValue="#98612"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="#Establishment"
-                defaultValue="Vistara"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Amount"
-                defaultValue="₹4000"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-          </div>
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              rows={2}
-              style={{
-                width: "4.8em",
-                position: "relative",
-                left: "-3.8em",
-                top: "0.4em",
-              }}
-              defaultValue="Flight Cost PUN-BOM AIR VISTARA"
-            />
-          </Box>
-          <h6
-            style={{
-              marginTop: "1em",
-              marginLeft: "-15.5em",
-              marginBottom: "1em",
-              fontSize: "0.6em",
-            }}
-          >
-            Team Lunch
-          </h6>
-          <div
-            className="innerbox"
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Type"
-                defaultValue="Meal"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em", position: "relative", left: "0.5em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Date "
-                defaultValue="14 June"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em", position: "relative", left: "0.4em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="#Invoice ID"
-                defaultValue="#8236"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em", position: "relative", left: "0.3em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="#Establishment"
-                defaultValue="BBQ Nation"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em", position: "relative", left: "0.2em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Amount"
-                defaultValue="₹4000"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-          </div>
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              rows={2}
-              style={{
-                width: "4.8em",
-                position: "relative",
-                left: "-3.8em",
-                top: "0.4em",
-              }}
-              defaultValue="TML Team Lunch at Barbcue Nation, Worli"
-            />
-          </Box>
-          <h6
-            style={{
-              marginTop: "1em",
-              marginLeft: "-14em",
-              marginLeft: "-15.5em",
-              marginBottom: "1em",
-              fontSize: "0.6em",
-            }}
-          >
-            Purchase{" "}
-          </h6>
-          <div
-            className="innerbox"
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            ></Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Type"
-                defaultValue="Purchase"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Date "
-                defaultValue="18 June"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="standard-read-only-input"
-                label="Amount"
-                defaultValue="₹4000"
-                InputProps={{
-                  readOnly: true,
-                }}
-                variant="standard"
-                style={{ width: "2em" }}
-              />
-            </Box>
-          </div>
+              >
+                {expense.description}
+              </h6>
+              <div className="innerbox" style={{ display: "flex", justifyContent: "space-between" }}>
+                <Box
+                  component="form"
+                  sx={{
+                    "& .MuiTextField-root": { m: 1, width: "25ch" },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Amount"
+                    defaultValue={`₹${expense.amount}`}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="standard"
+                    style={{ width: "2em" }}
+                  />
+                </Box>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </>
@@ -560,3 +272,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
 };
 
 export default PreApproveRequest;
+
+
+
+
