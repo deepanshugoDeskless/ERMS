@@ -132,7 +132,6 @@ const ClaimRequest = () => {
   if (loading) return <Loader />;
   if (error) return <Error />;
 
-
   const columns = [
     {
       field: "title",
@@ -261,8 +260,8 @@ const ClaimRequest = () => {
                     position: "fixed",
                     marginLeft: "-0.3em",
                     marginTop: "1.7em",
-                    position: 'fixed',
-                    bottom: '0'
+                    position: "fixed",
+                    bottom: "0",
                   }}
                   sx={{
                     "& .MuiDataGrid-root": {

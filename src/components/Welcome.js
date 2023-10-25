@@ -84,28 +84,19 @@ const ImageWithText = () => {
   return (
     <div style={containerStyle}>
       <div style={imageContainerStyle}>
-        {/* <img
-          style={{
-            maxWidth: "80%",
-            height: "20em",
-            marginLeft: "45px",
-            marginTop: "50px",
-          }}
-          src="https://godeskless.com/wp-content/uploads/2023/05/icon-q2.svg"
-        ></img> */}
         <img
-              style={{
-                position:'relative',
-                left:'10em',
-                top:'6em',
-                display:'flex',
-                alignContent:'center',
-                justifyContent:'center',
-                height:'14em',
-                width:'14em'
-              }}
-              src={require("../Assets/gdklogo.png")}
-            ></img>
+          style={{
+            position: "relative",
+            left: "10em",
+            top: "6em",
+            display: "flex",
+            alignContent: "center",
+            justifyContent: "center",
+            height: "14em",
+            width: "14em",
+          }}
+          src={require("../Assets/gdklogo.png")}
+        ></img>
         <h2
           className="font-link3"
           style={{ position: "absolute", left: "0em", top: "09em" }}
