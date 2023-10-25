@@ -5,6 +5,7 @@ import {
   ADD_BULK_EXPENSE,
   CREATE_REIMBURSEMENT,
   GET_REIMBURSEMENTS,
+  GET_PENDING_REIMBURSEMENTS,
   GET_TEAM_MEMBERS,
 } from "../gqloperations/mutations"; // Import your GraphQL query
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
@@ -63,7 +64,7 @@ const ApproveReimbursements = () => {
   });
   const [createBulkExpenses] = useMutation(ADD_BULK_EXPENSE, {});
 
-  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
+  const { loading, error, data } = useQuery(GET_PENDING_REIMBURSEMENTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
@@ -292,7 +293,7 @@ const ApproveReimbursements = () => {
                   selectReimbursement(newRowSelectionModel);
                 }}
                 rowSelectionModel={rowSelectionModel}
-                rows={data.ireimbursements.filter(
+                rows={data.pendingReimbursements.filter(
                   (element) => element.isPreApproved
                 )}
                 columns={columns}

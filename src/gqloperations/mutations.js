@@ -71,14 +71,13 @@ export const CREATE_REIMBURSEMENT = gql`
 `;
 
 export const UPDATE_REIMBURSEMENTS = gql`
-mutation UpdateReimbursments(
-  $reimbursementsUpdateInput: ReimbursementsUpdateInput!
-) {
-  String: updateReimbursments(
-    reimbursementsUpdateInput: $reimbursementsUpdateInput
-  )
-}
-
+  mutation UpdateReimbursments(
+    $reimbursementsUpdateInput: ReimbursementsUpdateInput!
+  ) {
+    String: updateReimbursments(
+      reimbursementsUpdateInput: $reimbursementsUpdateInput
+    )
+  }
 `;
 export const GET_REIMBURSEMENTS = gql`
   query GetMyReimbursements {
@@ -95,6 +94,30 @@ export const GET_REIMBURSEMENTS = gql`
       totalAmount
       by
       isPreApproved
+    }
+  }
+`;
+export const GET_PENDING_REIMBURSEMENTS = gql`
+  query PendingReimbursements {
+    pendingReimbursements {
+      _id
+      title
+      description
+      type
+      visitLocation
+      noOfDays
+      fromDate
+      toDate
+      askedAmount
+      totalAmount
+      isPreApproved
+      isApproved
+      expenses {
+        amount
+        description
+        approved
+        by
+      }
     }
   }
 `;
@@ -126,7 +149,7 @@ export const GET_PRE_REQUESTS = gql`
       askedAmount
       totalAmount
       isPreApproved
-      expenses{
+      expenses {
         amount
       }
       by {
