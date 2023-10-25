@@ -22,7 +22,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { CREATE_REIMBURSEMENT } from "../gqloperations/mutations";
 import { GET_REIMBURSEMENTS } from "../gqloperations/mutations";
-import {Loader, Error} from "./loader";
+import { Loader, Error } from "./loader";
 
 export const AddTravel = () => {
   const [colorMode] = useMode();
@@ -75,7 +75,6 @@ export const AddTravel = () => {
   const handleSubmit = () => {
     createReimbursement({ variables: { reimbursementNew: request } })
       .then(() => {
-        // Data submitted successfully, you can perform any additional actions here
         setRequest({
           name: "",
           fromDate: "",
@@ -85,7 +84,6 @@ export const AddTravel = () => {
         });
       })
       .catch((error) => {
-        // Handle errors
         console.error(error);
       });
   };
@@ -289,16 +287,15 @@ export const AddTravel = () => {
       >
         Request History{" "}
       </h4>
-      {/* Add a table here */}
       <div
         className="viewingdata"
         style={{
           position: "absolute",
           top: "7.8em",
-          width: "130vw", // Adjust width as needed
-          marginLeft: "0", // Adjust left margin as needed
-          overflowX: "auto", // Horizontal scrollbar if content overflows
-          maxHeight: "5.7em", // Set the maximum height for the table container
+          width: "130vw", 
+          marginLeft: "0", 
+          overflowX: "auto", 
+          maxHeight: "5.7em", 
           marginLeft: "-4.7em",
         }}
       >
@@ -334,30 +331,9 @@ export const AddTravel = () => {
             checkboxSelection
             rows={data.ireimbursements}
             columns={columns}
-            getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
+            getRowId={(row) => row._id} 
           />
         </Box>
-        {/* <table style={styles.table}>
-          <thead style={styles.tableHeader}>
-            <tr>
-              <th>Name</th>
-              <th>From Date</th>
-              <th>To Date</th>
-              <th>Description</th>
-              <th>Place of Visit</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody style={styles.tableData}>
-            {data.ireimbursements.toLict.map((row, index) => (
-              <tr key={index} style={{ color: "green" }}>
-                {row.map((item, itemIndex) => (
-                  <td key={itemIndex}>{item._id}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
       </div>
     </div>
   );
@@ -402,7 +378,7 @@ const styles = {
   tableHeader: {
     backgroundColor: "#f2f2f2",
     padding: "18px",
-    fontSize: "x-small", // Adjust the font size as needed
+    fontSize: "x-small", 
     position: "sticky",
     top: 0,
     zIndex: 1,
@@ -410,7 +386,7 @@ const styles = {
   tableData: {
     padding: "8px",
     borderBottom: "1px solid #ddd",
-    fontSize: "small", // Adjust the font size as needed
+    fontSize: "small", 
   },
 };
 

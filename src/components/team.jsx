@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useQuery } from "@apollo/client"; // Import useQuery
-import { GET_TEAM_MEMBERS } from "../gqloperations/mutations"; // Import your GraphQL query
+import { useQuery } from "@apollo/client";
+import { GET_TEAM_MEMBERS } from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
@@ -11,7 +11,7 @@ import { ColorModeContext, useMode } from "../../src/theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { useState } from "react";
-import {Loader, Error} from "./loader";
+import { Loader, Error } from "./loader";
 
 const Team = () => {
   const [colorMode] = useMode();
@@ -19,7 +19,6 @@ const Team = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Fetch data using the GraphQL query
   const { loading, error, data } = useQuery(GET_TEAM_MEMBERS);
 
   if (loading) return <Loader />;
@@ -90,72 +89,64 @@ const Team = () => {
 
   return (
     <>
-      {/* <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline /> */}
-          {/* <h1 style={{ position: 'absolute', top: '0.3em', left: '11em' }}>Team</h1>
-          <h5 style={{ position: 'absolute', top: '4.8em', left: '25em' }}>Managing the Team Members</h5> */}
-          <Box
-            style={{
-              position: "absolute",
-              bottom: "0px",
-              left: "5em",
-              width: "84%",
-            }}
-          >
-            <div
-              style={{
-                // backgroundColor: colors.blueAccent[800],
-                color: colors.blueAccent[200],
-                width: "84vw",
-                position: "fixed",
-                top: "01.5em",
-                height: "2em",
-                display: "flex",
-                textAlign: "center",
-                justifyContent: "center",
-              }}
-              className="banner"
-            >
-              <h4 style={{}}>goDeskless Workforce</h4>
-            </div>
-            <Box
-              height="80vh"
-              sx={{
-                "& .MuiDataGrid-root": {
-                  border: "none",
-                },
-                "& .MuiDataGrid-cell": {
-                  borderBottom: "none",
-                },
-                "& .name-column--cell": {
-                  color: colors.greenAccent[300],
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: colors.blueAccent[700],
-                  borderBottom: "none",
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: colors.primary[400],
-                },
-                "& .MuiDataGrid-footerContainer": {
-                  borderTop: "none",
-                  backgroundColor: colors.blueAccent[700],
-                },
-                "& .MuiCheckbox-root": {
-                  color: `${colors.greenAccent[200]} !important`,
-                },
-              }}
-            >
-              <DataGrid
-                rows={data.users}
-                columns={columns}
-                getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
-              />
-            </Box>
-          </Box>
-        {/* </ThemeProvider>
-      </ColorModeContext.Provider> */}
+      <Box
+        style={{
+          position: "absolute",
+          bottom: "0px",
+          left: "5em",
+          width: "84%",
+        }}
+      >
+        <div
+          style={{
+            color: colors.blueAccent[200],
+            width: "84vw",
+            position: "fixed",
+            top: "01.5em",
+            height: "2em",
+            display: "flex",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+          className="banner"
+        >
+          <h4 style={{}}>goDeskless Workforce</h4>
+        </div>
+        <Box
+          height="80vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .name-column--cell": {
+              color: colors.greenAccent[300],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+          }}
+        >
+          <DataGrid
+            rows={data.users}
+            columns={columns}
+            getRowId={(row) => row._id}
+          />
+        </Box>
+      </Box>
     </>
   );
 };

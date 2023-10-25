@@ -20,7 +20,6 @@ export default function NavBar() {
       >
         <h2
           style={{
-            // backgroundColor: "yellow",
             color: "white",
             marginLeft: 10,
             padding: 20,

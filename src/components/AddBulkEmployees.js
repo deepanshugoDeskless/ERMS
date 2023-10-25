@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useQuery } from "@apollo/client"; // Import useQuery
-import { GET_TEAM_MEMBERS } from "../gqloperations/mutations"; // Import your GraphQL query
+import { useQuery } from "@apollo/client";
+import { GET_TEAM_MEMBERS } from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
@@ -17,7 +17,7 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import { ColorModeContext, useMode } from "../../src/theme";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
-import {Loader, Error} from "./loader";
+import { Loader, Error } from "./loader";
 
 function AddBulkEmployee() {
   const [colorMode] = useMode();
@@ -63,15 +63,15 @@ function AddBulkEmployee() {
     setFile(selectedFile);
 
     if (selectedFile) {
-      setErrorMessage("Please submit the file"); // Show "Please submit the file" when the file is selected
+      setErrorMessage("Please submit the file");
     } else {
-      setErrorMessage("Please upload an Excel file"); // Show "Please upload an Excel file" when no file is selected
+      setErrorMessage("Please upload an Excel file");
     }
   };
 
   const readFile = () => {
     if (!file) {
-      setErrorMessage("Please submit the file"); // Show "Please submit the file" if no file is selected
+      setErrorMessage("Please submit the file");
       return;
     }
 
@@ -85,7 +85,7 @@ function AddBulkEmployee() {
       const parsedData = convertToJson(data);
       setJsonData(parsedData);
       setDisplayTable(true);
-      setErrorMessage("Thank you for uploading the file"); // Show "Thank you for uploading the file" upon successful upload
+      setErrorMessage("Thank you for uploading the file");
 
       handleSubmit({ bulkUserInput: parsedData });
     };
@@ -209,8 +209,6 @@ function AddBulkEmployee() {
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          {/* <h1 style={{ position: 'absolute', top: '0.3em', left: '11em' }}>Team</h1>
-          <h5 style={{ position: 'absolute', top: '4.8em', left: '25em' }}>Managing the Team Members</h5> */}
           <Box
             style={{
               flex: 1,
@@ -268,13 +266,7 @@ function AddBulkEmployee() {
                       alignItems: "center",
                     }}
                   >
-                    <div
-                      className="file-upload"
-                      // style={{
-                      //   justifyContent: "center",
-                      //   alignItems: "center",
-                      // }}
-                    >
+                    <div className="file-upload">
                       <img
                         src={require("../Assets/cloud-upload.png")}
                         alt="upload"
@@ -315,13 +307,7 @@ function AddBulkEmployee() {
                       alignItems: "center",
                     }}
                   >
-                    <div
-                      className="file-upload"
-                      // style={{
-                      //   justifyContent: "center",
-                      //   alignItems: "center",
-                      // }}
-                    >
+                    <div className="file-upload">
                       <img
                         src={require("../Assets/cloud-upload.png")}
                         alt="upload"
@@ -346,104 +332,11 @@ function AddBulkEmployee() {
                   </div>
                 </div>
               </div>
-
-              {/* <Box
-                height="80vh"
-                sx={{
-                  "& .MuiDataGrid-root": {
-                    border: "none",
-                  },
-                  "& .MuiDataGrid-cell": {
-                    borderBottom: "none",
-                  },
-                  "& .name-column--cell": {
-                    color: colors.greenAccent[300],
-                  },
-                  "& .MuiDataGrid-columnHeaders": {
-                    backgroundColor: colors.blueAccent[700],
-                    borderBottom: "none",
-                  },
-                  "& .MuiDataGrid-virtualScroller": {
-                    backgroundColor: colors.primary[400],
-                  },
-                  "& .MuiDataGrid-footerContainer": {
-                    borderTop: "none",
-                    backgroundColor: colors.blueAccent[700],
-                  },
-                  "& .MuiCheckbox-root": {
-                    color: `${colors.greenAccent[200]} !important`,
-                  },
-                }}
-              >
-                {/* <DataGrid
-                checkboxSelection
-                rows={data.users}
-                columns={columns}
-                getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
-              /> */}
-
-              {/* </Box> */}
             </div>
           </Box>
         </ThemeProvider>
       </ColorModeContext.Provider>
     </>
-
-    // <div className="addemployee">
-    //   <div className="h1">Add Employees</div>
-    //   <Stack sx={{ width: "100%", marginTop: "-05%" }} spacing={2}>
-    //     {displayTable ? (
-    //       <Alert severity="success">{errorMessage}</Alert>
-    //     ) : (
-    //       <Alert severity={file ? "info" : "error"}>{errorMessage}</Alert>
-    //     )}
-    //   </Stack>
-    //   <input
-    //     type="file"
-    //     id="file"
-    //     ref={fileInputRef}
-    //     onChange={filePathset}
-    //     className="uploadfile"
-    //   />
-    //   <Stack spacing={2} direction="row">
-    //     <Button
-    //       variant="contained"
-    //       onClick={readFile}
-    //       style={{ fontSize: "medium", marginLeft: "30%" }}
-    //     >
-    //       Submit File
-    //     </Button>
-    //   </Stack>
-
-    //   {displayTable && (
-    //     <div style={tableContainerStyle}>
-    //       <div style={horizontalScrollStyle}>
-    //         <table style={tableStyle}>
-    //           <thead>
-    //             <tr>
-    //               {Object.keys(jsonData[0]).map((key) => (
-    //                 <th key={key} style={thStyle}>
-    //                   {key}
-    //                 </th>
-    //               ))}
-    //             </tr>
-    //           </thead>
-    //           <tbody>
-    //             {jsonData.map((row, index) => (
-    //               <tr key={index}>
-    //                 {Object.values(row).map((value, index) => (
-    //                   <td key={index} style={tdStyle}>
-    //                     {value}
-    //                   </td>
-    //                 ))}
-    //               </tr>
-    //             ))}
-    //           </tbody>
-    //         </table>
-    //       </div>
-    //     </div>
-    //   )}
-    // </div>
   );
 }
 

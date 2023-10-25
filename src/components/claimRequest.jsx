@@ -4,7 +4,7 @@ import {
   CREATE_REIMBURSEMENT,
   GET_REIMBURSEMENTS,
   GET_TEAM_MEMBERS,
-} from "../gqloperations/mutations"; // Import your GraphQL query
+} from "../gqloperations/mutations";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
@@ -35,16 +35,13 @@ import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 
 import { useMutation, useQuery, gql } from "@apollo/client";
-import {Loader, Error} from "./loader";
+import { Loader, Error } from "./loader";
 
 const ClaimRequest = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  
-
-  // Fetch data using the GraphQL query
 
   const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
     refetchQueries: [{ query: GET_REIMBURSEMENTS }],
@@ -67,8 +64,6 @@ const ClaimRequest = () => {
     description: "",
     place: "",
   });
-
-  
 
   const [expenses, setExpenses] = useState([]);
   const [reimbursement, setReimbursement] = useState({});
@@ -127,17 +122,16 @@ const ClaimRequest = () => {
       variables: { expenseNewArray: expenses },
     })
       .then(() => {
-        // Data submitted successfully, you can perform any additional actions here
         alert("Expenses uploaded successfully");
       })
       .catch((error) => {
-        // Handle errors
         console.error(error);
       });
   };
 
   if (loading) return <Loader />;
-  if (error) return <Error/>;
+  if (error) return <Error />;
+
 
   const columns = [
     {
@@ -206,13 +200,15 @@ const ClaimRequest = () => {
           >
             <div
               style={{
-                // backgroundColor: colors.blueAccent[800],
                 color: colors.blueAccent[200],
                 width: "100%",
                 height: "2em",
                 display: "flex",
                 textAlign: "center",
                 justifyContent: "center",
+                position: "fixed",
+                top: "1.6em",
+                left: "2em",
               }}
             >
               <h4 style={{}}>Claim Reimbursement</h4>
@@ -220,7 +216,6 @@ const ClaimRequest = () => {
             <Box
               style={{
                 flexDirection: "row",
-                // backgroundColor: "gray",
                 display: "flex",
               }}
             >
@@ -229,9 +224,9 @@ const ClaimRequest = () => {
                   marginTop: "1.5em",
                   width: "33%",
                   flexDirection: "column",
-                  // backgroundColor: "yellow",
                   display: "flex",
-                  height: "95%",
+                  height: "77vh",
+                  marginLeft: "0.3em",
                 }}
               >
                 <div
@@ -260,7 +255,15 @@ const ClaimRequest = () => {
                   </h4>
                 </div>
                 <Box
-                  height="77vh"
+                  height="70vh"
+                  style={{
+                    width: "7.25em",
+                    position: "fixed",
+                    marginLeft: "-0.3em",
+                    marginTop: "1.7em",
+                    position: 'fixed',
+                    bottom: '0'
+                  }}
                   sx={{
                     "& .MuiDataGrid-root": {
                       border: "none",
@@ -293,7 +296,9 @@ const ClaimRequest = () => {
                       selectReimbursement(newRowSelectionModel);
                     }}
                     rowSelectionModel={rowSelectionModel}
-                    rows={data.ireimbursements.filter((element) => element.isPreApproved)}
+                    rows={data.ireimbursements.filter(
+                      (element) => element.isPreApproved
+                    )}
                     columns={columns}
                     getRowId={(row) => row._id}
                   />
@@ -304,7 +309,6 @@ const ClaimRequest = () => {
                   marginTop: "1.5em",
                   width: "90%",
                   flexDirection: "column",
-                  // backgroundColor: "red",
                   display: "flex",
                   height: "100%",
                 }}
@@ -449,17 +453,24 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
     },
   ];
 
+  const top100Films = [
+    { label: "Expense Header 1" },
+    { label: "Expense Header 2" },
+    { label: "Expense Header 3" },
+  ];
+
   return (
     <div
       key={key}
       style={{
-        // backgroundColor: colors.blueAccent[900],
-        width: "100%",
+        width: "55vw",
         border: "2px solid #ccc",
         borderRadius: 20,
         marginTop: "0.2em",
-        height: "70%",
+        height: "24vh",
         padding: 8,
+        position: "relative",
+        left: "0.4em",
       }}
     >
       <form>
@@ -468,7 +479,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
             flexDirection: "row",
             display: "flex",
             width: "100%",
-            height:'20vh',
+            height: "20vh",
             marginTop: 10,
             justifyContent: "space-between",
             alignItems: "center",
@@ -491,9 +502,36 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               onChange={(event, selectedType) => {
                 setExpenseType(selectedType);
               }}
-              sx={{ width: 120 }}
+              sx={{ width: 140 }}
               style={{ position: "relative" }}
-              renderInput={(params) => <TextField {...params} label="Type" />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Type"
+                  style={{ position: "relative", marginTop: "-1em" }}
+                />
+              )}
+            />
+          </Box>
+
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 1, width: "2.4em" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              id="outlined-basic"
+              label="#Invoice ID"
+              variant="outlined"
+              style={{
+                width: "2.9em",
+                position: "relative",
+                marginTop: "1em",
+                marginLeft: "-3em",
+              }}
             />
           </Box>
 
@@ -512,7 +550,31 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               value={expenseDescription}
               onChange={(e) => setExpenseDescrption(e.target.value)}
               style={{
-                width: "3em",
+                width: "6em",
+                position: "relative",
+                marginLeft: "0em",
+                marginTop: "-1em",
+              }}
+            />
+          </Box>
+
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 1, width: "2.4em" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              id="outlined-basic"
+              label="Establishment"
+              variant="outlined"
+              style={{
+                width: "3.9em",
+                position: "relative",
+                marginTop: "1em",
+                marginLeft: "-7.9em",
               }}
             />
           </Box>
@@ -520,6 +582,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
           <div
             style={{
               paddingBottom: 24,
+              marginLeft: "0.1em",
+              marginTop: "-2em",
             }}
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -532,10 +596,30 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                     );
                   }}
                   label="Payment Date"
+                  style={{ position: "relative", marginLeft: "4em" }}
                 />
               </DemoContainer>
             </LocalizationProvider>
           </div>
+
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={top100Films}
+            sx={{ width: 500 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Expense Header"
+                style={{
+                  position: "relative",
+                  marginTop: "0.8em",
+                  marginLeft: "-12.4em",
+                }}
+              />
+            )}
+          />
+
           <div
             style={{
               flexDirection: "row",
@@ -543,6 +627,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               width: "100%",
               justifyContent: "center",
               alignItems: "center",
+              marginLeft: "-7em",
+              marginTop: "3.1em",
             }}
           >
             <Box
@@ -552,6 +638,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                   width: "2ch",
                   height: "1ch",
                   position: "relative",
+                  marginTop: "-1em",
                 },
               }}
               noValidate
@@ -587,6 +674,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                 onChange={(e) => setExpensesAmount(e.target.value)}
                 style={{
                   width: "3em",
+                  position: "relative",
+                  marginTop: "-1em",
                 }}
               />
             </Box>
@@ -597,6 +686,9 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               variant="contained"
               style={{
                 borderRadius: 20,
+                position: "relative",
+                marginTop: "-8em",
+                marginLeft: "-8em",
               }}
               onClick={() => {
                 console.log(

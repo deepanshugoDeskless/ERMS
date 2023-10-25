@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
-import {
-  CREATE_REIMBURSEMENT,
-  GET_REIMBURSEMENTS,
-  GET_TEAM_MEMBERS,
-  RAISE_REIMBURSEMENT_REQUEST,
-} from "../gqloperations/mutations"; // Import your GraphQL query
+import { CREATE_REIMBURSEMENT, GET_REIMBURSEMENTS, RAISE_REIMBURSEMENT_REQUEST } from "../gqloperations/mutations";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
@@ -24,17 +19,25 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import HistoryIcon from "@mui/icons-material/History";
+import Alert from "@mui/material/Alert";
+
 import { useMutation, useQuery } from "@apollo/client";
 import { Loader, Error } from "./loader";
 
 const RaiseRequest = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [amountError, setAmountError] = useState(false); // State for amount error message
 
   const handleAmountInput = (e) => {
     const input = e.target.value;
     if (/^\d*\.?\d*$/.test(input)) {
       setAmount(input);
+      setAmountError(false); // Clear the amount error message
+    } else {
+      setAmountError(true); // Set the amount error message
     }
   };
 
@@ -49,20 +52,19 @@ const RaiseRequest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Fetch data using the GraphQL query
   const [createReimbursement] = useMutation(RAISE_REIMBURSEMENT_REQUEST, {
     onCompleted: () => {
       refetch({
-        // Additional fetch options
         context: {
           headers: {
-            // Your custom headers here
             Authorization: `${localStorage.getItem("token")}`,
           },
         },
       });
+      setSuccessAlert(true);
     },
   });
+
   const { loading, error, data, refetch } = useQuery(GET_REIMBURSEMENTS, {
     context: {
       headers: {
@@ -129,17 +131,17 @@ const RaiseRequest = () => {
       },
     })
       .then(() => {
-        // Data submitted successfully, you can perform any additional actions here
         setTitle("");
         setDescription("");
         setType({});
         setPlace("");
         setFromDate(null);
         setToDate(null);
+        const newAmount = parseFloat(amount);
+        setTotalAmount((prevTotal) => prevTotal + newAmount);
         setAmount("");
       })
       .catch((error) => {
-        // Handle errors
         console.error(error);
       });
   };
@@ -169,7 +171,7 @@ const RaiseRequest = () => {
     {
       field: "description",
       headerName: "Description",
-      flex: 1,
+      flex: 1.5,
       cellClassName: "name-column--cell",
     },
     {
@@ -187,7 +189,7 @@ const RaiseRequest = () => {
     {
       field: "askedAmount",
       headerName: "Asked For",
-      flex: 0.5,
+      flex: 0.8,
       cellClassName: "name-column--cell",
     },
     {
@@ -203,11 +205,13 @@ const RaiseRequest = () => {
             display="flex"
             justifyContent="center"
             backgroundColor={
-              row.isPreApproved ? colors.greenAccent[600] : colors.greenAccent[700]
+              row.isPreApproved
+                ? "#0BF265"
+                : "#F4064A"
             }
             borderRadius="4px"
           >
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+            <Typography style={{ color: 'white' }} sx={{ ml: "5px" }}>
               {row.isPreApproved ? " Approved " : "Pending"}
             </Typography>
           </Box>
@@ -248,9 +252,14 @@ const RaiseRequest = () => {
           >
             <h4 style={{}}>Raise Your Request</h4>
           </div>
+          {successAlert && (
+            <Alert severity="success" sx={{ position: 'relative', marginTop: '4em', }}>
+              Your request has been submitted successfully!
+            </Alert>
+          )}
           <div
             style={{
-              marginTop: "1.5em",
+              marginTop: "0.6em",
               padding: "0.5em",
               width: "84vw",
               height: 80,
@@ -272,7 +281,11 @@ const RaiseRequest = () => {
                 maxRows={6}
                 options={TypeNature}
                 sx={{ width: 200, height: 80 }}
-                style={{ width: "4em", marginTop: "0.15em", marginLeft: "0.12em" }}
+                style={{
+                  width: "4em",
+                  marginTop: "0.15em",
+                  marginLeft: "0.12em",
+                }}
                 onChange={(event, selectedType) => {
                   setType(selectedType);
                 }}
@@ -289,8 +302,12 @@ const RaiseRequest = () => {
                 id="combo-box-type"
                 maxRows={6}
                 options={TypeMap}
-                sx={{ width: 200, height: 80 }}
-                style={{ width: "4.5em", marginLeft: "0.6em", marginTop: "0.1em" }}
+                sx={{ width: 240, height: 80 }}
+                style={{
+                  width: "4.8em",
+                  marginLeft: "0.6em",
+                  marginTop: "0.1em",
+                }}
                 onChange={(event, selectedType) => {
                   setType(selectedType);
                 }}
@@ -311,7 +328,11 @@ const RaiseRequest = () => {
                   setTitle(titleInput.target.value);
                 }}
                 style={styles.input}
-                style={{ width: "4em", marginTop: "0.1em", marginLeft: "1.3em" }}
+                style={{
+                  width: "4em",
+                  marginTop: "0.1em",
+                  marginLeft: "1.3em",
+                }}
               />
             </div>
             <TextField
@@ -433,6 +454,13 @@ const RaiseRequest = () => {
               Submit
             </Button>
           </div>
+
+          {amountError && (
+            <Alert severity="error" sx={{ position: 'relative', marginTop: '-2em', width: '20em',left:'44.4em' }}>
+              Please enter only numbers
+            </Alert>
+          )}
+
           <div
             style={{
               display: "flex",
@@ -444,13 +472,17 @@ const RaiseRequest = () => {
           >
             <HistoryIcon
               style={{
+                position:'relative',
+                top:'-0.84em',
                 marginRight: 4,
                 transform: "scale(1.5)",
               }}
             />
             <h4
               style={{
-                marginLeft: 4,
+                position:'relative',
+                top:'-0.6em',
+                marginLeft: 6,
                 fontFamily: "Bebas Neue,sans-serif",
                 fontSize: "xx-large",
               }}
@@ -460,7 +492,12 @@ const RaiseRequest = () => {
           </div>
 
           <Box
-            height="50vh"
+            style={{
+              position: 'fixed',
+              bottom: '0',
+              width: '83.3%'
+            }}
+            height="36vh"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
@@ -493,7 +530,7 @@ const RaiseRequest = () => {
               getRowId={(row) => row._id}
             />
           </Box>
-        </Box>
+          </Box>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
@@ -547,20 +584,15 @@ const styles = {
 
 export default RaiseRequest;
 
+// import React, { useState } from "react";
 // import { Box, Typography, useTheme } from "@mui/material";
-// import {
-//   CREATE_REIMBURSEMENT,
-//   GET_REIMBURSEMENTS,
-//   GET_TEAM_MEMBERS,
-//   RAISE_REIMBURSEMENT_REQUEST,
-// } from "../gqloperations/mutations"; // Import your GraphQL query
+// import { CREATE_REIMBURSEMENT, GET_REIMBURSEMENTS, RAISE_REIMBURSEMENT_REQUEST } from "../gqloperations/mutations";
 // import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 // import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 // import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 // import Header from "./Header";
 // import { ThemeProvider } from "@emotion/react";
 // import { CssBaseline } from "@mui/material";
-// import React, { useState } from "react";
 // import TextField from "@mui/material/TextField";
 // import { DataGrid } from "@mui/x-data-grid";
 // import { tokens } from "../../src/theme";
@@ -569,49 +601,52 @@ export default RaiseRequest;
 // import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 // import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import { margin } from "@mui/system";
 // import MenuItem from "@mui/material/MenuItem";
-// import FormHelperText from "@mui/material/FormHelperText";
-// import FormControl from "@mui/material/FormControl";
-// import InputLabel from "@mui/material/InputLabel";
-// import InputAdornment from "@mui/material/InputAdornment";
-// import Input from "@mui/material/Input";
 // import Button from "@mui/material/Button";
-// import Stack from "@mui/material/Stack";
 // import Autocomplete from "@mui/material/Autocomplete";
 // import HistoryIcon from "@mui/icons-material/History";
-// import { useMutation, useQuery, gql } from "@apollo/client";
-// import {Loader, Error} from "./loader";
+// import Alert from "@mui/material/Alert";
+// import AlertTitle from "@mui/material/AlertTitle";
+// import { useMutation, useQuery } from "@apollo/client";
+// import { Loader, Error } from "./loader";
 
 // const RaiseRequest = () => {
 //   const [colorMode] = useMode();
 //   const [isSidebar, setIsSidebar] = useState(true);
+//   const [successAlert, setSuccessAlert] = useState(false); // State for success alert
+//   const [totalAmount, setTotalAmount] = useState(0); // State to keep track of the total amount
+
+//   const handleAmountInput = (e) => {
+//     const input = e.target.value;
+//     if (/^\d*\.?\d*$/.test(input)) {
+//       setAmount(input);
+//     }
+//   };
 
 //   const [type, setType] = useState({});
 //   const [title, setTitle] = useState("");
-//   const [description, setDescriopion] = useState("");
+//   const [description, setDescription] = useState("");
 //   const [place, setPlace] = useState("");
-//   const [fromDate, setFormDate] = useState(null);
+//   const [fromDate, setFromDate] = useState(null);
 //   const [toDate, setToDate] = useState(null);
 //   const [amount, setAmount] = useState("");
 
 //   const theme = useTheme();
 //   const colors = tokens(theme.palette.mode);
 
-//   // Fetch data using the GraphQL query
 //   const [createReimbursement] = useMutation(RAISE_REIMBURSEMENT_REQUEST, {
 //     onCompleted: () => {
 //       refetch({
-//         // Additional fetch options
 //         context: {
 //           headers: {
-//             // Your custom headers here
 //             Authorization: `${localStorage.getItem("token")}`,
 //           },
 //         },
 //       });
+//       setSuccessAlert(true); // Display success alert after request creation
 //     },
 //   });
+
 //   const { loading, error, data, refetch } = useQuery(GET_REIMBURSEMENTS, {
 //     context: {
 //       headers: {
@@ -630,7 +665,6 @@ export default RaiseRequest;
 //   });
 
 //   const currencies = [
-//     ,
 //     {
 //       value: "INR",
 //       label: "₹",
@@ -657,6 +691,7 @@ export default RaiseRequest;
 //     const { name, value } = e.target;
 //     setRequest({ ...request, [name]: value });
 //   };
+
 //   const callRaiseReimbursementRequest = () => {
 //     createReimbursement({
 //       context: {
@@ -678,17 +713,17 @@ export default RaiseRequest;
 //       },
 //     })
 //       .then(() => {
-//         // Data submitted successfully, you can perform any additional actions here
 //         setTitle("");
-//         setDescriopion("");
+//         setDescription("");
 //         setType({});
 //         setPlace("");
-//         setFormDate(null);
+//         setFromDate(null);
 //         setToDate(null);
+//         const newAmount = parseFloat(amount);
+//         setTotalAmount((prevTotal) => prevTotal + newAmount); // Update the total amount
 //         setAmount("");
 //       })
 //       .catch((error) => {
-//         // Handle errors
 //         console.error(error);
 //       });
 //   };
@@ -699,7 +734,7 @@ export default RaiseRequest;
 //   const TypeMap = [
 //     { label: "Travel Expense", code: "ta" },
 //     { label: "Meal Expense", code: "fa" },
-//     { label: "Accomodation Expense", code: "aa" },
+//     { label: "Accommodation Expense", code: "aa" },
 //     { label: "Purchase Expense", code: "pa" },
 //   ];
 
@@ -709,7 +744,6 @@ export default RaiseRequest;
 //   ];
 
 //   const columns = [
-//     // { field: "_id", headerName: "ID", flex: 1 },
 //     {
 //       field: "title",
 //       headerName: "Title",
@@ -719,7 +753,7 @@ export default RaiseRequest;
 //     {
 //       field: "description",
 //       headerName: "Description",
-//       flex: 1,
+//       flex: 1.5,
 //       cellClassName: "name-column--cell",
 //     },
 //     {
@@ -737,7 +771,7 @@ export default RaiseRequest;
 //     {
 //       field: "askedAmount",
 //       headerName: "Asked For",
-//       flex: 0.5,
+//       flex: 0.8,
 //       cellClassName: "name-column--cell",
 //     },
 //     {
@@ -754,12 +788,12 @@ export default RaiseRequest;
 //             justifyContent="center"
 //             backgroundColor={
 //               row.isPreApproved
-//                 ? colors.greenAccent[600]
-//                 : colors.greenAccent[700]
+//                 ? "#0BF265"
+//                 : "#F4064A"
 //             }
 //             borderRadius="4px"
 //           >
-//             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+//             <Typography style={{color:'white'}} sx={{ ml: "5px" }}>
 //               {row.isPreApproved ? " Approved " : "Pending"}
 //             </Typography>
 //           </Box>
@@ -769,296 +803,310 @@ export default RaiseRequest;
 //   ];
 
 //   return (
-//     <>
-//       <ColorModeContext.Provider value={colorMode}>
-//         <ThemeProvider theme={theme}>
-//           <CssBaseline />
-//           <Box
+//     <ColorModeContext.Provider value={colorMode}>
+//       <ThemeProvider theme={theme}>
+//         <CssBaseline />
+//         <Box
+//           style={{
+//             position: "absolute",
+//             bottom: "0px",
+//             left: "5em",
+//             top: "2em",
+//             width: "84%",
+//             flex: 1,
+//             flexDirection: "column",
+//             display: "flex",
+//             height: "100%",
+//           }}
+//         >
+//           <div
 //             style={{
-//               position: "absolute",
-//               bottom: "0px",
-//               left: "5em",
-//               top: "2em",
-//               width: "84%",
-//               flex: 1,
-//               flexDirection: "column",
+//               color: colors.blueAccent[200],
+//               width: "84vw",
+//               position: "fixed",
+//               top: "1.6em",
+//               height: "2em",
 //               display: "flex",
-//               height: "100%",
+//               textAlign: "center",
+//               justifyContent: "center",
+//             }}
+//             className="banner"
+//           >
+//             <h4 style={{}}>Raise Your Request</h4>
+//           </div>
+//           {/* Success Alert */}
+//           {successAlert && (
+//             <Alert severity="success" sx={{ position:'relative',marginTop:'4em', }}>
+//               Your request has been submitted successfully!
+//             </Alert>
+//           )}
+//           <div
+//             style={{
+//               marginTop: "0.6em",
+//               padding: "0.5em",
+//               width: "84vw",
+//               height: 80,
+//               display: "flex",
+//               flexDirection: "row",
+//               textAlign: "center",
+//               justifyContent: "space-between",
 //             }}
 //           >
 //             <div
 //               style={{
-//                 // backgroundColor: colors.blueAccent[800],
-//                 color: colors.blueAccent[200],
-//                 width: "84vw",
-//                 position: "fixed",
-//                 top: "1.6em",
-//                 height: "2em",
 //                 display: "flex",
-//                 textAlign: "center",
-//                 justifyContent: "center",
+//                 flexDirection: "row",
 //               }}
-//               className="banner"
 //             >
-//               <h4 style={{}}>Raise Your Request</h4>
+//               <Autocomplete
+//                 disablePortal
+//                 id="combo-box-nature"
+//                 maxRows={6}
+//                 options={TypeNature}
+//                 sx={{ width: 200, height: 80 }}
+//                 style={{
+//                   width: "4em",
+//                   marginTop: "0.15em",
+//                   marginLeft: "0.12em",
+//                 }}
+//                 onChange={(event, selectedType) => {
+//                   setType(selectedType);
+//                 }}
+//                 renderInput={(params) => (
+//                   <TextField
+//                     {...params}
+//                     label="Nature of Travel"
+//                     value={type.label}
+//                   />
+//                 )}
+//               />
+//               <Autocomplete
+//                 disablePortal
+//                 id="combo-box-type"
+//                 maxRows={6}
+//                 options={TypeMap}
+//                 sx={{ width: 240, height: 80 }}
+//                 style={{
+//                   width: "4.8em",
+//                   marginLeft: "0.6em",
+//                   marginTop: "0.1em",
+//                 }}
+//                 onChange={(event, selectedType) => {
+//                   setType(selectedType);
+//                 }}
+//                 renderInput={(params) => (
+//                   <TextField
+//                     {...params}
+//                     label="Expense Type"
+//                     value={type.label}
+//                   />
+//                 )}
+//               />
+//               <TextField
+//                 id="outlined-basic"
+//                 label="Title of Request"
+//                 variant="outlined"
+//                 value={title}
+//                 onChange={(titleInput) => {
+//                   setTitle(titleInput.target.value);
+//                 }}
+//                 style={styles.input}
+//                 style={{
+//                   width: "4em",
+//                   marginTop: "0.1em",
+//                   marginLeft: "1.3em",
+//                 }}
+//               />
+//             </div>
+//             <TextField
+//               id="outlined-multiline-static"
+//               label="Description"
+//               multiline
+//               sx={{
+//                 width: 200,
+//                 height: 80,
+//               }}
+//               value={description}
+//               onChange={(descriptionInput) => {
+//                 setDescription(descriptionInput.target.value);
+//               }}
+//               style={styles.input}
+//               style={{ width: "4em", marginTop: "0.1em" }}
+//             />
+
+//             <TextField
+//               id="outlined-multiline-static"
+//               label="Place of Visit"
+//               variant="outlined"
+//               value={place}
+//               onChange={(placeInput) => {
+//                 setPlace(placeInput.target.value);
+//               }}
+//               style={styles.input}
+//               style={{ width: "4em", marginTop: "0.1em" }}
+//             />
+//           </div>
+//           <div
+//             style={{
+//               padding: "0.5em",
+//               width: "100%",
+//               height: 120,
+//               display: "flex",
+//               flexDirection: "row",
+//               textAlign: "center",
+//               justifyContent: "space-between",
+//             }}
+//           >
+//             <div
+//               style={{
+//                 margin: 4,
+//                 marginBottom: 5,
+//                 display: "flex",
+//                 flexDirection: "row",
+//                 justifyContent: "center",
+//                 alignItems: "center",
+//               }}
+//             >
+//               <LocalizationProvider dateAdapter={AdapterDayjs}>
+//                 <DemoContainer components={["DatePicker"]}>
+//                   <DatePicker
+//                     value={fromDate}
+//                     onChange={(fromDateInput) => {
+//                       setFromDate(new Date(fromDateInput).toLocaleDateString());
+//                     }}
+//                     label="From Date"
+//                   />
+//                 </DemoContainer>
+//               </LocalizationProvider>
+
+//               <LocalizationProvider dateAdapter={AdapterDayjs}>
+//                 <DemoContainer components={["DatePicker"]}>
+//                   <DatePicker
+//                     value={toDate}
+//                     onChange={(toDateInput) => {
+//                       setToDate(new Date(toDateInput).toLocaleDateString());
+//                     }}
+//                     label="To Date"
+//                   />
+//                 </DemoContainer>
+//               </LocalizationProvider>
 //             </div>
 //             <div
 //               style={{
-//                 // backgroundColor: colors.blueAccent[900],
-//                 marginTop: "1.5em",
-//                 padding: "0.5em",
-//                 width: "84vw",
-//                 height: 80,
 //                 display: "flex",
 //                 flexDirection: "row",
-//                 textAlign: "center",
-//                 justifyContent: "space-between",
+//                 justifyContent: "center",
+//                 alignItems: "center",
 //               }}
 //             >
-//               <div
-//                 style={{
-//                   display: "flex",
-//                   flexDirection: "row",
-//                 }}
-//               >
-//                 <Autocomplete
-//                   disablePortal
-//                   id="combo-box-demo"
-//                   maxRows={6}
-//                   options={TypeNature}
-//                   sx={{ width: 200, height: 80 }}
-//                   style={styles.input}
-//                   style={{width:'4em',marginTop:'0.15em',marginLeft:'0.12em'}}
-//                   onChange={(event, selectedType) => {
-//                     setType(selectedType);
-//                   }}
-//                   renderInput={(params) => (
-//                     <TextField
-//                       {...params}
-//                       label="Nature of Travel"
-//                       value={type.label}
-//                     />
-//                   )}
-//                 />
-//                  <Autocomplete
-//                   disablePortal
-//                   id="combo-box-demo"
-//                   maxRows={6}
-//                   options={TypeMap}
-//                   sx={{ width: 200, height: 80 }}
-//                   style={styles.input}
-//                   style={{width:'4.5em',marginLeft:'0.6em',marginTop:'0.1em'}}
-//                   onChange={(event, selectedType) => {
-//                     setType(selectedType);
-//                   }}
-//                   renderInput={(params) => (
-//                     <TextField
-//                       {...params}
-//                       label="Expense Type"
-//                       value={type.label}
-//                     />
-//                   )}
-//                 />
-//                 <TextField
-//                   id="outlined-basic"
-//                   label="Title of Request"
-//                   variant="outlined"
-//                   value={title}
-//                   onChange={(titleInput) => {
-//                     setTitle(titleInput.target.value);
-//                   }}
-//                   style={styles.input}
-//                   style={{width:'4em',marginTop:'0.1em',marginLeft:'1.3em'}}
-//                 />
-//               </div>
 //               <TextField
-//                 id="outlined-multiline-static"
-//                 label="Description"
-//                 multiline
-//                 sx={{
-//                   width: 200,
-//                   height: 80,
-//                 }}
-//                 value={description}
-//                 onChange={(descriptionInput) => {
-//                   setDescriopion(descriptionInput.target.value);
-//                 }}
-//                 style={styles.input}
-//                 style={{width:'4em',marginTop:'0.1em'}}
-//               />
+//                 id="outlined-select-currency"
+//                 select
+//                 defaultValue="INR"
+//                 style={{ ...styles.input, width: 60 }}
+//                 style={{ marginLeft: "-0.3em" }}
+//               >
+//                 {currencies.map((option) => (
+//                   <MenuItem key={option.value} value={option.value}>
+//                     {option.label}
+//                   </MenuItem>
+//                 ))}
+//               </TextField>
 
 //               <TextField
-//                 id="outlined-multiline-static"
-//                 label="Place of Visit"
+//                 id="outlined-basic"
+//                 label="Amount"
+//                 value={amount}
+//                 onChange={handleAmountInput}
 //                 variant="outlined"
 //                 style={styles.input}
-//                 value={place}
-//                 onChange={(placeInput) => {
-//                   setPlace(placeInput.target.value);
-//                 }}
-//                 style={{width:'4em',marginTop:'0.1em'}}
+//                 style={{ width: "7.8em" }}
 //               />
 //             </div>
-//             <div
+
+//             <Button
+//               variant="contained"
 //               style={{
-//                 // backgroundColor: colors.blueAccent[900],
-//                 padding: "0.5em",
-//                 width: "100%",
-//                 height: 120,
-//                 display: "flex",
-//                 flexDirection: "row",
-//                 textAlign: "center",
-//                 justifyContent: "space-between",
+//                 width: 180,
+//                 height: 60,
+//               }}
+//               onClick={() => {
+//                 callRaiseReimbursementRequest();
 //               }}
 //             >
-//               <div
-//                 style={{
-//                   margin: 4,
-//                   marginBottom: 5,
-//                   display: "flex",
-//                   flexDirection: "row",
-//                   justifyContent: "center",
-//                   alignItems: "center",
-//                 }}
-//               >
-//                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-//                   <DemoContainer components={["DatePicker"]}>
-//                     <DatePicker
-//                       value={fromDate}
-//                       onChange={(fromDateInput) => {
-//                         setFormDate(
-//                           new Date(fromDateInput).toLocaleDateString()
-//                         );
-//                       }}
-//                       label="From Date"
-//                     />
-//                   </DemoContainer>
-//                 </LocalizationProvider>
-
-//                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-//                   <DemoContainer components={["DatePicker"]}>
-//                     <DatePicker
-//                       value={toDate}
-//                       onChange={(toDateInput) => {
-//                         setToDate(new Date(toDateInput).toLocaleDateString());
-//                       }}
-//                       label="To Date"
-//                     />
-//                   </DemoContainer>
-//                 </LocalizationProvider>
-//               </div>
-//               <div
-//                 style={{
-//                   display: "flex",
-//                   flexDirection: "row",
-//                   justifyContent: "center",
-//                   alignItems: "center",
-//                 }}
-//               >
-//                 <TextField
-//                   id="outlined-select-currency"
-//                   select
-//                   defaultValue="INR"
-//                   style={{ ...styles.input, width: 60 }}
-//                   style={{marginLeft:'-0.3em'}}
-//                 >
-//                   {currencies.map((option) => (
-//                     <MenuItem key={option.value} value={option.value}>
-//                       {option.label}
-//                     </MenuItem>
-//                   ))}
-//                 </TextField>
-
-//                 <TextField
-//                   id="outlined-basic"
-//                   label="Amount"
-//                   value={amount}
-//                   onChange={(amountInput) => {
-//                     setAmount(amountInput.target.value);
-//                   }}
-//                   variant="outlined"
-//                   style={styles.input}
-//                   style={{width:'7.8em'}}
-//                 />
-//               </div>
-
-//               <Button
-//                 variant="contained"
-//                 style={{
-//                   width: 180,
-//                   height: 60,
-//                 }}
-//                 onClick={() => {
-//                   callRaiseReimbursementRequest();
-//                 }}
-//               >
-//                 Submit
-//               </Button>
-//             </div>
-//             <div
+//               Submit
+//             </Button>
+//           </div>
+//           <div
+//             style={{
+//               display: "flex",
+//               flexDirection: "row",
+//               justifyContent: "flex-start",
+//               alignItems: "center",
+//               marginLeft: 8,
+//             }}
+//           >
+//             <HistoryIcon
 //               style={{
-//                 display: "flex",
-//                 flexDirection: "row",
-//                 justifyContent: "flex-start",
-//                 alignItems: "center",
-//                 marginLeft: 8,
+//                 marginRight: 4,
+//                 transform: "scale(1.5)",
+//               }}
+//             />
+//             <h4
+//               style={{
+//                 marginLeft: 4,
+//                 fontFamily: "Bebas Neue,sans-serif",
+//                 fontSize: "xx-large",
 //               }}
 //             >
-//               <HistoryIcon
-//                 style={{
-//                   marginRight: 4,
-//                   transform: "scale(1.5)",
-//                 }}
-//               />
-//               <h4
-//                 style={{
-//                   marginLeft: 4,
-//                   fontFamily: "Bebas Neue,sans-serif",
-//                   fontSize: "xx-large",
-//                 }}
-//               >
-//                 Request History
-//               </h4>
-//             </div>
+//               Request History
+//             </h4>
+//           </div>
 
-//             <Box
-//               height="50vh"
-//               sx={{
-//                 "& .MuiDataGrid-root": {
-//                   border: "none",
-//                 },
-//                 "& .MuiDataGrid-cell": {
-//                   borderBottom: "none",
-//                 },
-//                 "& .name-column--cell": {
-//                   color: colors.greenAccent[300],
-//                 },
-//                 "& .MuiDataGrid-columnHeaders": {
-//                   backgroundColor: colors.blueAccent[700],
-//                   borderBottom: "none",
-//                 },
-//                 "& .MuiDataGrid-virtualScroller": {
-//                   backgroundColor: colors.primary[400],
-//                 },
-//                 "& .MuiDataGrid-footerContainer": {
-//                   borderTop: "none",
-//                   backgroundColor: colors.blueAccent[700],
-//                 },
-//                 "& .MuiCheckbox-root": {
-//                   color: `${colors.greenAccent[200]} !important`,
-//                 },
-//               }}
-//             >
-//               <DataGrid
-//                 rows={data.ireimbursements}
-//                 columns={columns}
-//                 getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
-//               />
-//             </Box>
+//           <Box
+//           style={{  position: 'fixed',
+//             bottom: '0', width:'83.3%'}}
+//             height="50vh"
+//             sx={{
+//               "& .MuiDataGrid-root": {
+//                 border: "none",
+//               },
+//               "& .MuiDataGrid-cell": {
+//                 borderBottom: "none",
+//               },
+//               "& .name-column--cell": {
+//                 color: colors.greenAccent[300],
+//               },
+//               "& .MuiDataGrid-columnHeaders": {
+//                 backgroundColor: colors.blueAccent[700],
+//                 borderBottom: "none",
+//               },
+//               "& .MuiDataGrid-virtualScroller": {
+//                 backgroundColor: colors.primary[400],
+//               },
+//               "& .MuiDataGrid-footerContainer": {
+//                 borderTop: "none",
+//                 backgroundColor: colors.blueAccent[700],
+//               },
+//               "& .MuiCheckbox-root": {
+//                 color: `${colors.greenAccent[200]} !important`,
+//               },
+//             }}
+//           >
+//             <DataGrid
+//               rows={data.ireimbursements}
+//               columns={columns}
+//               getRowId={(row) => row._id}
+//             />
 //           </Box>
-//         </ThemeProvider>
-//       </ColorModeContext.Provider>
-//     </>
+
+//           {/* Total Amount Display
+//           <Typography variant="h6" style={{ marginTop: "1em" }}>
+//             Total Amount: {totalAmount}
+//           </Typography> */}
+//         </Box>
+//       </ThemeProvider>
+//     </ColorModeContext.Provider>
 //   );
 // };
 
@@ -1096,7 +1144,7 @@ export default RaiseRequest;
 //   tableHeader: {
 //     backgroundColor: "#f2f2f2",
 //     padding: "18px",
-//     fontSize: "x-small", // Adjust the font size as needed
+//     fontSize: "x-small",
 //     position: "sticky",
 //     top: 0,
 //     zIndex: 1,
@@ -1104,7 +1152,7 @@ export default RaiseRequest;
 //   tableData: {
 //     padding: "8px",
 //     borderBottom: "1px solid #ddd",
-//     fontSize: "small", // Adjust the font size as needed
+//     fontSize: "small",
 //   },
 // };
 

@@ -1,643 +1,992 @@
+// import React, { useState } from "react";
+// import { Box, Typography, useTheme } from "@mui/material";
+// import { DataGrid } from "@mui/x-data-grid";
+// import Button from "@mui/material/Button";
+// import { tokens } from "../../src/theme";
+// import { useMode } from "../../src/theme";
+// import { useQuery } from "@apollo/client";
+// import gql from "graphql-tag";
+
+// const GET_REIMBURSEMENTS = gql`
+//   query GetMyReimbursements {
+//     ireimbursements {
+//       _id
+//       title
+//       description
+//       type
+//       visitLocation
+//       noOfDays
+//       fromDate
+//       toDate
+//       askedAmount
+//       totalAmount
+//       by
+//       isPreApproved
+//     }
+//   }
+// `;
+
+// const PreApproveRequest = () => {
+//   const [colorMode] = useMode();
+//   const theme = useTheme();
+//   const colors = tokens(theme.palette.mode);
+//   const [selectionModel, setSelectionModel] = useState([]);
+//   const [isFormOpen, setFormOpen] = useState(false);
+//   const [selectedReimbursement, setSelectedReimbursement] = useState(null);
+
+//   const handleSelectionModelChange = (newSelection) => {
+//     setSelectionModel(newSelection);
+
+//     if (newSelection.length > 0) {
+//       // Find the selected reimbursement based on its ID
+//       const selectedId = newSelection[0];
+//       const foundReimbursement = reimbursements.find(
+//         (reimbursement) => reimbursement._id === selectedId
+//       );
+
+//       setSelectedReimbursement(foundReimbursement);
+//     } else {
+//       setSelectedReimbursement(null);
+//     }
+
+//     // Open the form when a row is selected
+//     setFormOpen(true);
+//   };
+
+//   // Fetch reimbursement data using Apollo Client
+//   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS);
+
+//   const reimbursements = data?.ireimbursements || [];
+
+//   // Function to format date as "date, month"
+//   const formatDate = (dateString) => {
+//     const options = { day: "numeric", month: "short" }; // Use "short" to display only the first 3 letters of the month
+//     const [month, day, year] = dateString.split("/");
+//     return new Date(year, month - 1, day).toLocaleDateString(undefined, options);
+//   };
+
+//   // Function to map the types to expenses
+//   const mapTypeToExpense = (type) => {
+//     console.log("🚀 ~ file: approveReimbursements.jsx:70 ~ mapTypeToExpense ~ type:", type)
+//     switch (type) {
+//       case "ta":
+//         return "Travel Expense";
+//       case "aa":
+//         return "Accommodation Expense";
+//       case "fa":
+//         return "Meal Expense";
+//         case "pa":
+//         return "Purchase Expense";
+//       default:
+//         return type;
+//     }
+//   };
+
+//   const formattedReimbursements = reimbursements.map((reimbursement) => ({
+//     ...reimbursement,
+//     fromDate: formatDate(reimbursement.fromDate),
+//     type: mapTypeToExpense(reimbursement.type),
+//   }));
+
+//   const columns = [
+//     { field: "title", headerName: "Title", flex: 0.6 },
+//     { field: "visitLocation", headerName: "Location", flex: 0.5 },
+//     { field: "type", headerName: "Type", flex: 0.5 },
+//     { field: "fromDate", headerName: "Date", flex: 0.5 },
+//     { field: "askedAmount", headerName: "Ask", flex: 0.5 },
+//   ];
+
+//   return (
+//     <>
+//       <Box
+//         style={{
+//           position: "absolute",
+//           bottom: "0px",
+//           left: "5em",
+//           right: "0px",
+//         }}
+//       >
+//         <div
+//           style={{
+//             backgroundColor: "yellow",
+//             color: colors.blueAccent[200],
+//             width: "100%",
+//             top: "0px",
+//             zIndex: -1,
+//             flex: 1,
+//             height: "100%",
+//             display: "flex",
+//             textAlign: "center",
+//             alignItems: "center",
+//             justifyContent: "space-between",
+//           }}
+//           className="banner"
+//         >
+//           <h4
+//             style={{
+//               marginLeft: 10,
+//               fontFamily: "Bebas Neue,sans-serif",
+//               fontSize: "xxx-large",
+//             }}
+//           >
+//             Approve Reimbursements
+//           </h4>
+//           <Button
+//             variant="contained"
+//             type="submit"
+//             style={{
+//               marginRight: 40,
+//               fontSize: "medium",
+//               width: "10%",
+//               height: "50%",
+//             }}
+//           >
+//             Approve
+//           </Button>
+//         </div>
+//         <Box
+//           height="82.3vh"
+//           width="36vw"
+//           sx={{
+//             "& .MuiDataGrid-root": {
+//               border: "none",
+//             },
+//             "& .MuiDataGrid-cell": {
+//               borderBottom: "none",
+//             },
+//             "& .name-column--cell": {
+//               color: colors.greenAccent[300],
+//             },
+//             "& .MuiDataGrid-columnHeaders": {
+//               backgroundColor: colors.blueAccent[700],
+//               borderBottom: "none",
+//             },
+//             "& .MuiDataGrid-virtualScroller": {
+//               backgroundColor: colors.primary[400],
+//             },
+//             "& .MuiDataGrid-footerContainer": {
+//               borderTop: "none",
+//               backgroundColor: colors.blueAccent[700],
+//             },
+//             "& .MuiCheckbox-root": {
+//               color: `${colors.greenAccent[200]} !important`,
+//             },
+//           }}
+//         >
+//           <DataGrid
+//             checkboxSelection
+//             onRowSelectionModelChange={(newRowSelectionModel) => {
+//               handleSelectionModelChange(newRowSelectionModel);
+//             }}
+//             rowSelectionModel={selectionModel}
+//             rows={formattedReimbursements}
+//             columns={columns}
+//             getRowId={(row) => row._id}
+//           />
+//         </Box>
+//       </Box>
+
+//       {isFormOpen && selectedReimbursement && (
+//         <div
+//           style={{
+//             position: "relative",
+//             marginTop: "1em",
+//             marginLeft: "5.8em",
+//             width: "calc(70% - 7em)",
+//             backgroundColor: "white",
+//             maxHeight: "82vh",
+//             overflow: "auto",
+//             borderLeft: "2px solid #ccc", // Adding a border
+//             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)", // Adding a box shadow
+//           }}
+//         >
+//           <h4
+//             style={{
+//               marginBottom: "0.5em",
+//               fontSize: "x-large",
+//               fontSize: 50,
+//               fontWeight: 400,
+//               position: "fixed",
+//               marginLeft: "0.5em",
+//               color: colors.blueAccent[200],
+//             }}
+//           >
+//             {selectedReimbursement.title}
+//           </h4>
+//           <Typography
+//             variant="h3"
+//             color="textSecondary"
+//             style={{
+//               position: "relative",
+//               marginLeft: "9em",
+//               marginTop: "0.53em",
+//               fontSize: "0.7em",
+//               fontWeight: "bold",
+//             }}
+//           >
+//             Total Amount: ₹{selectedReimbursement.totalAmount}
+//           </Typography>
+
+//           {/* Display other details of the selected reimbursement */}
+//           {/* Example: */}
+//           <h6 style={{ marginTop: "2em", marginLeft: "-15.5em", marginBottom: "1em", fontSize: "0.6em" }}>
+//             {selectedReimbursement.type}
+//           </h6>
+
+//           {/* Add more details as needed */}
+//         </div>
+//       )}
+//     </>
+//   );
+// };
+
+// export default PreApproveRequest;
 
 
+
+
+// import React, { useState } from "react";
+// import { Box, Typography, useTheme } from "@mui/material";
+// import { DataGrid } from "@mui/x-data-grid";
+// import Button from "@mui/material/Button";
+// import TextField from "@mui/material/TextField";
+// import { tokens } from "../../src/theme";
+// import { useMode } from "../../src/theme";
+// import { useQuery } from "@apollo/client";
+// import gql from "graphql-tag";
+
+// const GET_REIMBURSEMENTS = gql`
+//   query GetMyReimbursements {
+//     ireimbursements {
+//       _id
+//       title
+//       description
+//       type
+//       visitLocation
+//       noOfDays
+//       fromDate
+//       toDate
+//       askedAmount
+//       totalAmount
+//       by
+//       isPreApproved
+//     }
+//   }
+// `;
+
+// const PreApproveRequest = () => {
+//   const [colorMode] = useMode();
+//   const theme = useTheme();
+//   const colors = tokens(theme.palette.mode);
+//   const [selectionModel, setSelectionModel] = useState([]);
+//   const [isFormOpen, setFormOpen] = useState(false);
+//   const [selectedReimbursement, setSelectedReimbursement] = useState(null);
+
+//   const handleSelectionModelChange = (newSelection) => {
+//     setSelectionModel(newSelection);
+
+//     if (newSelection.length > 0) {
+//       // Find the selected reimbursement based on its ID
+//       const selectedId = newSelection[0];
+//       const foundReimbursement = reimbursements.find(
+//         (reimbursement) => reimbursement._id === selectedId
+//       );
+
+//       setSelectedReimbursement(foundReimbursement);
+//     } else {
+//       setSelectedReimbursement(null);
+//     }
+
+//     // Open the form when a row is selected
+//     setFormOpen(true);
+//   };
+
+//   // Fetch reimbursement data using Apollo Client
+//   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS);
+
+//   const reimbursements = data?.ireimbursements || [];
+
+//   // Function to format date as "date, month"
+//   const formatDate = (dateString) => {
+//     const options = { day: "numeric", month: "long" };
+//     return new Date(dateString).toLocaleDateString(undefined, options);
+//   };
+
+//   const columns = [
+//     { field: "title", headerName: "Title", flex: 0.6 },
+//     { field: "visitLocation", headerName: "Location", flex: 0.5 },
+//     { field: "type", headerName: "Type", flex: 0.5 },
+//     { field: "fromDate", headerName: "Date", flex: 0.5 },
+//     { field: "askedAmount", headerName: "Ask", flex: 0.5 },
+//   ];
+
+//   return (
+//     <>
+//       <Box
+//         style={{
+//           position: "absolute",
+//           bottom: "0px",
+//           left: "5em",
+//           right: "0px",
+//         }}
+//       >
+//         <div
+//           style={{
+//             backgroundColor: "yellow",
+//             color: colors.blueAccent[200],
+//             width: "100%",
+//             top: "0px",
+//             zIndex: -1,
+//             flex: 1,
+//             height: "100%",
+//             display: "flex",
+//             textAlign: "center",
+//             alignItems: "center",
+//             justifyContent: "space-between",
+//           }}
+//           className="banner"
+//         >
+//           <h4
+//             style={{
+//               marginLeft: 10,
+//               fontFamily: "Bebas Neue,sans-serif",
+//               fontSize: "xxx-large",
+//             }}
+//           >
+//             Approve Reimbursements
+//           </h4>
+//           <Button
+//             variant="contained"
+//             type="submit"
+//             style={{
+//               marginRight: 40,
+//               fontSize: "medium",
+//               width: "10%",
+//               height: "50%",
+//             }}
+//           >
+//             Approve
+//           </Button>
+//         </div>
+//         <Box
+//           height="82.3vh"
+//           width="36vw"
+//           sx={{
+//             "& .MuiDataGrid-root": {
+//               border: "none",
+//             },
+//             "& .MuiDataGrid-cell": {
+//               borderBottom: "none",
+//             },
+//             "& .name-column--cell": {
+//               color: colors.greenAccent[300],
+//             },
+//             "& .MuiDataGrid-columnHeaders": {
+//               backgroundColor: colors.blueAccent[700],
+//               borderBottom: "none",
+//             },
+//             "& .MuiDataGrid-virtualScroller": {
+//               backgroundColor: colors.primary[400],
+//             },
+//             "& .MuiDataGrid-footerContainer": {
+//               borderTop: "none",
+//               backgroundColor: colors.blueAccent[700],
+//             },
+//             "& .MuiCheckbox-root": {
+//               color: `${colors.greenAccent[200]} !important`,
+//             },
+//           }}
+//         >
+//           <DataGrid
+//             checkboxSelection
+//             onRowSelectionModelChange={(newRowSelectionModel) => {
+//               handleSelectionModelChange(newRowSelectionModel);
+//             }}
+//             rowSelectionModel={selectionModel}
+//             rows={reimbursements}
+//             columns={columns}
+//             getRowId={(row) => row._id}
+//           />
+//         </Box>
+//       </Box>
+
+//       {isFormOpen && selectedReimbursement && (
+//         <div
+//           style={{
+//             position: "relative",
+//             marginTop: "1em",
+//             marginLeft: "5.8em",
+//             width: "calc(70% - 7em)",
+//             backgroundColor: "white",
+//             maxHeight: "82vh",
+//             overflow: "auto",
+//             borderLeft: "2px solid #ccc", // Adding a border
+//             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)", // Adding a box shadow
+//           }}
+//         >
+//           <h4
+//             style={{
+//               marginBottom: "0.5em",
+//               fontSize: "x-large",
+//               fontSize: 50,
+//               fontWeight: 400,
+//               position: "fixed",
+//               marginLeft: "0.5em",
+//               color: colors.blueAccent[200],
+//             }}
+//           >
+//             {selectedReimbursement.title}
+//           </h4>
+//           <Typography
+//             variant="h3"
+//             color="textSecondary"
+//             style={{
+//               position: "relative",
+//               marginLeft: "9em",
+//               marginTop: "0.53em",
+//               fontSize: "0.7em",
+//               fontWeight: "bold",
+//             }}
+//           >
+//             Total Amount: ₹{selectedReimbursement.totalAmount}
+//           </Typography>
+
+//           {/* Display other details of the selected reimbursement */}
+//           {/* Example: */}
+//           <h6 style={{ marginTop: "2em", marginLeft: "-15.5em", marginBottom: "1em", fontSize: "0.6em" }}>
+//             {selectedReimbursement.type}
+//           </h6>
+
+//           {/* Add more details as needed */}
+//         </div>
+//       )}
+//     </>
+//   );
+// };
+
+// export default PreApproveRequest;
+
+import React, { useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
-import {
-  ADD_BULK_EXPENSE,
-  CREATE_REIMBURSEMENT,
-  GET_REIMBURSEMENTS,
-  GET_TEAM_MEMBERS,
-} from "../gqloperations/mutations"; // Import your GraphQL query
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import Header from "./Header";
-import { ThemeProvider } from "@emotion/react";
-import { CssBaseline } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../src/theme";
-import { ColorModeContext, useMode } from "../../src/theme";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { margin } from "@mui/system";
-import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Autocomplete from "@mui/material/Autocomplete";
-import HistoryIcon from "@mui/icons-material/History";
-import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
-import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
+import TextField from "@mui/material/TextField";
+import { tokens } from "../../src/theme";
+import { useMode } from "../../src/theme";
+import{useQuery} from "@apollo/client";
+import {GET_TEAM_MEMBERS,
+  GET_REIMBURSEMENTS,
+  UPDATE_REIMBURSEMENTS,
+} from "../gqloperations/mutations";
 
-import { useMutation, useQuery, gql } from "@apollo/client";
-import {Loader, Error} from "./loader";
-
-const ApproveReimbursements = () => {
+const PreApproveRequest = (key, showPlusButton, addForm) => {
   const [colorMode] = useMode();
-  const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [height, setHeight] = useState(window.innerHeight);
+  const [selectionModel, setSelectionModel] = useState([]);
+  const [isFormOpen, setFormOpen] = useState(false);
 
-  const updateDimensions = () => {
-    setHeight(window.innerHeight);
+  const handleSelectionModelChange = (newSelection) => {
+    setSelectionModel(newSelection);
+    // Open the form when a row is selected
+    setFormOpen(true);
   };
 
-  useEffect(() => {
-    window.addEventListener('resize', updateDimensions);
-    return () => {
-      window.removeEventListener('resize', updateDimensions);
-    };
-  }, []);
-  // Fetch data using the GraphQL query
+  // Function to format date as "date, month"
+  const formatDate = (dateString) => {
+    const options = { day: "numeric", month: "long" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
-  const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
-    refetchQueries: [{ query: GET_REIMBURSEMENTS }],
-  });
-  const [createBulkExpenses] = useMutation(ADD_BULK_EXPENSE, {});
-
-  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
-    context: {
-      headers: {
-        Authorization: `${localStorage.getItem("token")}`,
-      },
+  // Sample data
+  const sampleData = [
+    {
+      id: 1,
+      title: "Mumbai Visit",
+      name:'Souraj',
+      type: "Mumbai Visit",
+      fromDate: "2023-05-12",
+      askedAmount: 5000,
     },
+    {
+      id: 2,
+      title: "Bangalore Visit",
+      name:'Deepanshu',
+      type: "Mumbai Travel",
+      fromDate: "2023-02-01",
+      askedAmount: 7000,
+    },
+    {
+      id: 2,
+      title: "SFO Visit",
+      name:'Punam',
+      type: "Mumbai Travel",
+      fromDate: "2023-02-01",
+      askedAmount: 7000,
+    },
+    {
+      id: 2,
+      title: "Delhi Visit",
+      name:'Ram',
+      type: "Mumbai Travel",
+      fromDate: "2023-02-01",
+      askedAmount: 7000,
+    },
+    
+    // Add more sample data entries here
+  ];
+
+  // Update the fromDate in the sample data to display in "date, month" format
+  sampleData.forEach((item) => {
+    item.fromDate = formatDate(item.fromDate);
   });
 
-  const [request, setRequest] = useState({
-    name: "",
-    fromDate: "",
-    toDate: "",
-    amount: "",
-    description: "",
-    place: "",
-  });
-
-  const [expenses, setExpenses] = useState([]);
-  const [reimbursement, setReimbursement] = useState({});
-  const [rowSelectionModel, setRowSelectionModel] = useState();
-
-  const addExpense = (expense) => {
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
-      expense
-    );
-    const formId = Date.now();
-    setExpenses([
-      ...expenses,
-      {
-        formId,
-        ...expense,
-      },
-    ]);
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
-      expenses
-    );
-  };
-
-  const selectReimbursement = (reimbursement) => {
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:94 ~ selectReimbursement ~ reimbursement:",
-      reimbursement[0]
-    );
-    setReimbursement(reimbursement[0]);
-    const formId = Date.now();
-    setExpenses([
-      {
-        formId,
-        reimbursement: reimbursement[0],
-      },
-    ]);
-  };
-
-  const callBulkExpenseUpload = () => {
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:137 ~ callBulkExpenseUpload ~ expenses:",
-      expenses
-    );
-    console.log("Calling bulk upload");
-    expenses.shift();
-    expenses.forEach((object) => {
-      delete object["formId"];
-    });
-    createBulkExpenses({
-      context: {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      },
-      variables: { expenseNewArray: expenses },
-    })
-      .then(() => {
-        // Data submitted successfully, you can perform any additional actions here
-        alert("Expenses uploaded successfully");
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error(error);
-      });
-  };
-
-  if (loading) return <Loader />;
-  if (error) return <Error />;
+  // Calculate the sum of all amounts
+  const totalAmount = sampleData.reduce((total, item) => total + item.askedAmount, 0);
 
   const columns = [
-    {
-      field: "title",
-      headerName: "Title",
-      flex: 0.8,
-      cellClassName: "name-column--cell",
-    },
-    {
-      field: "askedAmount",
-      headerName: "Approved",
-      flex: 0.8,
-      cellClassName: "name-column--cell",
-    },
-    {
-      field: "isPreApproved",
-      headerName: "Approval",
-      flex: 1,
-      renderCell: ({ row }) => {
-        return (
-          <Box
-            width="90%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              row.isPreApproved
-                ? colors.greenAccent[600]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {row.isPreApproved ? " Approved " : "Pending"}
-            </Typography>
-          </Box>
-        );
-      },
-    },
+    { field: "title", headerName: "Title", flex: 0.6 },
+    { field: "name", headerName: "Requester", flex: 0.5 },
+    // { field: "type", headerName: "Type", flex: 1 },
+    { field: "fromDate", headerName: "Date", flex: 0.5 },
+    { field: "askedAmount", headerName: "Ask", flex: 0.5 },
   ];
+
   
 
   return (
     <>
       <Box
         style={{
+          position: "absolute",
+          bottom: "0px",
           left: "5em",
-          marginRight: "5em",
-          width: "100%",
-          flexDirection: "column",
-          display: "flex",
-          height: "100%",
+          right: "0px",
         }}
       >
         <div
           style={{
-            // backgroundColor: colors.blueAccent[800],
+            backgroundColor: "yellow",
             color: colors.blueAccent[200],
             width: "100%",
-            height: 60,
+            top: "0px",
+            zIndex: -1,
+            flex: 1,
+            height: "100%",
             display: "flex",
             textAlign: "center",
-            justifyContent: "center",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
+          className="banner"
         >
-          <h4 style={{}}>Pre Request</h4>
+          <h4
+            style={{
+              marginLeft: 10,
+              fontFamily: "Bebas Neue,sans-serif",
+              fontSize: "xxx-large",
+            }}
+          >
+            Approve Reimbursements
+          </h4>
+          <Button
+            variant="contained"
+            type="submit"
+            style={{
+              marginRight: 40,
+              fontSize: "medium",
+              width: "10%",
+              height: "50%",
+            }}
+          >
+            Approve
+          </Button>
         </div>
         <Box
-          style={{
-            flexDirection: "row",
-            // backgroundColor: "gray",
-            display: "flex",
+          height="82.3vh"
+          width="36vw"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .name-column--cell": {
+              color: colors.greenAccent[300],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
           }}
         >
-          <Box
-            style={{
-              width: "30%",
-              flexDirection: "column",
-              // backgroundColor: "yellow",
-              display: "flex",
-              height: "95%",
+          <DataGrid
+            checkboxSelection
+            onRowSelectionModelChange={(newRowSelectionModel) => {
+              handleSelectionModelChange(newRowSelectionModel);
             }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                marginLeft: 8,
-              }}
-            >
-              <DoneAllRoundedIcon
-                style={{
-                  marginRight: 4,
-                  transform: "scale(1.5)",
-                }}
-              />
-              <h4
-                style={{
-                  marginLeft: 4,
-                  fontFamily: "Bebas Neue,sans-serif",
-                  fontSize: "xx-large",
-                }}
-              >
-                Approved For
-              </h4>
-            </div>
-            <Box
-              height={height - 80}
-              marginBottom="10vh"
-              sx={{
-                "& .MuiDataGrid-root": {
-                  border: "none",
-                },
-                "& .MuiDataGrid-cell": {
-                  borderBottom: "none",
-                },
-                "& .name-column--cell": {
-                  color: colors.greenAccent[300],
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: colors.blueAccent[700],
-                  borderBottom: "none",
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: colors.primary[400],
-                },
-                "& .MuiDataGrid-footerContainer": {
-                  borderTop: "none",
-                  backgroundColor: colors.blueAccent[700],
-                },
-                "& .MuiCheckbox-root": {
-                  color: `${colors.greenAccent[200]} !important`,
-                },
-              }}
-            >
-              <DataGrid
-                onRowSelectionModelChange={(newRowSelectionModel) => {
-                  setRowSelectionModel(newRowSelectionModel);
-                  selectReimbursement(newRowSelectionModel);
-                }}
-                rowSelectionModel={rowSelectionModel}
-                rows={data.ireimbursements.filter(
-                  (element) => element.isPreApproved
-                )}
-                columns={columns}
-                getRowId={(row) => row._id}
-              />
-            </Box>
-          </Box>
-          <Box
-            style={{
-              marginTop: "0.8em",
-              width: "70%",
-              flexDirection: "column",
-              // backgroundColor: "red",
-              display: "flex",
-              height: "100%",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginLeft: 8,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <CurrencyRupeeRoundedIcon
-                  style={{
-                    marginRight: 4,
-                    transform: "scale(1.5)",
-                  }}
-                />
-                <h4
-                  style={{
-                    marginLeft: 4,
-                    fontFamily: "Bebas Neue,sans-serif",
-                    fontSize: "xx-large",
-                  }}
-                >
-                  Add Expenses
-                </h4>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <h4
-                  style={{
-                    marginLeft: 4,
-                    fontFamily: "Bebas Neue,sans-serif",
-                    fontSize: "xx-large",
-                  }}
-                >
-                  Total =
-                </h4>
-                <h4
-                  style={{
-                    marginLeft: 4,
-                    fontFamily: "Bebas Neue,sans-serif",
-                    fontSize: "xx-large",
-                  }}
-                >
-                  {"0"}
-                </h4>
-                <CurrencyRupeeRoundedIcon
-                  style={{
-                    marginRight: 4,
-                    transform: "scale(1.5)",
-                  }}
-                />
-              </div>
-
-              <Button
-                variant="contained"
-                style={{
-                  borderRadius: 10,
-                  marginRight: 16,
-                }}
-                onClick={callBulkExpenseUpload}
-              >
-                Submit For Reimbursement
-              </Button>
-            </div>
-            <div
-              style={{
-                width: "100%",
-                padding: "20px",
-                overflowY: "scroll",
-                height: "70%",
-              }}
-            >
-              {expenses.map((expense, index) => (
-                <Form
-                  key={expense.formId}
-                  showPlusButton={index === expenses?.length - 1}
-                  addExpense={addExpense}
-                  reimbursement={reimbursement}
-                />
-              ))}
-            </div>
-          </Box>
+            rowSelectionModel={selectionModel}
+            rows={sampleData}
+            columns={columns}
+            getRowId={(row) => row.id}
+          />
         </Box>
       </Box>
-    </>
-  );
-};
 
-function Form({ key, showPlusButton, addExpense, reimbursement }) {
-  const expenseTypes = [
-    { label: "Travel", code: "te" },
-    { label: "Meal", code: "fe" },
-    { label: "Accommodation", code: "ae" },
-    { label: "Purchase", code: "pe" },
-  ];
-  const theme = useTheme();
-  const [expenseType, setExpenseType] = useState({});
-  const [expenseDescription, setExpenseDescrption] = useState("");
-  const [expenseDate, setExpenseDate] = useState(null);
-  const [expenseAmount, setExpensesAmount] = useState("");
-
-  const colors = tokens(theme.palette.mode);
-  const currencies = [
-    {
-      value: "INR",
-      label: "₹",
-    },
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
-  ];
-
-  return (
-    <div
-      key={key}
-      style={{
-        // backgroundColor: colors.blueAccent[900],
-        width: "100%",
-        border: "2px solid #ccc",
-        borderRadius: 20,
-        marginTop: "0.2em",
-        height: "70%",
-        padding: 8,
-      }}
-    >
-      <form>
+      {isFormOpen && (
         <div
           style={{
-            flexDirection: "row",
-            display: "flex",
-            width: "100%",
-            marginTop: 10,
-            justifyContent: "space-between",
-            alignItems: "center",
+            position: "relative",
+            marginTop: "1em",
+            marginLeft: "5.8em",
+            width: "calc(70% - 7em)",
+            backgroundColor: "white",
+            maxHeight: "82vh",
+            overflow: "auto",
+            borderLeft: "2px solid #ccc", // Adding a border
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)", // Adding a box shadow
           }}
         >
-          <Box
-            width="20vh"
-            component="form"
-            sx={{
-              "& .MuiTextField-root": {},
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={expenseTypes}
-              value={expenseType?.label ? expenseType?.label : ""}
-              onChange={(event, selectedType) => {
-                setExpenseType(selectedType);
-              }}
-              sx={{ width: 160 }}
-              style={{ position: "relative" }}
-              renderInput={(params) => <TextField {...params} label="Type" />}
-            />
-          </Box>
-
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              value={expenseDescription}
-              onChange={(e) => setExpenseDescrption(e.target.value)}
-              style={{
-                width: "3em",
-              }}
-            />
-          </Box>
-
-          <div
+          <h4
             style={{
-              paddingBottom: 24,
+              marginBottom: "0.5em",
+              fontSize: "x-large",
+              fontSize: 50,
+              fontWeight: 400,
+              position: "fixed",
+              marginLeft: "0.5em",
+              color: colors.blueAccent[200],
             }}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker
-                  value={expenseDate}
-                  onChange={(expenseDateInput) => {
-                    setExpenseDate(
-                      new Date(expenseDateInput).toLocaleDateString()
-                    );
-                  }}
-                  label="Payment Date"
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </div>
-          <div
-            style={{
-              flexDirection: "row",
-              display: "flex",
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box
+            Mumbai Visit
+          </h4>
+
+           {/* <h4 style={{ marginBottom: '0.5em' }}>Deepanshu || Mumbai Visit  </h4> */}
+           <h6 style={{marginTop:'2.4em',marginLeft:'-15.2em',marginBottom:'1em',fontSize:'0.6em'}}>Flight Travel</h6>
+           <div className="innerbox" style={{ display: 'flex', justifyContent: 'space-between' }}>           
+             <Box
               component="form"
               sx={{
-                "& .MuiTextField-root": {
-                  width: "2ch",
-                  height: "1ch",
-                  position: "relative",
-                },
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
               }}
               noValidate
               autoComplete="off"
             >
-              <div>
-                <TextField
-                  id="outlined-select-currency"
-                  select
-                  defaultValue="INR"
-                >
-                  {currencies.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
             </Box>
             <Box
               component="form"
               sx={{
-                "& .MuiTextField-root": { width: "25ch" },
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
               }}
               noValidate
               autoComplete="off"
             >
               <TextField
-                id="outlined-multiline-static"
-                label="Amount"
-                multiline
-                value={expenseAmount}
-                onChange={(e) => setExpensesAmount(e.target.value)}
-                style={{
-                  width: "3em",
+                id="standard-read-only-input"
+                label="Type"
+                defaultValue="Travel"
+                InputProps={{
+                  readOnly: true,
                 }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="Date "
+                defaultValue="12 May"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="#Invoice ID"
+                defaultValue="#98612"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="#Establishment"
+                defaultValue="Vistara"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="Amount"
+                defaultValue="₹4000"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
               />
             </Box>
           </div>
-
-          {showPlusButton && (
-            <Button
-              variant="contained"
-              style={{
-                borderRadius: 20,
+          <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+       <TextField
+          id="outlined-multiline-static"
+          label="Description"
+          multiline
+          rows={2}
+          style={{width:'4.8em',position:'relative',left:'-3.8em',top:'0.4em'}}
+          defaultValue="Flight Cost PUN-BOM AIR VISTARA"
+        />
+        </Box>
+          <h6 style={{marginTop:'1em',marginLeft:'-15.5em',marginBottom:'1em',fontSize:'0.6em'}}>Team Lunch</h6>
+          <div className="innerbox" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
               }}
-              onClick={() => {
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseAmount:",
-                  expenseAmount
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDate:",
-                  expenseDate
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDescription:",
-                  expenseDescription
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseType:",
-                  expenseType
-                );
-
-                if (
-                  expenseType &&
-                  expenseDescription &&
-                  expenseDate &&
-                  expenseAmount
-                ) {
-                  addExpense({
-                    type: expenseType.code,
-                    amount: expenseAmount,
-                    description: expenseDescription,
-                    reimbursement: reimbursement,
-                  });
-                } else {
-                  alert("Please Fill Details.");
-                }
-              }}
+              noValidate
+              autoComplete="off"
             >
-              Add
-            </Button>
-          )}
+              <TextField
+                id="standard-read-only-input"
+                label="Type"
+                defaultValue="Meal"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em',position:'relative',left:'0.5em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="Date "
+                defaultValue="14 June"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em',position:'relative',left:'0.4em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="#Invoice ID"
+                defaultValue="#8236"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em',position:'relative',left:'0.3em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="#Establishment"
+                defaultValue="BBQ Nation"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em',position:'relative',left:'0.2em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="Amount"
+                defaultValue="₹4000"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+          </div>
+          <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+       <TextField
+          id="outlined-multiline-static"
+          label="Description"
+          multiline
+          rows={2}
+          style={{width:'4.8em',position:'relative',left:'-3.8em',top:'0.4em'}}
+          defaultValue="TML Team Lunch at Barbcue Nation, Worli"
+        />
+        </Box>
+          <h6 style={{marginTop:'1em',marginLeft:'-14em',marginLeft:'-15.5em',marginBottom:'1em',fontSize:'0.6em'}}>Purchase </h6>
+          <div className="innerbox" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="Type"
+                defaultValue="Purchase"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+            
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="Date "
+                defaultValue="18 June"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="standard-read-only-input"
+                label="Amount"
+                defaultValue="₹4000"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                style={{ width: '2em' }}
+              />
+            </Box>
+            
+          </div>
         </div>
-      </form>
-    </div>
+      )}
+    </>
   );
-}
+};
 
-export default ApproveReimbursements;
+export default PreApproveRequest;

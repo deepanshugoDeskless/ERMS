@@ -1,15 +1,23 @@
 import React from "react";
-// import { CounterCard } from '@mui-treasury/components/card/counter';
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import { useQuery, gql } from "@apollo/client";
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../src/theme";
 
+const GET_REIMBURSEMENTS = gql`
+  query GetReimbursements {
+    ireimbursements {
+      _id
+    }
+  }
+`;
+
 const useStyles = makeStyles(() => ({
   card: {
-    width: "300px", // adjust the width according to your layout
+    width: "300px",
     borderRadius: 12,
     boxShadow: "0 8px 16px 0 rgba(0,0,0,0.2)",
     overflow: "hidden",
@@ -28,11 +36,18 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MyCounterCard = ({ count, title, subtitle, color }) => {
+const MyCounterCard = ({ title }) => {
   const classes = useStyles();
-
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS);
+
+  if (loading) return "Loading...";
+  if (error) return `Error: ${error.message}`;
+
+  const count = data.ireimbursements.length;
+
   return (
     <Card className={classes.card}>
       <CardContent>
@@ -43,8 +58,6 @@ const MyCounterCard = ({ count, title, subtitle, color }) => {
             marginTop: 40,
             fontSize: 20,
             fontWeight: 600,
-            // fontFamily: "Bebas Neue,sans-serif",
-            // fontSize: "xxx-large",
             color: colors.blueAccent[200],
             opacity: 1,
           }}
@@ -54,22 +67,12 @@ const MyCounterCard = ({ count, title, subtitle, color }) => {
         <Typography className={classes.pos} color="textSecondary">
           Count
         </Typography>
-        <Typography variant="h3" component="p">
+        <Typography variant="h2" component="p">
           {count}
         </Typography>
       </CardContent>
     </Card>
   );
-  //   const classes = useStyles();
-
-  //   return (
-  //     <CounterCard
-  //       classes={{ root: classes.card }}
-  //       count={123} // adjust the count according to your requirement
-  //       color={'#fff'} // adjust the color of the counter
-  //       backgroundColor={'#3f51b5'} // adjust the background color
-  //     />
-  //   );
 };
 
 export default MyCounterCard;

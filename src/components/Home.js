@@ -9,12 +9,12 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Loader, Error, PersonScroll } from "./loader";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useMutation, useQuery } from "@apollo/client"; // Import useQuery
+import { useMutation, useQuery } from "@apollo/client";
 import {
   GET_TEAM_MEMBERS,
   GET_PRE_REQUESTS,
   UPDATE_REIMBURSEMENTS,
-} from "../gqloperations/mutations"; // Import your GraphQL query
+} from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
@@ -161,7 +161,6 @@ const Home = () => {
       >
         <div
           style={{
-            // backgroundColor: colors.blueAccent[800],
             color: colors.blueAccent[200],
             width: "100%",
             top: "0px",
@@ -176,7 +175,6 @@ const Home = () => {
         >
           <div
             style={{
-              // backgroundColor: "red",
               flexDirection: "row",
               justifyContent: "flex-start",
               alignItems: "baseline",
@@ -189,7 +187,6 @@ const Home = () => {
               style={{
                 marginTop: 40,
                 marginLeft: 40,
-                // fontFamily: "Bebas Neue,sans-serif",
                 fontSize: "xxx-large",
                 fontSize: 50,
                 fontWeight: 400,
@@ -203,9 +200,6 @@ const Home = () => {
                 marginTop: 40,
                 marginLeft: 40,
                 color: colors.blueAccent[500],
-                // fontSize: 50,
-                // fontWeight: 400,
-                // fontFamily: "Bebas Neue,sans-serif",
                 fontSize: "xxx-large",
               }}
             >
@@ -217,35 +211,16 @@ const Home = () => {
                 marginLeft: 40,
                 fontSize: 40,
                 fontWeight: 400,
-                // fontFamily: "Bebas Neue,sans-serif",
-                // fontSize: "xxx-large",
                 color: colors.blueAccent[200],
                 opacity: 0.5,
               }}
             >
-              Welcome To GoDeskless ERMS
+              Welcome To goDeskless ERMS
             </h4>
           </div>
-
-          {/* <Button
-            variant="contained"
-            type="submit"
-            onClick={() => {
-              handleBulkApproveSubmit();
-            }}
-            style={{
-              marginRight: 40,
-              fontSize: "small",
-              width: "10%",
-              height: "50%",
-            }}
-          >
-            Approve
-          </Button> */}
         </div>
         <div
           style={{
-            // backgroundColor: colors.blueAccent[800],
             color: colors.blueAccent[200],
             width: "100%",
             top: "0px",
@@ -257,50 +232,12 @@ const Home = () => {
             alignItems: "center",
             paddingRight: 40,
             justifyContent: "space-between",
-          }}>
-          <PersonScroll />
-          <MyCounterCard count={23} title={"Reimbursement Approved"}/>
-          <MyCounterCard count={12} title={"Reimbursement Pending"}/>
-        </div>
-        {/* <Box
-          height="85vh"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .name-column--cell": {
-              color: colors.greenAccent[300],
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: colors.blueAccent[700],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: colors.primary[400],
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: colors.blueAccent[700],
-            },
-            "& .MuiCheckbox-root": {
-              color: `${colors.greenAccent[200]} !important`,
-            },
           }}
         >
-          <DataGrid
-            checkboxSelection
-            onRowSelectionModelChange={(newRowSelectionModel) => {
-              handleSelectionModelChange(newRowSelectionModel);
-            }}
-            rowSelectionModel={selectionModel}
-            rows={data.pendingPreRequests}
-            columns={columns}
-            getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
-          />
-        </Box> */}
+          <PersonScroll />
+          <MyCounterCard count={23} title={"Reimbursement Approved"} />
+          <MyCounterCard count={12} title={"Reimbursement Pending"} />
+        </div>
       </Box>
     </>
   );

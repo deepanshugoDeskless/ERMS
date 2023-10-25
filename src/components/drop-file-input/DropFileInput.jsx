@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import "./drop-file-input.css";
 
 import { ImageConfig } from "../../config/ImageConfig";
-// import uploadImg from "../../Assets/cloud-upload-regular-240.png";
 import uploadImg from "../../Assets/cloud-upload.png";
 
 const DropFileInput = (props) => {
@@ -49,14 +48,7 @@ const DropFileInput = (props) => {
           boxSizing: "border-box",
         }}
       >
-        <div
-          className="drop-file-input__label"
-          style={
-            {
-              // backgroundColor: "blue",
-            }
-          }
-        >
+        <div className="drop-file-input__label">
           <img src={uploadImg} alt="" />
           <h6>Drag & Drop your files here</h6>
         </div>
@@ -64,7 +56,6 @@ const DropFileInput = (props) => {
       </div>
       {fileList.length > 0 ? (
         <div className="drop-file-preview">
-          {/* <p className="drop-file-preview__title">Ready to upload</p> */}
           {fileList.map((item, index) => (
             <div
               key={index}
@@ -86,7 +77,6 @@ const DropFileInput = (props) => {
               <div className="drop-file-preview__item__info">
                 <h6
                   style={{
-                    // fontFamily: "Bebas Neue,sans-serif",
                     fontSize: "small",
                   }}
                 >
@@ -108,7 +98,10 @@ const DropFileInput = (props) => {
                 <Button
                   variant="contained"
                   onClick={() => {
-                    console.log("🚀 ~ file: DropFileInput.jsx:112 ~ DropFileInput ~ item:", item)
+                    console.log(
+                      "🚀 ~ file: DropFileInput.jsx:112 ~ DropFileInput ~ item:",
+                      item
+                    );
                     props.uploadFile(item);
                   }}
                   style={{ fontSize: "small" }}

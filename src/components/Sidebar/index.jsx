@@ -1,4 +1,3 @@
-// src/components/Sidebar/index.jsx
 import React, { useState } from "react";
 
 import {
@@ -34,10 +33,8 @@ export default function Sidebar({ children }) {
       <SidebarContainer displaySidebar={displaySidebar}>
         <SidebarWrapper>
           <SidebarLogoWrapper displaySidebar={displaySidebar}>
-            {/* Logo wrapper starts */}
             <SidebarLogo href="#">
               <span className="app-brand-logo demo">
-                {/* <img src={BrandLogo} alt="Brand logo" /> */}
               </span>
               <SidebarBrand
                 displaySidebar={displaySidebar}
@@ -51,16 +48,7 @@ export default function Sidebar({ children }) {
                 />
               </SidebarBrand>
             </SidebarLogo>
-            {/* <SidebarToggler
-              displaySidebar={displaySidebar}
-              onClick={handleSidebarDisplay}
-            >
-              <div className="outer__circle">
-                <div className="inner__circle" />
-              </div>
-            </SidebarToggler> */}
           </SidebarLogoWrapper>
-          {/* Render the SidebarItems component */}
           <SidebarItems displaySidebar={displaySidebar} />
         </SidebarWrapper>
       </SidebarContainer>

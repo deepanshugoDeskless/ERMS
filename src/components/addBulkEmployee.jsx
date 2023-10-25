@@ -5,7 +5,7 @@ import {
   GET_TEAM_MEMBERS,
   SIGNUP_USER,
   BULK_UPLOAD_USER,
-} from "../gqloperations/mutations"; // Import your GraphQL query
+} from "../gqloperations/mutations";
 import "../../src/App.css";
 import * as XLSX from "xlsx";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
@@ -40,15 +40,13 @@ import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
 import { useMutation, useQuery, gql } from "@apollo/client";
 
 import DropFileInput from "./drop-file-input/DropFileInput";
-import {Loader, Error} from "./loader";
+import { Loader, Error } from "./loader";
 
 const AddEmployee = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
-  // Fetch data using the GraphQL query
 
   const [individualFirstName, setIndividualFirstName] = useState("");
   const [individualLasttName, setIndividualLasttName] = useState("");
@@ -66,7 +64,6 @@ const AddEmployee = () => {
 
   const readFile = () => {
     if (!file) {
-      // setErrorMessage("Please submit the file"); // Show "Please submit the file" if no file is selected
       return;
     }
 
@@ -80,7 +77,6 @@ const AddEmployee = () => {
       const parsedData = convertToJson(data);
       setJsonData(parsedData);
       setDisplayTable(true);
-      // setErrorMessage("Thank you for uploading the file"); // Show "Thank you for uploading the file" upon successful upload
 
       handleBulkSubmit({ bulkUserInput: parsedData });
     };
@@ -136,9 +132,7 @@ const AddEmployee = () => {
     },
   });
 
-  const [addEmployee] = useMutation(SIGNUP_USER, {
-    // refetchQueries: [{ query: GET_REIMBURSEMENTS }],
-  });
+  const [addEmployee] = useMutation(SIGNUP_USER, {});
 
   const callAddIndividualEmployee = () => {
     addEmployee({
@@ -160,7 +154,6 @@ const AddEmployee = () => {
       },
     })
       .then(() => {
-        // Data submitted successfully, you can perform any additional actions here
         setIndividualFirstName("");
         setIndividualLasttName("");
         setIndividualEmail("");
@@ -216,20 +209,10 @@ const AddEmployee = () => {
     },
   ];
 
-  // const onFileChange = (files) => {
-  //   console.log(files);
-  // };
-
   const onFileChange = (e) => {
     const selectedFile = e[0];
     console.log(selectedFile);
     setFile(selectedFile);
-
-    // if (selectedFile) {
-    //   setErrorMessage("Please submit the file"); // Show "Please submit the file" when the file is selected
-    // } else {
-    //   setErrorMessage("Please upload an Excel file"); // Show "Please upload an Excel file" when no file is selected
-    // }
   };
 
   return (
@@ -238,7 +221,6 @@ const AddEmployee = () => {
         display: "flex",
         flex: 1,
         flexDirection: "row",
-        // backgroundColor: "blue",
         width: "90%",
         alignItems: "flex-start",
         justifyContent: "flex-start",
@@ -250,7 +232,6 @@ const AddEmployee = () => {
           flex: 0.2,
           marginLeft: 30,
           flexDirection: "column",
-          // backgroundColor: "red",
           border: "2px solid #ddd",
           padding: 4,
           borderRadius: 20,
@@ -283,7 +264,6 @@ const AddEmployee = () => {
           borderRadius: 20,
           display: "flex",
           flexDirection: "column",
-          // backgroundColor: "yellow",
           alignItems: "flex-start",
           justifyContent: "center",
         }}
@@ -299,7 +279,6 @@ const AddEmployee = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            // backgroundColor: "yellow",
             flex: 1,
             width: "100%",
             alignItems: "center",
@@ -308,7 +287,6 @@ const AddEmployee = () => {
         >
           <div
             style={{
-              // backgroundColor: "palegreen",
               flexDirection: "column",
               display: "flex",
               width: "80%",
@@ -322,7 +300,6 @@ const AddEmployee = () => {
             <div>
               <div
                 style={{
-                  // backgroundColor: "orange",
                   flexDirection: "row",
                   display: "flex",
                   justifyContent: "center",
@@ -363,7 +340,6 @@ const AddEmployee = () => {
 
               <div
                 style={{
-                  // backgroundColor: "orange",
                   flexDirection: "row",
                   display: "flex",
                   justifyContent: "center",
@@ -418,7 +394,6 @@ const AddEmployee = () => {
               />
               <div
                 style={{
-                  // backgroundColor: "orange",
                   flexDirection: "column",
                   display: "flex",
                   justifyContent: "center",
@@ -438,8 +413,6 @@ const AddEmployee = () => {
               </div>
             </div>
           </div>
-
-          {/* <DropFileInput onFileChange={(files) => onFileChange(files)} /> */}
         </div>
       </div>
     </div>

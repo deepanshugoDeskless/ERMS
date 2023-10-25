@@ -1,4 +1,3 @@
-// src/components/Icons.js
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import WebOutlinedIcon from "@mui/icons-material/WebOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";

@@ -1,7 +1,5 @@
-// src/components/Sidebar/SidebarStyles.js
 import styled from "styled-components";
 
-// Children Component
 export const Children = styled.div`
   width: 100%;
   height: 100%;
@@ -83,7 +81,6 @@ export const ItemName = styled.span`
   text-transform: capitalize;
 `;
 
-// Sidebar Container
 export const SidebarContainer = styled.div`
   position: absolute;
   left: 0;

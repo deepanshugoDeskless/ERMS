@@ -1,11 +1,11 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useMutation, useQuery } from "@apollo/client"; // Import useQuery
+import { useMutation, useQuery } from "@apollo/client";
 import {
   GET_TEAM_MEMBERS,
   GET_PRE_REQUESTS,
   UPDATE_REIMBURSEMENTS,
-} from "../gqloperations/mutations"; // Import your GraphQL query
+} from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
@@ -44,10 +44,8 @@ const PreApproveRequest = () => {
     useMutation(UPDATE_REIMBURSEMENTS, {
       onCompleted: () => {
         refetch({
-          // Additional fetch options
           context: {
             headers: {
-              // Your custom headers here
               Authorization: `${localStorage.getItem("token")}`,
             },
           },
@@ -81,14 +79,29 @@ const PreApproveRequest = () => {
     {
       field: "description",
       headerName: "Description",
-      flex: 0.7,
+      flex: 0.9,
       cellClassName: "name-column--cell",
     },
     {
       field: "type",
       headerName: "Type",
-      flex: 0.5,
+      flex: 0.9,
       cellClassName: "name-column--cell",
+      valueGetter: (params) => {
+        // Map the type value to the desired display text
+        switch (params.value) {
+          case "pa":
+            return "Purchase Expense";
+          case "ta":
+            return "Travel Expense";
+          case "aa":
+            return "Accommodation Expense";
+          case "fa":
+            return "Meal Expense";
+          default:
+            return params.value;
+        }
+      },
     },
     {
       field: "by",
@@ -119,7 +132,6 @@ const PreApproveRequest = () => {
         );
       },
     },
-
     {
       field: "visitLocation",
       headerName: "Place",
@@ -154,8 +166,7 @@ const PreApproveRequest = () => {
       >
         <div
           style={{
-            // backgroundColor: colors.blueAccent[800],
-            backgroundColor:'yellow',
+            backgroundColor: "yellow",
             color: colors.blueAccent[200],
             width: "100%",
             top: "0px",
@@ -166,7 +177,6 @@ const PreApproveRequest = () => {
             textAlign: "center",
             alignItems: "center",
             justifyContent: "space-between",
-            
           }}
           className="banner"
         >
@@ -231,7 +241,7 @@ const PreApproveRequest = () => {
             rowSelectionModel={selectionModel}
             rows={data.pendingPreRequests}
             columns={columns}
-            getRowId={(row) => row._id} // Replace '_id' with the actual unique identifier field
+            getRowId={(row) => row._id}
           />
         </Box>
       </Box>

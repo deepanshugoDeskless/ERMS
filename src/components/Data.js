@@ -1,4 +1,3 @@
-// src/components/Data.js
 import {
   HomeIcon,
   LayoutIcon,
@@ -34,6 +33,7 @@ import PriceCheckRoundedIcon from "@mui/icons-material/PriceCheckRounded";
 import PreApproveResuests from "./preApproveRequests";
 import PreApproveRequest from "./preApproveRequests";
 import ApproveReimbursements from "./approveReimbursements";
+import ApprovedExpensesHistory from "./approvedexpenseshistory";
 
 export const ADMIN_SIDEBAR_DATA = [
   {
@@ -71,43 +71,13 @@ export const ADMIN_SIDEBAR_DATA = [
     path: "approveReimbursements",
     icon: <PriceCheckRoundedIcon />,
   },
-  // {
-  //   id: 6,
-  //   name: "Raise Request",
-  //   page: <AddTravel />,
-  //   path: "addtravel",
-  //   icon: <TravelIcon />,
-  // },
-  // {
-  //   id: 7,
-  //   name: "Claim Reimbursement",
-  //   page: <ClaimReimbursement />,
-  //   path: "claimreimbursement",
-  //   icon: <AddmoneyIcon />,
-  // },
-
-  // ,
-  // {
-  //   id: 6,
-  //   name: "invoice",
-  //   page: <Addemployee />,
-  //   path: "invoice",
-  //   icon: <InvoiceIcon />,
-  // },
-  // {
-  //   id: 7,
-  //   name: "calendar",
-  //   page: <Addemployee />,
-  //   path: "calendar",
-  //   icon: <CalendarIcon />,
-  // },
-  // {
-  //   id: 8,
-  //   name: "FAQ",
-  //   page: <Addemployee />,
-  //   path: "faq",
-  //   icon: <FaqIcon />,
-  // },
+  {
+    id: 6,
+    name: " Approved Requests",
+    page: <ApprovedExpensesHistory />,
+    path: "approvedrequests",
+    icon: <HistoryIcon />,
+  },
 ];
 
 export const USER_SIDEBAR_DATA = [
