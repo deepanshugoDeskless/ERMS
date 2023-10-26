@@ -5,11 +5,13 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { tokens } from "../../src/theme";
 import { useMode } from "../../src/theme";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useMutation } from "@apollo/client";
+import { UPDATE_REIMBURSEMENTS } from "../gqloperations/mutations";
 
 const ADMIN_FETCH_REQUESTS = gql`
   query PendingReimbursements {
     pendingReimbursements {
+      _id
       title
       description
       type
@@ -31,6 +33,7 @@ const ADMIN_FETCH_REQUESTS = gql`
   }
 `;
 
+
 const getTypeDescription = (type) => {
   switch (type) {
     case "ta":
@@ -46,22 +49,22 @@ const getTypeDescription = (type) => {
   }
 };
 
+
 const PreApproveRequest = (key, showPlusButton, addForm) => {
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
   const [colorMode] = useMode();
+  const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
-  const [isFormOpen, setFormOpen] = useState(false);
-  const [selectedRowData, setSelectedRowData] = useState(null);
 
   const handleSelectionModelChange = (newSelection) => {
+    console.log(
+      "🚀 ~ file: preApproveRequests.jsx:25 ~ handleSelectionModelChange ~ newSelection:",
+      newSelection
+    );
     setSelectionModel(newSelection);
-
-    setFormOpen(true);
-
-    if (newSelection.length > 0) {
-      setSelectedRowData(reimbursements.find((row) => row.id === newSelection[0]));
-    }
   };
 
   const calculateTotalAmount = (expenses) => {
@@ -76,8 +79,39 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     },
   });
 
+  const [updateReimbursements, { updateData, updateLoading, updateError }] =
+  useMutation(UPDATE_REIMBURSEMENTS, {
+    onCompleted: () => {
+      refetch({
+        context: {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        },
+      });
+    },
+  });
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+
+  const handleBulkApproveSubmit = () => {
+    updateReimbursements({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: {
+        reimbursementsUpdateInput: {
+          ids: selectionModel,
+          reimbursementInput: {
+            isApproved: true,
+          },
+        },
+      },
+    });
+  };
 
   const reimbursements = data.pendingReimbursements.map((reimbursement, index) => {
     // Date format change karne ke liye
@@ -87,11 +121,9 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     const formattedFromDate = `${fromDate.getDate()} ${fromDate.toLocaleString('en-US', { month: 'short' })}`;
     const formattedToDate = `${toDate.getDate()} ${toDate.toLocaleString('en-US', { month: 'short' })}`;
 
-    
-
     return {
       //API se data fetch karne ke liye to show in table and form
-      id: index,
+      id: reimbursement._id,
       title: reimbursement.title,
       fromDate: formattedFromDate,
       toDate: formattedToDate,
@@ -148,6 +180,9 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
           <Button
             variant="contained"
             type="submit"
+            onClick={() => {
+              handleBulkApproveSubmit();
+            }}
             style={{
               marginRight: 40,
               fontSize: "medium",
