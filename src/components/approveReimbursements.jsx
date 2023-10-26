@@ -33,7 +33,6 @@ const ADMIN_FETCH_REQUESTS = gql`
   }
 `;
 
-
 const getTypeDescription = (type) => {
   switch (type) {
     case "ta":
@@ -49,7 +48,6 @@ const getTypeDescription = (type) => {
   }
 };
 
-
 const PreApproveRequest = (key, showPlusButton, addForm) => {
   const [isFormOpen, setFormOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -60,15 +58,25 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
   const [selectionModel, setSelectionModel] = useState([]);
 
   const handleSelectionModelChange = (newSelection) => {
-    console.log(
-      "🚀 ~ file: preApproveRequests.jsx:25 ~ handleSelectionModelChange ~ newSelection:",
-      newSelection
-    );
     setSelectionModel(newSelection);
+
+    if (newSelection.length > 0) {
+      const selectedReimbursement = reimbursements.find(
+        (row) => row.id === newSelection[0]
+      );
+      setSelectedRowData(selectedReimbursement);
+      setFormOpen(true);
+    } else {
+      setFormOpen(false);
+      setSelectedRowData(null);
+    }
   };
 
   const calculateTotalAmount = (expenses) => {
-    return expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0);
+    return expenses.reduce(
+      (total, expense) => total + parseFloat(expense.amount),
+      0
+    );
   };
 
   const { loading, error, data, refetch } = useQuery(ADMIN_FETCH_REQUESTS, {
@@ -80,17 +88,17 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
   });
 
   const [updateReimbursements, { updateData, updateLoading, updateError }] =
-  useMutation(UPDATE_REIMBURSEMENTS, {
-    onCompleted: () => {
-      refetch({
-        context: {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
+    useMutation(UPDATE_REIMBURSEMENTS, {
+      onCompleted: () => {
+        refetch({
+          context: {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
           },
-        },
-      });
-    },
-  });
+        });
+      },
+    });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -113,30 +121,38 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     });
   };
 
-  const reimbursements = data.pendingReimbursements.map((reimbursement, index) => {
-    // Date format change karne ke liye
-    const fromDate = new Date(reimbursement.fromDate);
-    const toDate = new Date(reimbursement.toDate);
+  const reimbursements = data.pendingReimbursements.map(
+    (reimbursement, index) => {
+      // Date format change karne ke liye
+      const fromDate = new Date(reimbursement.fromDate);
+      const toDate = new Date(reimbursement.toDate);
 
-    const formattedFromDate = `${fromDate.getDate()} ${fromDate.toLocaleString('en-US', { month: 'short' })}`;
-    const formattedToDate = `${toDate.getDate()} ${toDate.toLocaleString('en-US', { month: 'short' })}`;
+      const formattedFromDate = `${fromDate.getDate()} ${fromDate.toLocaleString(
+        "en-US",
+        { month: "short" }
+      )}`;
+      const formattedToDate = `${toDate.getDate()} ${toDate.toLocaleString(
+        "en-US",
+        { month: "short" }
+      )}`;
 
-    return {
-      //API se data fetch karne ke liye to show in table and form
-      id: reimbursement._id,
-      title: reimbursement.title,
-      fromDate: formattedFromDate,
-      toDate: formattedToDate,
-      type: getTypeDescription(reimbursement.type), 
-      askedAmount: reimbursement.askedAmount,
-      expenses: reimbursement.expenses,
-      description: reimbursement.description,
-    };
-  });
+      return {
+        //API se data fetch karne ke liye to show in table and form
+        id: reimbursement._id,
+        title: reimbursement.title,
+        fromDate: formattedFromDate,
+        toDate: formattedToDate,
+        type: getTypeDescription(reimbursement.type),
+        askedAmount: reimbursement.askedAmount,
+        expenses: reimbursement.expenses,
+        description: reimbursement.description,
+      };
+    }
+  );
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
-    { field: "type", headerName: "Type", flex: 1.2 }, 
+    { field: "type", headerName: "Type", flex: 1.2 },
     { field: "fromDate", headerName: "From Date", flex: 1 },
     { field: "toDate", headerName: "To Date", flex: 0.8 },
     { field: "askedAmount", headerName: "Ask", flex: 0.7 },
@@ -237,54 +253,82 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
 
       {isFormOpen && selectedRowData && (
         <div
-        style={{
-          position: "relative",
-          marginTop: "0.9em",
-          marginLeft: "7.6em",
-          width: "calc(70% - 8.8em)",
-          backgroundColor: "white",
-          maxHeight: "82vh",
-          overflowY: "auto", 
-          borderLeft: "2px solid #ccc",
-          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-        }}
-      >
-          <h4
+          style={{
+            position: "relative",
+            marginTop: "0.9em",
+            marginLeft: "7.6em",
+            width: "calc(70% - 8.8em)",
+            backgroundColor: "white",
+            maxHeight: "82vh",
+            overflowY: "auto",
+            borderLeft: "2px solid #ccc",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          <div
             style={{
-              marginBottom: "0.5em",
-              fontSize: "x-large",
-              fontSize: 50,
-              fontWeight: 400,
-              position: "fixed",
-              marginLeft: "0.5em",
-              color: colors.blueAccent[200],
+              position: "sticky",
+              top: "0",
+              backgroundColor: "white",
+              zIndex: 1,
             }}
           >
-            {selectedRowData.description}
-          </h4>
-          <Typography style={{ position :'relative',fontSize:'xx-large',marginTop: "0.4em", marginLeft: "10em",color:'#808080' }}>
-            Amount: ₹{calculateTotalAmount(selectedRowData.expenses)}
-          </Typography>
+            <h4
+              style={{
+                marginBottom: "0.5em",
+                fontSize: "x-large",
+                fontSize: 50,
+                fontWeight: 400,
+                marginLeft: "-4.4em",
+                color: colors.blueAccent[200],
+              }}
+            >
+              {selectedRowData.description}
+            </h4>
+            <Typography
+              style={{
+                fontSize: "xx-large",
+                marginTop: "-2.3em",
+                marginLeft: "10.4em",
+                color: "#808080",
+              }}
+            >
+              Amount: ₹{calculateTotalAmount(selectedRowData.expenses)}
+            </Typography>
+          </div>
           {selectedRowData.expenses.map((expense, index) => (
-            <div key={index}>
+            <div
+              key={index}
+              style={{
+                border: "1px solid #ccc",
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                padding: "0.5em",
+                borderRadius: "12px",
+                marginTop: "0.4em",
+              }}
+            >
               <h6
                 style={{
-                  marginTop: index === 0 ? "2.4em" : "1em",
-                  marginLeft: "-12em",
+                  marginTop: index === 0 ? "-0.5em" : "0.2em",
+                  marginLeft: "-12.5em",
                   marginBottom: "1em",
                   fontSize: "0.6em",
                 }}
               >
                 {expense.description}
               </h6>
-              <div className="innerbox" style={{ display: "flex", justifyContent: "space-between" }}>
+              <div
+                className="innerbox"
+                style={{ display: "flex", justifyContent: "space-evenly" }}
+              >
                 <Box
                   component="form"
                   sx={{
-                    "& .MuiTextField-root": { m: 1, width: "25ch" },
+                    "& .MuiTextField-root": { m: 1, width: "4ch" },
                   }}
                   noValidate
                   autoComplete="off"
+                  style={{ position: "relative", marginTop: "-0.16em" }}
                 >
                   <TextField
                     id="standard-read-only-input"
@@ -294,7 +338,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                       readOnly: true,
                     }}
                     variant="standard"
-                    style={{ width: "2em" }}
+                    style={{ width: "4ch" }}
                   />
                 </Box>
               </div>
@@ -307,7 +351,3 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
 };
 
 export default PreApproveRequest;
-
-
-
-
