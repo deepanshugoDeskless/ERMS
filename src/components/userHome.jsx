@@ -146,11 +146,11 @@ const UserHome = () => {
         >
           <PersonScroll />
           <MyCounterCard
-            count={pendingPreRequests.length}
-            title={"Requested For Pre Approved"}
+            count={pendingPreRequests?.length}
+            title={"Requested For Pre Approval"}
           />
           <MyCounterCard
-            count={pendingReimbursementRequests.length}
+            count={pendingReimbursementRequests?.length}
             title={"Claimed Reimbursement"}
           />
         </div>
