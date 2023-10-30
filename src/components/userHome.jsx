@@ -5,7 +5,7 @@ import { colorMode } from "../theme";
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Loader, Error, PersonScroll } from "./loader";
+import { Loader, Error, PersonScroll, UserDashboardAnimation } from "./loader";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@apollo/client";
@@ -144,7 +144,7 @@ const UserHome = () => {
             justifyContent: "space-between",
           }}
         >
-          <PersonScroll />
+          <UserDashboardAnimation />
           <MyCounterCard
             count={pendingPreRequests?.length}
             title={"Requested For Pre Approval"}
