@@ -3,17 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import { useQuery, gql } from "@apollo/client";
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../src/theme";
-
-const GET_REIMBURSEMENTS = gql`
-  query GetReimbursements {
-    ireimbursements {
-      _id
-    }
-  }
-`;
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -36,17 +27,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MyCounterCard = ({ title }) => {
+const MyCounterCard = ({ count, title, subTitle }) => {
+  console.log("🚀 ~ file: counterCard.js:33 ~ MyCounterCard ~ count:", count);
   const classes = useStyles();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
-  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS);
-
-  if (loading) return "Loading...";
-  if (error) return `Error: ${error.message}`;
-
-  const count = data.ireimbursements.length;
 
   return (
     <Card className={classes.card}>
@@ -65,10 +50,10 @@ const MyCounterCard = ({ title }) => {
           {title}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          Count
+          {subTitle ?? "Count"}
         </Typography>
         <Typography variant="h2" component="p">
-          {count}
+          {count ?? 0}
         </Typography>
       </CardContent>
     </Card>

@@ -32,13 +32,14 @@ import PreApproveRequest from "./preApproveRequests";
 import ApproveReimbursements from "./approveReimbursements";
 import ApprovedExpensesHistory from "./approvedexpenseshistory";
 import UserHome from "./userHome";
+import AdminHome from "./adminHome";
 
 
 export const ADMIN_SIDEBAR_DATA = [
   {
     id: 1,
     name: "Admin Dashboards",
-    page: <Home />,
+    page: <AdminHome />,
     path: "adminHome",
     icon: <HomeIcon />,
   },

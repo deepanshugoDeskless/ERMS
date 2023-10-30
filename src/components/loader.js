@@ -1,4 +1,3 @@
-// src/App.js
 import React from "react";
 import lottie from "lottie-web";
 import reactLogo from "../Assets/animation_lnsgnezl.json";
