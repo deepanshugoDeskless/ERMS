@@ -23,9 +23,6 @@ import Home from "./Home";
 import Team from "./team";
 import RaiseRequest from "./raiseRequest";
 import AddEmployee from "./addBulkEmployee";
-import { AddReimbursement } from "./AddReimbursement";
-import { ApprovedExpenses } from "./ApprovedExpenses";
-import { AddTravel } from "./AddTravel";
 import ClaimReimbursement, { claimReimbursement } from "./claimReimbursement";
 import ClaimRequest from "./claimRequest";
 import AirplaneTicketRoundedIcon from "@mui/icons-material/AirplaneTicketRounded";
@@ -34,7 +31,7 @@ import PreApproveResuests from "./preApproveRequests";
 import PreApproveRequest from "./preApproveRequests";
 import ApproveReimbursements from "./approveReimbursements";
 import ApprovedExpensesHistory from "./approvedexpenseshistory";
-import homeNewfin from "./homeNewfin";
+
 
 export const ADMIN_SIDEBAR_DATA = [
   {
@@ -85,7 +82,7 @@ export const NEWFINANCE_SIDEBAR_DATA = [
   {
     id: 1,
     name: "dashboards",
-    page: < Home/>,
+    page: <Home />,
     path: "financeHome",
     icon: <HomeIcon />,
   },
