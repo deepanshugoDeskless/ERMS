@@ -12,6 +12,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import {
   ADMIN_FETCH_REQUESTS,
   GET_PRE_REQUESTS,
+  GET_REIMBURSEMENTS,
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
@@ -32,32 +33,29 @@ const UserHome = () => {
   //   Get the numeber of pending prerequests count
   //   Get the numeber of pending reimbursements count
   const {
-    loadingPreRequests,
-    errorPreRequests,
-    data: dataPreRequests,
-  } = useQuery(GET_PRE_REQUESTS, {
+    loadingRequests,
+    errorRequests,
+    data: dataRequests,
+  } = useQuery(GET_REIMBURSEMENTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
       },
     },
   });
+  if (loadingRequests) return <Loader />;
+  if (errorRequests) return <Error />;
 
-  const {
-    loadingReimbursementRequests,
-    errorReimbursementRequests,
-    data: dataReimbursementRequest,
-  } = useQuery(ADMIN_FETCH_REQUESTS, {
-    context: {
-      headers: {
-        Authorization: `${localStorage.getItem("token")}`,
-      },
-    },
-  });
-
-  if (loadingPreRequests || loadingReimbursementRequests) return <Loader />;
-  if (errorPreRequests || errorReimbursementRequests) return <Error />;
-
+  const pendingPreRequests = dataRequests?.ireimbursements.filter(
+    (element) => !element.isPreApproved
+  );
+  const pendingReimbursementRequests = dataRequests?.ireimbursements.filter(
+    (element) => !element.isApproved
+  );
+  console.log(
+    "🚀 ~ file: userHome.jsx:54 ~ UserHome ~ pendingPreRequests:",
+    pendingPreRequests
+  );
   const userFirstName = `${localStorage.getItem("user-firstname")}`;
   const userLastName = `${localStorage.getItem("user-lastname")}`;
 
@@ -147,8 +145,14 @@ const UserHome = () => {
           }}
         >
           <PersonScroll />
-          <MyCounterCard count={23} title={"Reimbursement Approved"} />
-          <MyCounterCard count={12} title={"Reimbursement Pending"} />
+          <MyCounterCard
+            count={pendingPreRequests.length}
+            title={"Requested For Pre Approved"}
+          />
+          <MyCounterCard
+            count={pendingReimbursementRequests.length}
+            title={"Claimed Reimbursement"}
+          />
         </div>
       </Box>
     </>
