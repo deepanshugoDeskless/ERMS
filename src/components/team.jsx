@@ -106,14 +106,23 @@ const Team = () => {
             height: "2em",
             display: "flex",
             textAlign: "center",
-            justifyContent: "center",
+            justifyContent: "flex-start",
           }}
           className="banner"
         >
-          <h4 style={{}}>goDeskless Workforce</h4>
+          <h4
+            style={{
+              marginTop: 13,
+              marginLeft: 10,
+              fontFamily: "Bebas Neue,sans-serif",
+              fontSize: "xxx-large",
+            }}
+          >
+            Workforce
+          </h4>
         </div>
         <Box
-          height="80vh"
+          height="82.3vh"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",

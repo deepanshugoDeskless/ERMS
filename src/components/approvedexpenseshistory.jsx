@@ -7,7 +7,6 @@ import { tokens } from "../../src/theme";
 import { Loader, Error } from "./loader";
 import { GET_REIMBURSEMENTS } from "../gqloperations/mutations";
 
-
 const ApprovedExpensesHistory = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -15,7 +14,7 @@ const ApprovedExpensesHistory = () => {
 
   // Function to format date as "date, month"
   const formatDate = (dateString) => {
-    const options = { day: "numeric", month: "short" }; 
+    const options = { day: "numeric", month: "short" };
     const [month, day, year] = dateString.split("/");
     return new Date(year, month - 1, day).toLocaleDateString(
       undefined,
@@ -136,30 +135,21 @@ const ApprovedExpensesHistory = () => {
             textAlign: "center",
             alignItems: "center",
             justifyContent: "space-between",
-
           }}
           className="banner"
         >
           <h4
             style={{
-              marginLeft: 20,
+              marginLeft: 10,
               fontFamily: "Bebas Neue,sans-serif",
               fontSize: "xxx-large",
-              marginTop:'-2em',
-              // backgroundColor:'yellow',
-              width: "100%",
-            //   textAlign:'left',
-              marginLeft:'0em',
-              height:'1.2em'
-              
-
             }}
           >
             Approved Expenses
           </h4>
         </div>
         <Box
-          height="80vh"
+          height="82.3vh"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",

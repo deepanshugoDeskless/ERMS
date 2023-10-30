@@ -216,206 +216,213 @@ const AddEmployee = () => {
   };
 
   return (
-    <div
+    <Box
       style={{
-        display: "flex",
-        flex: 1,
-        flexDirection: "row",
-        width: "90%",
-        alignItems: "flex-start",
-        justifyContent: "flex-start",
+        position: "absolute",
+        top: "100px",
+        left: "5em",
+        right: "0px",
       }}
     >
       <div
         style={{
           display: "flex",
-          flex: 0.2,
-          marginLeft: 30,
-          flexDirection: "column",
-          border: "2px solid #ddd",
-          padding: 4,
-          borderRadius: 20,
-          width: "90%",
+          flexDirection: "row",
+          marginTop: 50,
+          flex: 1,
+          width: "100%",
           alignItems: "flex-start",
-          justifyContent: "center",
-          marginRight: 20,
+          justifyContent: "space-evenly",
         }}
       >
-        <h6
-          style={{
-            marginBottom: 20,
-            marginLeft: 10,
-          }}
-        >
-          Upload Excel
-        </h6>
-
-        <DropFileInput
-          onFileChange={(files) => onFileChange(files)}
-          uploadFile={(files) => readFile(files)}
-        />
-      </div>
-
-      <div
-        style={{
-          border: "2px solid #ddd",
-          padding: 4,
-          flex: 0.5,
-          borderRadius: 20,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          justifyContent: "center",
-        }}
-      >
-        <h6
-          style={{
-            marginLeft: 10,
-          }}
-        >
-          Add Individually
-        </h6>
         <div
           style={{
             display: "flex",
+            marginLeft: 30,
             flexDirection: "column",
-            flex: 1,
-            width: "100%",
-            alignItems: "center",
+            border: "2px solid #ddd",
+            padding: 4,
+            borderRadius: 20,
+            alignItems: "flex-start",
+            justifyContent: "center",
+            marginRight: 20,
+          }}
+        >
+          <h6
+            style={{
+              marginBottom: 20,
+              marginLeft: 10,
+            }}
+          >
+            Upload Excel
+          </h6>
+
+          <DropFileInput
+            onFileChange={(files) => onFileChange(files)}
+            uploadFile={(files) => readFile(files)}
+          />
+        </div>
+
+        <div
+          style={{
+            border: "2px solid #ddd",
+            padding: 4,
+            borderRadius: 20,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
             justifyContent: "center",
           }}
         >
-          <div
+          <h6
             style={{
-              flexDirection: "column",
-              display: "flex",
-              width: "80%",
-              height: 120,
-              margin: 4,
-              marginTop: 12,
-              justifyContent: "center",
-              flex: 1,
+              marginLeft: 10,
             }}
           >
-            <div>
-              <div
-                style={{
-                  flexDirection: "row",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <TextField
-                  type="text"
-                  placeholder="Enter First Name"
-                  name="firstName"
-                  value={individualFirstName}
-                  onChange={(e) => setIndividualFirstName(e.target.value)}
-                  required
+            Add Individually
+          </h6>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                flexDirection: "column",
+                display: "flex",
+                width: "80%",
+                height: 120,
+                margin: 4,
+                marginTop: 12,
+                justifyContent: "center",
+                flex: 1,
+              }}
+            >
+              <div>
+                <div
                   style={{
-                    width: "60%",
-                    margin: 4,
+                    flexDirection: "row",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                  id="outlined-basic"
-                  label="First Name"
-                  variant="outlined"
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Last Name"
-                  variant="outlined"
-                  value={individualLasttName}
-                  type="text"
-                  placeholder="Enter Last Name"
-                  name="lastName"
-                  onChange={(e) => setIndividualLasttName(e.target.value)}
-                  required
-                  style={{
-                    width: "60%",
-                    margin: 4,
-                  }}
-                />
-              </div>
-
-              <div
-                style={{
-                  flexDirection: "row",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <TextField
-                  type="email"
-                  placeholder="Enter Email"
-                  name="email"
-                  value={individualEmail}
-                  onChange={(e) => setIndividualEmail(e.target.value)}
-                  required
-                  style={{
-                    width: "60%",
-                    margin: 4,
-                  }}
-                  id="outlined-basic"
-                  label="Email"
-                  variant="outlined"
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Phone"
-                  variant="outlined"
-                  type="number"
-                  placeholder="Enter Number"
-                  value={individualPhone}
-                  name="phone"
-                  onChange={(e) => setIndividualPhone(e.target.value)}
-                  required
-                  style={{
-                    width: "60%",
-                    margin: 4,
-                  }}
-                />
-              </div>
-              <TextField
-                id="outlined-basic"
-                label="Employee Code"
-                variant="outlined"
-                value={individualEmployeeCode}
-                type="number"
-                placeholder="Enter Employee Code"
-                name="employeeCode"
-                onChange={(e) => setIndividualEmployeeCode(e.target.value)}
-                required
-                style={{
-                  width: "100%",
-                  marginTop: 4,
-                }}
-              />
-              <div
-                style={{
-                  flexDirection: "column",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  type="submit"
-                  onClick={() => {
-                    callAddIndividualEmployee();
-                  }}
-                  style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
                 >
-                  Add Employee
-                </Button>
+                  <TextField
+                    type="text"
+                    placeholder="Enter First Name"
+                    name="firstName"
+                    value={individualFirstName}
+                    onChange={(e) => setIndividualFirstName(e.target.value)}
+                    required
+                    style={{
+                      width: "60%",
+                      margin: 4,
+                    }}
+                    id="outlined-basic"
+                    label="First Name"
+                    variant="outlined"
+                  />
+                  <TextField
+                    id="outlined-basic"
+                    label="Last Name"
+                    variant="outlined"
+                    value={individualLasttName}
+                    type="text"
+                    placeholder="Enter Last Name"
+                    name="lastName"
+                    onChange={(e) => setIndividualLasttName(e.target.value)}
+                    required
+                    style={{
+                      width: "60%",
+                      margin: 4,
+                    }}
+                  />
+                </div>
+
+                <div
+                  style={{
+                    flexDirection: "row",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <TextField
+                    type="email"
+                    placeholder="Enter Email"
+                    name="email"
+                    value={individualEmail}
+                    onChange={(e) => setIndividualEmail(e.target.value)}
+                    required
+                    style={{
+                      width: "60%",
+                      margin: 4,
+                    }}
+                    id="outlined-basic"
+                    label="Email"
+                    variant="outlined"
+                  />
+                  <TextField
+                    id="outlined-basic"
+                    label="Phone"
+                    variant="outlined"
+                    type="number"
+                    placeholder="Enter Number"
+                    value={individualPhone}
+                    name="phone"
+                    onChange={(e) => setIndividualPhone(e.target.value)}
+                    required
+                    style={{
+                      width: "60%",
+                      margin: 4,
+                    }}
+                  />
+                </div>
+                <TextField
+                  id="outlined-basic"
+                  label="Employee Code"
+                  variant="outlined"
+                  value={individualEmployeeCode}
+                  type="number"
+                  placeholder="Enter Employee Code"
+                  name="employeeCode"
+                  onChange={(e) => setIndividualEmployeeCode(e.target.value)}
+                  required
+                  style={{
+                    width: "100%",
+                    marginTop: 4,
+                  }}
+                />
+                <div
+                  style={{
+                    flexDirection: "column",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    onClick={() => {
+                      callAddIndividualEmployee();
+                    }}
+                    style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
+                  >
+                    Add Employee
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -170,7 +170,6 @@ const PreApproveRequest = () => {
             color: colors.blueAccent[200],
             width: "100%",
             top: "0px",
-            zIndex: -1,
             flex: 1,
             height: "100%",
             display: "flex",
@@ -182,7 +181,7 @@ const PreApproveRequest = () => {
         >
           <h4
             style={{
-              marginLeft: 50,
+              marginLeft: 10,
               fontFamily: "Bebas Neue,sans-serif",
               fontSize: "xxx-large",
             }}
@@ -206,7 +205,7 @@ const PreApproveRequest = () => {
           </Button>
         </div>
         <Box
-          height="80vh"
+          height="82.3vh"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",
