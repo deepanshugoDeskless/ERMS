@@ -164,7 +164,7 @@ const ApprovedExpensesHistory = () => {
               fontFamily: "Bebas Neue,sans-serif",
               fontSize: "xxx-large",
               marginTop:'-2em',
-              // backgroundColor:'yellow',
+            //   backgroundColor:'yellow',
               width: "100%",
             //   textAlign:'left',
               marginLeft:'0em',

@@ -60,7 +60,7 @@ const Home = () => {
       },
     });
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
   if (error) return <Error />;
 
   const userFirstName = `${localStorage.getItem("user-firstname")}`;

@@ -24,14 +24,9 @@ const ADMIN_FETCH_REQUESTS = gql`
       isPreApproved
       isApproved
       expenses {
-        date
-        type
-        _id
-        description
         amount
+        description
         approved
-        invoiceId
-        establishment
         by
       }
     }
@@ -47,12 +42,11 @@ const getTypeDescription = (type) => {
     case "fa":
       return "Meal Expense";
     case "aa":
-      return "Acco Expense";
+      return "Accommodation Expense";
     default:
       return type;
   }
 };
-
 
 const PreApproveRequest = (key, showPlusButton, addForm) => {
   const [isFormOpen, setFormOpen] = useState(false);
@@ -127,59 +121,39 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     });
   };
 
-  
+  const reimbursements = data.pendingReimbursements.map(
+    (reimbursement, index) => {
+      // Date format change karne ke liye
+      const fromDate = new Date(reimbursement.fromDate);
+      const toDate = new Date(reimbursement.toDate);
 
-  const months = {
-    '01': 'Jan',
-    '02': 'Feb',
-    '03': 'Mar',
-    '04': 'Apr',
-    '05': 'May',
-    '06': 'Jun',
-    '07': 'Jul',
-    '08': 'Aug',
-    '09': 'Sep',
-    '10': 'Oct',
-    '11': 'Nov',
-    '12': 'Dec',
-  };
-  
-  const reimbursements = data.pendingReimbursements.map((reimbursement, index) => {
-    // Split the date strings into day, month, and year
-    const fromDateStringParts = reimbursement.fromDate.split('/');
-    const toDateStringParts = reimbursement.toDate.split('/');
-  
-    // Ensure the date strings are in the format "DD/MM/YYYY"
-    if (fromDateStringParts.length === 3 && toDateStringParts.length === 3) {
-      const fromDay = fromDateStringParts[0];
-      const fromMonth = months[fromDateStringParts[1]];
-      const toDay = toDateStringParts[0];
-      const toMonth = months[toDateStringParts[1]];
-  
+      const formattedFromDate = `${fromDate.getDate()} ${fromDate.toLocaleString(
+        "en-US",
+        { month: "short" }
+      )}`;
+      const formattedToDate = `${toDate.getDate()} ${toDate.toLocaleString(
+        "en-US",
+        { month: "short" }
+      )}`;
+
       return {
+        //API se data fetch karne ke liye to show in table and form
         id: reimbursement._id,
         title: reimbursement.title,
-        fromDate: `${fromDay} ${fromMonth}`,
-        toDate: `${toDay} ${toMonth}`,
+        fromDate: formattedFromDate,
+        toDate: formattedToDate,
         type: getTypeDescription(reimbursement.type),
         askedAmount: reimbursement.askedAmount,
         expenses: reimbursement.expenses,
         description: reimbursement.description,
       };
-    } else {
-      // Handle invalid date strings here
-      console.error('Invalid date format:', reimbursement.fromDate, reimbursement.toDate);
     }
-  });
-  
-  
-  
-  
+  );
 
   const columns = [
-    { field: "title", headerName: "Title", flex: 1.4},
-    { field: "type", headerName: "Type", flex: 1.6},
-    { field: "fromDate", headerName: "From Date", flex: 0.8 },
+    { field: "title", headerName: "Title", flex: 1.4 },
+    { field: "type", headerName: "Type", flex: 1.2 },
+    { field: "fromDate", headerName: "From Date", flex: 1 },
     { field: "toDate", headerName: "To Date", flex: 0.8 },
     { field: "askedAmount", headerName: "Ask", flex: 0.7 },
   ];
@@ -237,7 +211,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
         </div>
         <Box
           height="82.3vh"
-          width="40vw"
+          width="42vw"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",
@@ -283,14 +257,12 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
             position: "relative",
             marginTop: "0.9em",
             marginLeft: "7.6em",
-            width: "calc(70% - 7.5em)",
+            width: "calc(70% - 8.8em)",
             backgroundColor: "white",
             maxHeight: "82vh",
             overflowY: "auto",
             borderLeft: "2px solid #ccc",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-            paddingLeft:'0.2em',
-            paddingRight:'0.4em'
           }}
         >
           <div
@@ -307,8 +279,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                 fontSize: "x-large",
                 fontSize: 50,
                 fontWeight: 400,
-                position:'relative',
-                left:'-3.2em',
+                marginLeft: "-4.4em",
                 color: colors.blueAccent[200],
               }}
             >
@@ -318,7 +289,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
               style={{
                 fontSize: "xx-large",
                 marginTop: "-2.3em",
-                marginLeft: "6.4em",
+                marginLeft: "10.4em",
                 color: "#808080",
               }}
             >
@@ -326,143 +297,53 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
             </Typography>
           </div>
           {selectedRowData.expenses.map((expense, index) => (
-  <div
-    key={index}
-    style={{
-      border: "1px solid #ccc",
-      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-      padding: "0.5em",
-      borderRadius: "12px",
-      marginTop: "0.4em",
-      // backgroundColor: 'yellow',
-      display: 'flex',
-      flexDirection: 'column'
-    }}
-  >
-    <h6
-      style={{
-        marginTop: index === 0 ? "-0.5em" : "0.2em",
-        position:'relative',
-        left:'-7.4em',
-        marginBottom: "1em",
-        fontSize: "0.6em",
-        fontWeight:'500'
-      }}
-    >
-      {expense.description}
-    </h6>
-    <div
-      className="innerbox"
-      style={{ display: "flex", justifyContent: "space-evenly" }}
-    >
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "3ch" },
-        }}
-        noValidate
-        autoComplete="off"
-        style={{ position: "relative", marginTop: "-0.16em" }}
-      >
-        <TextField
-          id="standard-read-only-input"
-          label="Amount"
-          defaultValue={`₹${expense.amount}`}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="standard"
-          style={{ width: "2.4ch" }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "10ch" },
-        }}
-        noValidate
-        autoComplete="off"
-        style={{ position: "relative", marginTop: "-0.16em" }}
-      >
-        <TextField
-          id="invoiceId"
-          label="Invoice ID"
-          defaultValue={expense.invoiceId}
-          variant="standard"
-          style={{ width: "3ch" }}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "10ch" },
-        }}
-        noValidate
-        autoComplete="off"
-        style={{ position: "relative", marginTop: "-0.16em" }}
-      >
-        <TextField
-          id="establishment"
-          label="Establishment"
-          defaultValue={expense.establishment}
-          variant="standard"
-          style={{ width: "3ch" }}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "10ch" },
-        }}
-        noValidate
-        autoComplete="off"
-        style={{ position: "relative", marginTop: "-0.16em" }}
-      >
-        <TextField
-          id="Type"
-          label="Type"
-          defaultValue={
-            expense.type === 'fe' ? 'Meal Expense' :
-            expense.type === 'ae' ? 'Accommodation Expense' :
-            expense.type === 'pe' ? 'Purchase Expense' :
-            expense.type === 'te' ? 'Travel Expense' : expense.type
-          }
-          variant="standard"
-          style={{ width: "6.4ch" }}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "10ch" },
-        }}
-        noValidate
-        autoComplete="off"
-        style={{ position: "relative", marginTop: "-0.16em" }}
-      >
-        <TextField
-          id="Date"
-          label="Date"
-          defaultValue={expense.date}
-          variant="standard"
-          style={{ width: "3ch" }}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </Box>
-    </div>
-  </div>
-))}
+            <div
+              key={index}
+              style={{
+                border: "1px solid #ccc",
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                padding: "0.5em",
+                borderRadius: "12px",
+                marginTop: "0.4em",
+              }}
+            >
+              <h6
+                style={{
+                  marginTop: index === 0 ? "-0.5em" : "0.2em",
+                  marginLeft: "-12.5em",
+                  marginBottom: "1em",
+                  fontSize: "0.6em",
+                }}
+              >
+                {expense.description}
+              </h6>
+              <div
+                className="innerbox"
+                style={{ display: "flex", justifyContent: "space-evenly" }}
+              >
+                <Box
+                  component="form"
+                  sx={{
+                    "& .MuiTextField-root": { m: 1, width: "4ch" },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                  style={{ position: "relative", marginTop: "-0.16em" }}
+                >
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Amount"
+                    defaultValue={`₹${expense.amount}`}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="standard"
+                    style={{ width: "4ch" }}
+                  />
+                </Box>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </>

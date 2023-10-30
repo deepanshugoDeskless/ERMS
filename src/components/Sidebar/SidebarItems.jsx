@@ -7,7 +7,7 @@ import {
   ItemName,
 } from "./SidebarStyles";
 
-import { adminSideMenu, userSideMenu } from "..";
+import { adminSideMenu, userSideMenu, newfinanceSideMenu} from "..";
 
 const SidebarItems = ({ displaySidebar }) => {
   const [activeItem, setActiveItem] = useState(0);
@@ -16,7 +16,11 @@ const SidebarItems = ({ displaySidebar }) => {
   var sideMenu;
   if (role == "admin") {
     sideMenu = adminSideMenu;
-  } else {
+  } 
+  else if (role == "finance") {
+    sideMenu = newfinanceSideMenu;
+  }
+  else {
     sideMenu = userSideMenu;
   }
   return (

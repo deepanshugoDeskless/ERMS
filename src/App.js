@@ -19,6 +19,7 @@ import {
   dummyData,
   adminSideMenu,
   userSideMenu,
+  newfinanceSideMenu,
 } from "./components";
 
 function App() {
@@ -30,7 +31,11 @@ function App() {
   var sideMenu;
   if (role == "admin") {
     sideMenu = adminSideMenu;
-  } else {
+  } 
+  else if (role == "finance") {
+    sideMenu = newfinanceSideMenu;
+  }
+  else {
     sideMenu = userSideMenu;
   }
   return (

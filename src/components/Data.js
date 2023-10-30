@@ -34,6 +34,7 @@ import PreApproveResuests from "./preApproveRequests";
 import PreApproveRequest from "./preApproveRequests";
 import ApproveReimbursements from "./approveReimbursements";
 import ApprovedExpensesHistory from "./approvedexpenseshistory";
+import homeNewfin from "./homeNewfin";
 
 export const ADMIN_SIDEBAR_DATA = [
   {
@@ -76,6 +77,51 @@ export const ADMIN_SIDEBAR_DATA = [
     name: " Approved Requests",
     page: <ApprovedExpensesHistory />,
     path: "approvedrequests",
+    icon: <HistoryIcon />,
+  },
+];
+
+export const NEWFINANCE_SIDEBAR_DATA = [
+  {
+    id: 1,
+    name: "dashboards",
+    page: < Home/>,
+    path: "financeHome",
+    icon: <HomeIcon />,
+  },
+  {
+    id: 2,
+    name: "Add Employees",
+    page: <AddEmployee />,
+    path: "financeUsers",
+    icon: <BulkUpload />,
+  },
+  {
+    id: 3,
+    name: "View Team",
+    page: <Team />,
+    path: "financeTeam",
+    icon: <PeopleIcon />,
+  },
+  {
+    id: 4,
+    name: "Preapprove Reimbursements",
+    page: <PreApproveRequest />,
+    path: "financeApproveRequest",
+    icon: <AirplaneTicketRoundedIcon />,
+  },
+  {
+    id: 5,
+    name: "Approve Reimbursements",
+    page: <ApproveReimbursements />,
+    path: "financeApproveReimbursements",
+    icon: <PriceCheckRoundedIcon />,
+  },
+  {
+    id: 6,
+    name: " Approved Requests",
+    page: <ApprovedExpensesHistory />,
+    path: "financeApprovedrequests",
     icon: <HistoryIcon />,
   },
 ];

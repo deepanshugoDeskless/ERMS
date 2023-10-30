@@ -42,6 +42,7 @@ const ClaimRequest = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [totalAmount, setTotalAmount] = useState(0); // New state for total amount
 
   const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
     refetchQueries: [{ query: GET_REIMBURSEMENTS }],
@@ -63,6 +64,10 @@ const ClaimRequest = () => {
     amount: "",
     description: "",
     place: "",
+    invoiceId : "",
+    establishment:"",
+
+
   });
 
   const [expenses, setExpenses] = useState([]);
@@ -74,6 +79,8 @@ const ClaimRequest = () => {
       "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
       expense
     );
+    const newTotalAmount = totalAmount + parseFloat(expense.amount);
+    setTotalAmount(newTotalAmount);
     const formId = Date.now();
     setExpenses([
       ...expenses,
@@ -195,6 +202,7 @@ const ClaimRequest = () => {
               flexDirection: "column",
               display: "flex",
               height: "100%",
+              overflowX: "hidden",
             }}
           >
             <div
@@ -359,9 +367,9 @@ const ClaimRequest = () => {
                         fontSize: "xx-large",
                       }}
                     >
-                      Total =
+                        Total = {totalAmount} {/* Display the total amount */}
                     </h4>
-                    <h4
+                    {/* <h4
                       style={{
                         marginLeft: 4,
                         fontFamily: "Bebas Neue,sans-serif",
@@ -369,7 +377,7 @@ const ClaimRequest = () => {
                       }}
                     >
                       {"0"}
-                    </h4>
+                    </h4> */}
                     <CurrencyRupeeRoundedIcon
                       style={{
                         marginRight: 4,
@@ -394,7 +402,7 @@ const ClaimRequest = () => {
                     width: "100%",
                     padding: "20px",
                     overflowY: "scroll",
-                    height: "70%",
+                    height: "70vh",
                   }}
                 >
                   {expenses.map((expense, index) => (
@@ -427,6 +435,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
   const [expenseDescription, setExpenseDescrption] = useState("");
   const [expenseDate, setExpenseDate] = useState(null);
   const [expenseAmount, setExpensesAmount] = useState("");
+  const [expenseInvoiceId,setExpenseInvoidId]=useState("");
+  const [expenseEstablishment,setExpenseEstablishment]=useState("")
 
   const colors = tokens(theme.palette.mode);
   const currencies = [
@@ -524,6 +534,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
             <TextField
               id="outlined-basic"
               label="#Invoice ID"
+              value={expenseInvoiceId}
+              onChange={(e)=>setExpenseInvoidId(e.target.value)}
               variant="outlined"
               style={{
                 width: "2.9em",
@@ -569,6 +581,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               id="outlined-basic"
               label="Establishment"
               variant="outlined"
+              value={expenseEstablishment}
+              onChange={(e)=>setExpenseEstablishment(e.target.value)}
               style={{
                 width: "3.9em",
                 position: "relative",
@@ -706,18 +720,36 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                   "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseType:",
                   expenseType
                 );
+                console.log(
+                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseInvoiceid:",
+                  expenseInvoiceId
+                );
+                console.log(
+                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseEstablishment:",
+                  expenseEstablishment
+                );
+                // console.log(
+                //   "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseHeader:",
+                //   expenseHeader
+                // );
 
                 if (
                   expenseType &&
                   expenseDescription &&
                   expenseDate &&
-                  expenseAmount
+                  expenseAmount &&
+                  expenseInvoiceId &&
+                  expenseEstablishment
+
                 ) {
                   addExpense({
                     type: expenseType.code,
                     amount: expenseAmount,
                     description: expenseDescription,
                     reimbursement: reimbursement,
+                    invoiceId : expenseInvoiceId,
+                    establishment :expenseEstablishment,
+                    date :expenseDate
                   });
                 } else {
                   alert("Please Fill Details.");
