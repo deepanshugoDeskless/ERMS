@@ -221,329 +221,321 @@ const RaiseRequest = () => {
   ];
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Box
+    <Box
+      style={{
+        position: "absolute",
+        bottom: "0px",
+        left: "5em",
+        right: "0px",
+      }}
+    >
+      <>
+        <div
           style={{
-            position: "absolute",
-            bottom: "0px",
-            left: "5em",
-            top: "2em",
-            width: "84%",
-            flex: 1,
-            flexDirection: "column",
+            color: colors.blueAccent[200],
+            width: "84vw",
+            position: "fixed",
+            top: "1.6em",
+            height: "2em",
             display: "flex",
-            height: "100%",
+            textAlign: "center",
+            justifyContent: "flex-start",
+          }}
+          className="banner"
+        >
+          <h4
+            style={{
+              marginLeft: 20,
+              fontFamily: "Bebas Neue,sans-serif",
+              fontSize: "xxx-large",
+            }}
+          >
+            Raise Your Request
+          </h4>
+        </div>
+        {successAlert && (
+          <Alert
+            severity="success"
+            sx={{ position: "relative", marginTop: "4em" }}
+          >
+            Your request has been submitted successfully!
+          </Alert>
+        )}
+        <div
+          style={{
+            marginTop: "0.6em",
+            padding: "0.5em",
+            width: "84vw",
+            height: 80,
+            display: "flex",
+            flexDirection: "row",
+            textAlign: "center",
+            justifyContent: "space-between",
           }}
         >
           <div
             style={{
-              color: colors.blueAccent[200],
-              width: "84vw",
-              position: "fixed",
-              top: "1.6em",
-              height: "2em",
-              display: "flex",
-              textAlign: "center",
-              justifyContent: "center",
-            }}
-            className="banner"
-          >
-            <h4 style={{}}>Raise Your Request</h4>
-          </div>
-          {successAlert && (
-            <Alert
-              severity="success"
-              sx={{ position: "relative", marginTop: "4em" }}
-            >
-              Your request has been submitted successfully!
-            </Alert>
-          )}
-          <div
-            style={{
-              marginTop: "0.6em",
-              padding: "0.5em",
-              width: "84vw",
-              height: 80,
               display: "flex",
               flexDirection: "row",
-              textAlign: "center",
-              justifyContent: "space-between",
             }}
           >
-            <div
+            <Autocomplete
+              disablePortal
+              id="combo-box-nature"
+              maxRows={6}
+              options={TypeNature}
+              sx={{ width: 200, height: 80 }}
               style={{
-                display: "flex",
-                flexDirection: "row",
+                width: "4em",
+                marginTop: "0.15em",
+                marginLeft: "0.12em",
               }}
-            >
-              <Autocomplete
-                disablePortal
-                id="combo-box-nature"
-                maxRows={6}
-                options={TypeNature}
-                sx={{ width: 200, height: 80 }}
-                style={{
-                  width: "4em",
-                  marginTop: "0.15em",
-                  marginLeft: "0.12em",
-                }}
-                onChange={(event, selectedType) => {
-                  setType(selectedType);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Nature of Travel"
-                    value={type.label}
-                  />
-                )}
-              />
-              <Autocomplete
-                disablePortal
-                id="combo-box-type"
-                maxRows={6}
-                options={TypeMap}
-                sx={{ width: 240, height: 80 }}
-                style={{
-                  width: "4.8em",
-                  marginLeft: "0.6em",
-                  marginTop: "0.1em",
-                }}
-                onChange={(event, selectedType) => {
-                  setType(selectedType);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Expense Type"
-                    value={type.label}
-                  />
-                )}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Title of Request"
-                variant="outlined"
-                value={title}
-                onChange={(titleInput) => {
-                  setTitle(titleInput.target.value);
-                }}
-                style={styles.input}
-                style={{
-                  width: "4em",
-                  marginTop: "0.1em",
-                  marginLeft: "1.3em",
-                }}
-              />
-            </div>
-            <TextField
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              sx={{
-                width: 200,
-                height: 80,
+              onChange={(event, selectedType) => {
+                setType(selectedType);
               }}
-              value={description}
-              onChange={(descriptionInput) => {
-                setDescription(descriptionInput.target.value);
-              }}
-              style={styles.input}
-              style={{ width: "4em", marginTop: "0.1em" }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Nature of Travel"
+                  value={type.label}
+                />
+              )}
             />
-
+            <Autocomplete
+              disablePortal
+              id="combo-box-type"
+              maxRows={6}
+              options={TypeMap}
+              sx={{ width: 240, height: 80 }}
+              style={{
+                width: "4.8em",
+                marginLeft: "0.6em",
+                marginTop: "0.1em",
+              }}
+              onChange={(event, selectedType) => {
+                setType(selectedType);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Expense Type"
+                  value={type.label}
+                />
+              )}
+            />
             <TextField
-              id="outlined-multiline-static"
-              label="Place of Visit"
+              id="outlined-basic"
+              label="Title of Request"
               variant="outlined"
-              value={place}
-              onChange={(placeInput) => {
-                setPlace(placeInput.target.value);
+              value={title}
+              onChange={(titleInput) => {
+                setTitle(titleInput.target.value);
               }}
-              style={styles.input}
-              style={{ width: "4em", marginTop: "0.1em" }}
+              style={{
+                ...styles.input,
+                width: "4em",
+                marginTop: "0.1em",
+                marginLeft: "1.3em",
+              }}
             />
           </div>
-          <div
-            style={{
-              padding: "0.5em",
-              width: "100%",
-              height: 120,
-              display: "flex",
-              flexDirection: "row",
-              textAlign: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                margin: 4,
-                marginBottom: 5,
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    value={fromDate}
-                    onChange={(fromDateInput) => {
-                      setFromDate(new Date(fromDateInput).toLocaleDateString());
-                    }}
-                    label="From Date"
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    value={toDate}
-                    onChange={(toDateInput) => {
-                      setToDate(new Date(toDateInput).toLocaleDateString());
-                    }}
-                    label="To Date"
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                id="outlined-select-currency"
-                select
-                defaultValue="INR"
-                style={{ ...styles.input, width: 60 }}
-                style={{ marginLeft: "-0.3em" }}
-              >
-                {currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-
-              <TextField
-                id="outlined-basic"
-                label="Amount"
-                value={amount}
-                onChange={handleAmountInput}
-                variant="outlined"
-                style={styles.input}
-                style={{ width: "7.8em" }}
-              />
-            </div>
-
-            <Button
-              variant="contained"
-              style={{
-                width: 180,
-                height: 60,
-              }}
-              onClick={() => {
-                callRaiseReimbursementRequest();
-              }}
-            >
-              Submit
-            </Button>
-          </div>
-
-          {amountError && (
-            <Alert
-              severity="error"
-              sx={{
-                position: "relative",
-                marginTop: "-2em",
-                width: "20em",
-                left: "44.4em",
-              }}
-            >
-              Please enter only numbers
-            </Alert>
-          )}
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              marginLeft: 8,
-            }}
-          >
-            <HistoryIcon
-              style={{
-                position: "fixed",
-                top: "18em",
-                marginRight: 4,
-                transform: "scale(1.5)",
-              }}
-            />
-            <h4
-              style={{
-                position: "fixed",
-                top: "13.15em",
-                marginLeft: 28,
-                fontFamily: "Bebas Neue,sans-serif",
-                fontSize: "xx-large",
-              }}
-            >
-              Request History
-            </h4>
-          </div>
-
-          <Box
-            style={{
-              position: "fixed",
-              bottom: "0",
-              width: "83.3%",
-            }}
-            height="36vh"
+          <TextField
+            id="outlined-multiline-static"
+            label="Description"
+            multiline
             sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
-              "& .name-column--cell": {
-                color: colors.greenAccent[300],
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: colors.blueAccent[700],
-                borderBottom: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: colors.primary[400],
-              },
-              "& .MuiDataGrid-footerContainer": {
-                borderTop: "none",
-                backgroundColor: colors.blueAccent[700],
-              },
-              "& .MuiCheckbox-root": {
-                color: `${colors.greenAccent[200]} !important`,
-              },
+              width: 200,
+              height: 80,
+            }}
+            value={description}
+            onChange={(descriptionInput) => {
+              setDescription(descriptionInput.target.value);
+            }}
+            style={{ width: "4em", marginTop: "0.1em" }}
+          />
+
+          <TextField
+            id="outlined-multiline-static"
+            label="Place of Visit"
+            variant="outlined"
+            value={place}
+            onChange={(placeInput) => {
+              setPlace(placeInput.target.value);
+            }}
+            style={{ width: "4em", marginTop: "0.1em" }}
+          />
+        </div>
+        <div
+          style={{
+            padding: "0.5em",
+            width: "100%",
+            height: 120,
+            display: "flex",
+            flexDirection: "row",
+            textAlign: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              margin: 4,
+              marginBottom: 5,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <DataGrid
-              rows={data.ireimbursements}
-              columns={columns}
-              getRowId={(row) => row._id}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  value={fromDate}
+                  onChange={(fromDateInput) => {
+                    setFromDate(new Date(fromDateInput).toLocaleDateString());
+                  }}
+                  label="From Date"
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  value={toDate}
+                  onChange={(toDateInput) => {
+                    setToDate(new Date(toDateInput).toLocaleDateString());
+                  }}
+                  label="To Date"
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              id="outlined-select-currency"
+              select
+              defaultValue="INR"
+              style={{ ...styles.input, width: 60, marginLeft: "-0.3em" }}
+            >
+              {currencies.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              id="outlined-basic"
+              label="Amount"
+              value={amount}
+              onChange={handleAmountInput}
+              variant="outlined"
+              style={{ ...styles.input, width: "7.8em" }}
             />
-          </Box>
-        </Box>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+          </div>
+
+          <Button
+            variant="contained"
+            style={{
+              width: 180,
+              height: 60,
+            }}
+            onClick={() => {
+              callRaiseReimbursementRequest();
+            }}
+          >
+            Submit
+          </Button>
+        </div>
+
+        {amountError && (
+          <Alert
+            severity="error"
+            sx={{
+              position: "relative",
+              marginTop: "-2em",
+              width: "20em",
+              left: "44.4em",
+            }}
+          >
+            Please enter only numbers
+          </Alert>
+        )}
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            marginLeft: 8,
+          }}
+        >
+          <HistoryIcon
+            style={{
+              marginLeft: 16,
+              marginRight: 4,
+              transform: "scale(1.5)",
+            }}
+          />
+          <h4
+            style={{
+              marginLeft: 16,
+              fontFamily: "Bebas Neue,sans-serif",
+              fontSize: "xx-large",
+            }}
+          >
+            Request History
+          </h4>
+        </div>
+      </>
+
+      <Box
+        style={{
+          bottom: "0px",
+          right: "0px",
+        }}
+        height="56vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .name-column--cell": {
+            color: colors.greenAccent[300],
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiCheckbox-root": {
+            color: `${colors.greenAccent[200]} !important`,
+          },
+        }}
+      >
+        <DataGrid
+          rows={data.ireimbursements}
+          columns={columns}
+          getRowId={(row) => row._id}
+        />
+      </Box>
+    </Box>
   );
 };
 

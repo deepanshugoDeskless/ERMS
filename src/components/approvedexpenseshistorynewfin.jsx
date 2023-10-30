@@ -150,8 +150,7 @@ const ApprovedExpensesHistory = () => {
             //   textAlign:'left',
               marginLeft:'0em',
               height:'1.2em'
-              
-
+            
             }}
           >
             Approved Expenses
