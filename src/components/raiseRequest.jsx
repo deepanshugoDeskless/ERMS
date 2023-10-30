@@ -253,14 +253,6 @@ const RaiseRequest = () => {
             Raise Your Request
           </h4>
         </div>
-        {successAlert && (
-          <Alert
-            severity="success"
-            sx={{ position: "relative", marginTop: "4em" }}
-          >
-            Your request has been submitted successfully!
-          </Alert>
-        )}
         <div
           style={{
             marginTop: "0.6em",
@@ -455,45 +447,57 @@ const RaiseRequest = () => {
           </Button>
         </div>
 
-        {amountError && (
-          <Alert
-            severity="error"
-            sx={{
-              position: "relative",
-              marginTop: "-2em",
-              width: "20em",
-              left: "44.4em",
-            }}
-          >
-            Please enter only numbers
-          </Alert>
-        )}
-
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
             alignItems: "center",
             marginLeft: 8,
           }}
         >
-          <HistoryIcon
+          <div
             style={{
-              marginLeft: 16,
-              marginRight: 4,
-              transform: "scale(1.5)",
-            }}
-          />
-          <h4
-            style={{
-              marginLeft: 16,
-              fontFamily: "Bebas Neue,sans-serif",
-              fontSize: "xx-large",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
             }}
           >
-            Request History
-          </h4>
+            <HistoryIcon
+              style={{
+                marginLeft: 16,
+                marginRight: 4,
+                transform: "scale(1.5)",
+              }}
+            />
+            <h4
+              style={{
+                marginLeft: 16,
+                fontFamily: "Bebas Neue,sans-serif",
+                fontSize: "xx-large",
+              }}
+            >
+              Request History
+            </h4>
+          </div>
+
+          {amountError && (
+            <Alert
+              severity="error"
+              sx={{
+                marginRight: 3,
+              }}
+            >
+              Please enter only numbers
+            </Alert>
+          )}
+
+          {successAlert && (
+            <Alert severity="success" sx={{ marginRight: 3 }}>
+              Your request has been submitted successfully!
+            </Alert>
+          )}
         </div>
       </>
 
