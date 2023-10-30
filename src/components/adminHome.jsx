@@ -150,7 +150,7 @@ const AdminHome = () => {
             title={"Pending Pre Approvals"}
           />
           <MyCounterCard
-            count={dataReimbursementRequest.pendingReimbursements.length}
+            count={dataReimbursementRequest?.pendingReimbursements?.length}
             title={"Pending Reimbursement"}
           />
         </div>
