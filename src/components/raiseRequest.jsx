@@ -483,17 +483,17 @@ const RaiseRequest = () => {
           >
             <HistoryIcon
               style={{
-                position: "relative",
-                top: "-0.84em",
+                position: "fixed",
+                top: "18em",
                 marginRight: 4,
                 transform: "scale(1.5)",
               }}
             />
             <h4
               style={{
-                position: "relative",
-                top: "-0.6em",
-                marginLeft: 6,
+                position: "fixed",
+                top: "13.15em",
+                marginLeft: 28,
                 fontFamily: "Bebas Neue,sans-serif",
                 fontSize: "xx-large",
               }}
