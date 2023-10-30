@@ -11,11 +11,6 @@ const Item = (props) => {
   } else {
     return (
       <div id="page">
-        {/* <Link to="/">
-          <button className="btn">
-            <ArrowBackIcon /> Back to Home
-          </button>
-        </Link> */}
         {page}
       </div>
     );

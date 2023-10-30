@@ -31,14 +31,15 @@ import PreApproveResuests from "./preApproveRequests";
 import PreApproveRequest from "./preApproveRequests";
 import ApproveReimbursements from "./approveReimbursements";
 import ApprovedExpensesHistory from "./approvedexpenseshistory";
+import UserHome from "./userHome";
 
 
 export const ADMIN_SIDEBAR_DATA = [
   {
     id: 1,
-    name: "dashboards",
+    name: "Admin Dashboards",
     page: <Home />,
-    path: "home",
+    path: "adminHome",
     icon: <HomeIcon />,
   },
   {
@@ -71,7 +72,7 @@ export const ADMIN_SIDEBAR_DATA = [
   },
   {
     id: 6,
-    name: " Approved Requests",
+    name: "Approved Requests",
     page: <ApprovedExpensesHistory />,
     path: "approvedrequests",
     icon: <HistoryIcon />,
@@ -81,7 +82,7 @@ export const ADMIN_SIDEBAR_DATA = [
 export const NEWFINANCE_SIDEBAR_DATA = [
   {
     id: 1,
-    name: "dashboards",
+    name: "Finance Dashboards",
     page: <Home />,
     path: "financeHome",
     icon: <HomeIcon />,
@@ -116,7 +117,7 @@ export const NEWFINANCE_SIDEBAR_DATA = [
   },
   {
     id: 6,
-    name: " Approved Requests",
+    name: "Approved Requests",
     page: <ApprovedExpensesHistory />,
     path: "financeApprovedrequests",
     icon: <HistoryIcon />,
@@ -126,9 +127,9 @@ export const NEWFINANCE_SIDEBAR_DATA = [
 export const USER_SIDEBAR_DATA = [
   {
     id: 1,
-    name: "dashboards",
+    name: "User Dashboards",
     page: <Home />,
-    path: "home",
+    path: "userHome",
     icon: <HomeIcon />,
   },
   {

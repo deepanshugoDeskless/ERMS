@@ -10,27 +10,29 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@apollo/client";
 import {
-  GET_TEAM_MEMBERS,
   GET_PRE_REQUESTS,
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "./Header";
 import Button from "@mui/material/Button";
 import MyCounterCard from "./counterCard";
 
-const Home = () => {
+const UserHome = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
 
-  // if (loading) return <Loader />;
-  // if (error) return <Error />;
+//   if (loading) return <Loader />;
+//   if (error) return <Error />;
 
-  const userFirstName = `${localStorage.getItem("user-firstname")}`;
-  const userLastName = `${localStorage.getItem("user-lastname")}`;
+//   const userFirstName = `${localStorage.getItem("user-firstname")}`;
+//   const userLastName = `${localStorage.getItem("user-lastname")}`;
 
   return (
     <>
@@ -86,7 +88,7 @@ const Home = () => {
                 fontSize: "xxx-large",
               }}
             >
-              {userFirstName},
+              {/* {userFirstName}, */}
             </h3>
             <h4
               style={{
@@ -126,4 +128,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default UserHome;

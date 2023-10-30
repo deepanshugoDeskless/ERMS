@@ -9,10 +9,8 @@ import {
   SidebarBrand,
   SidebarToggler,
 } from "./SidebarStyles";
-// import BrandLogo from "./BrandLogo.svg";
 
 import { SidebarItems } from "..";
-import { requirePropFactory } from "@mui/material";
 
 const MOBILE_VIEW = window.innerWidth < 468;
 
@@ -34,8 +32,7 @@ export default function Sidebar({ children }) {
         <SidebarWrapper>
           <SidebarLogoWrapper displaySidebar={displaySidebar}>
             <SidebarLogo href="#">
-              <span className="app-brand-logo demo">
-              </span>
+              <span className="app-brand-logo demo"></span>
               <SidebarBrand
                 displaySidebar={displaySidebar}
                 className="app__brand__text"

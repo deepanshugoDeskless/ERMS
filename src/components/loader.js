@@ -4,6 +4,7 @@ import lottie from "lottie-web";
 import reactLogo from "../Assets/animation_lnsgnezl.json";
 import reactError from "../Assets/animation_lnt675ic.json";
 import personScroll from "../Assets/animation_lnt61h6a.json";
+import Lottie from "lottie-react";
 
 export function Loader() {
   React.useEffect(() => {
@@ -32,7 +33,6 @@ export function Loader() {
   );
 }
 
-
 export function Error() {
   React.useEffect(() => {
     lottie.loadAnimation({
@@ -60,19 +60,7 @@ export function Error() {
   );
 }
 
-
-
 export function PersonScroll() {
-  React.useEffect(() => {
-    lottie.loadAnimation({
-      container: document.querySelector("#react-logo"),
-      animationData: personScroll,
-      renderer: "svg", // "canvas", "html"
-      loop: true, // boolean
-      autoplay: true, // boolean
-    });
-  }, []);
-
   return (
     <div
       style={{
@@ -84,7 +72,11 @@ export function PersonScroll() {
         height: 500,
       }}
     >
-      <div id="react-logo" />
+      <Lottie
+        animationData={JSON.parse(JSON.stringify(personScroll))}
+        height={400}
+        width={400}
+      />
     </div>
   );
 }

@@ -6,11 +6,9 @@ import Pagenotfound from "./components/Pagenotfound";
 import Welcome from "./components/Welcome";
 
 export const routes = [
-  { path: "/home", element: <Home /> },
   { path: "/team", element: <Team /> },
   { path: "/*", element: <Pagenotfound /> },
   { path: "", element: <Welcome /> },
-  {path:"/contacts", element: <Welcome></Welcome>}
 ];
 export const publicRoutes = [
   { path: "/login", element: <Login /> },
