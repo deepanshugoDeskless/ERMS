@@ -183,7 +183,6 @@ const ApprovedExpensesHistory = () => {
           }}
         >
           <DataGrid
-            checkboxSelection
             rows={formattedData}
             columns={columns}
             getRowId={(row) => row._id}
