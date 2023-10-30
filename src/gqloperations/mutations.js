@@ -139,6 +139,7 @@ export const GET_PRE_REQUESTS = gql`
 export const ADMIN_FETCH_REQUESTS = gql`
   query PendingReimbursements {
     pendingReimbursements {
+      _id
       title
       description
       type
@@ -151,9 +152,14 @@ export const ADMIN_FETCH_REQUESTS = gql`
       isPreApproved
       isApproved
       expenses {
-        amount
+        date
+        type
+        _id
         description
+        amount
         approved
+        invoiceId
+        establishment
         by
       }
     }

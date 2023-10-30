@@ -129,7 +129,7 @@ export const USER_SIDEBAR_DATA = [
   {
     id: 1,
     name: "User Dashboards",
-    page: <Home />,
+    page: <UserHome />,
     path: "userHome",
     icon: <HomeIcon />,
   },

@@ -6,37 +6,8 @@ import TextField from "@mui/material/TextField";
 import { tokens } from "../../src/theme";
 import { useMode } from "../../src/theme";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { UPDATE_REIMBURSEMENTS } from "../gqloperations/mutations";
+import { ADMIN_FETCH_REQUESTS, UPDATE_REIMBURSEMENTS } from "../gqloperations/mutations";
 
-const ADMIN_FETCH_REQUESTS = gql`
-  query PendingReimbursements {
-    pendingReimbursements {
-      _id
-      title
-      description
-      type
-      visitLocation
-      noOfDays
-      fromDate
-      toDate
-      askedAmount
-      totalAmount
-      isPreApproved
-      isApproved
-      expenses {
-        date
-        type
-        _id
-        description
-        amount
-        approved
-        invoiceId
-        establishment
-        by
-      }
-    }
-  }
-`;
 
 const getTypeDescription = (type) => {
   switch (type) {

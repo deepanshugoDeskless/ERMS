@@ -28,11 +28,37 @@ const UserHome = () => {
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
 
-//   if (loading) return <Loader />;
-//   if (error) return <Error />;
+  //   Get the numeber of pending prerequests count
+  //   Get the numeber of pending reimbursements count
+  const {
+    loadingPreRequests,
+    errorPreRequests,
+    data: dataPreRequests,
+  } = useQuery(GET_PRE_REQUESTS, {
+    context: {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    },
+  });
 
-//   const userFirstName = `${localStorage.getItem("user-firstname")}`;
-//   const userLastName = `${localStorage.getItem("user-lastname")}`;
+  const {
+    loadingReimbursementRequests,
+    errorReimbursementRequests,
+    data: dataReimbursementRequest,
+  } = useQuery(ADMIN_FETCH_REQUESTS, {
+    context: {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    },
+  });
+
+  if (loadingPreRequests || loadingReimbursementRequests) return <Loader />;
+  if (errorPreRequests || errorReimbursementRequests) return <Error />;
+
+  const userFirstName = `${localStorage.getItem("user-firstname")}`;
+  const userLastName = `${localStorage.getItem("user-lastname")}`;
 
   return (
     <>
@@ -88,7 +114,7 @@ const UserHome = () => {
                 fontSize: "xxx-large",
               }}
             >
-              {/* {userFirstName}, */}
+              {userFirstName},
             </h3>
             <h4
               style={{

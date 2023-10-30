@@ -8,30 +8,6 @@ import { useMode } from "../../src/theme";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { UPDATE_REIMBURSEMENTS } from "../gqloperations/mutations";
 
-const ADMIN_FETCH_REQUESTS = gql`
-  query PendingReimbursements {
-    pendingReimbursements {
-      _id
-      title
-      description
-      type
-      visitLocation
-      noOfDays
-      fromDate
-      toDate
-      askedAmount
-      totalAmount
-      isPreApproved
-      isApproved
-      expenses {
-        amount
-        description
-        approved
-        by
-      }
-    }
-  }
-`;
 
 const getTypeDescription = (type) => {
   switch (type) {

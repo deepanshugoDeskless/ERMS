@@ -5,26 +5,7 @@ import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { tokens } from "../../src/theme";
 import { Loader, Error } from "./loader";
-
-// Define your GraphQL query
-const GET_REIMBURSEMENTS = gql`
-  query GetMyReimbursements {
-    ireimbursements {
-      _id
-      title
-      description
-      type
-      visitLocation
-      noOfDays
-      fromDate
-      toDate
-      askedAmount
-      totalAmount
-      by
-      isPreApproved
-    }
-  }
-`;
+import { GET_REIMBURSEMENTS } from "../gqloperations/mutations";
 
 const ApprovedExpensesHistory = () => {
   const theme = useTheme();
