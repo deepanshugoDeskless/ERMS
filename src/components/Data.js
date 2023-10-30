@@ -33,6 +33,7 @@ import ApproveReimbursements from "./approveReimbursements";
 import ApprovedExpensesHistory from "./approvedexpenseshistory";
 import UserHome from "./userHome";
 import AdminHome from "./adminHome";
+import FinanceHome from "./financeHome";
 
 
 export const ADMIN_SIDEBAR_DATA = [
@@ -84,7 +85,7 @@ export const NEWFINANCE_SIDEBAR_DATA = [
   {
     id: 1,
     name: "Finance Dashboards",
-    page: <Home />,
+    page: <FinanceHome />,
     path: "financeHome",
     icon: <HomeIcon />,
   },

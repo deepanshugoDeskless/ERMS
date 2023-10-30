@@ -136,6 +136,28 @@ export const GET_PRE_REQUESTS = gql`
   }
 `;
 
+
+export const GET_APPROVED_REIMBURSEMENTS = gql`
+  query ApprovedReimbursements {
+    approvedReimbursements {
+      _id
+      title
+      description
+      type
+      visitLocation
+      noOfDays
+      fromDate
+      toDate
+      askedAmount
+      totalAmount
+      isPreApproved
+      expenses {
+        amount
+      }
+    }
+  }
+`;
+
 export const ADMIN_FETCH_REQUESTS = gql`
   query PendingReimbursements {
     pendingReimbursements {
