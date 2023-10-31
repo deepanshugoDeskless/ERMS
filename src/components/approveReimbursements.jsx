@@ -114,8 +114,14 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     12: "Dec",
   };
 
-  const reimbursements = data.pendingReimbursements.map(
-    (reimbursement, index) => {
+  const reimbursements = data.pendingReimbursements
+    .filter(
+      (element) =>
+        element.expenses.length > 0 &&
+        element.isPreApproved &&
+        !element.isApproved
+    )
+    .map((reimbursement, index) => {
       // Split the date strings into day, month, and year
       const fromDateStringParts = reimbursement.fromDate.split("/");
       const toDateStringParts = reimbursement.toDate.split("/");
@@ -145,8 +151,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
           reimbursement.toDate
         );
       }
-    }
-  );
+    });
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -314,7 +319,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                     // backgroundColor: 'yellow',
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "self-start"
+                    alignItems: "self-start",
                   }}
                 >
                   <h6
