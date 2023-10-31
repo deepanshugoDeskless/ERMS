@@ -27,8 +27,6 @@ const AdminHome = () => {
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
 
-  //   Get the numeber of pending prerequests count
-  //   Get the numeber of pending reimbursements count
   const {
     loadingPreRequests,
     errorPreRequests,
@@ -150,7 +148,14 @@ const AdminHome = () => {
             title={"Pending Pre Approvals"}
           />
           <MyCounterCard
-            count={dataReimbursementRequest?.pendingReimbursements?.length}
+            count={
+              dataReimbursementRequest?.pendingReimbursements?.filter(
+                (element) =>
+                  element.isPreApproved &&
+                  !element.isApproved &&
+                  element.expenses.length > 0
+              ).length
+            }
             title={"Pending Reimbursement"}
           />
         </div>

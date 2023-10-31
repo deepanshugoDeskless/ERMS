@@ -30,8 +30,6 @@ const UserHome = () => {
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
 
-  //   Get the numeber of pending prerequests count
-  //   Get the numeber of pending reimbursements count
   const {
     loadingRequests,
     errorRequests,

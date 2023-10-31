@@ -28,8 +28,6 @@ const FinanceHome = () => {
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
 
-  //   Get the numeber of approved reimbursements
-  //   Get the numeber of pending reimbursements count
   const {
     loadingApprovedReimbursements,
     errorApprovedReimbursements,
