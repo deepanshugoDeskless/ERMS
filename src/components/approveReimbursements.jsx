@@ -78,8 +78,8 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
       },
     });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <Loader/>;
+  if (error) return <Error/>;
 
   const handleBulkApproveSubmit = () => {
     updateReimbursements({

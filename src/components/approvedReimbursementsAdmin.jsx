@@ -11,6 +11,7 @@ import {
   GET_APPROVED_REIMBURSEMENTS,
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
+import { Error, Loader } from "./loader";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -82,8 +83,8 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
       },
     });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <Loader/>;
+  if (error) return <Error/>;
 
   const handleBulkApproveSubmit = () => {
     updateReimbursements({
