@@ -9,17 +9,23 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import InputOutlinedIcon from "@mui/icons-material/InputOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import CardTravelIcon from '@mui/icons-material/CardTravel';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import HistoryIcon from '@mui/icons-material/History';
+import CardTravelIcon from "@mui/icons-material/CardTravel";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import HistoryIcon from "@mui/icons-material/History";
+import ViewSidebarRoundedIcon from "@mui/icons-material/ViewSidebarRounded";
+import CottageRoundedIcon from '@mui/icons-material/CottageRounded';
+import BackHandRoundedIcon from '@mui/icons-material/BackHandRounded';
+import SavingsRoundedIcon from '@mui/icons-material/SavingsRounded';
+import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 
 export {
-  HomeOutlinedIcon as HomeIcon,
+  CottageRoundedIcon as HomeIcon,
   WebOutlinedIcon as LayoutIcon,
   CalendarMonthOutlinedIcon as CalendarIcon,
   PersonOutlineOutlinedIcon as UserIcon,
@@ -31,11 +37,14 @@ export {
   InputOutlinedIcon as ModalIcon,
   ArrowBackIcon,
   ArrowRightOutlinedIcon as ArrowIcon,
-  PeopleOutlinedIcon as PeopleIcon,
+  Groups2RoundedIcon as PeopleIcon,
   GroupAddIcon as BulkUpload,
   ContactsOutlinedIcon as ContactIcon,
   HelpOutlineOutlinedIcon as FaqIcon,
   CardTravelIcon as TravelIcon,
-  AddCircleOutlineIcon as AddmoneyIcon,
+  SavingsRoundedIcon as AddmoneyIcon,
+  FactCheckRoundedIcon as ApproveIcon,
   HistoryIcon as HistoryIcon,
+  ViewSidebarRoundedIcon as ViewSidebarRoundedIcon,
+  BackHandRoundedIcon as BackHandRoundedIcon
 };

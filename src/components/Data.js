@@ -17,6 +17,9 @@ import {
   AddIcon,
   AddmoneyIcon,
   HistoryIcon,
+  ViewSidebarRoundedIcon,
+  BackHandRoundedIcon,
+  ApproveIcon,
 } from "./Icons";
 
 import Home from "./Home";
@@ -25,7 +28,6 @@ import RaiseRequest from "./raiseRequest";
 import AddEmployee from "./addBulkEmployee";
 import ClaimRequest from "./claimRequest";
 import AirplaneTicketRoundedIcon from "@mui/icons-material/AirplaneTicketRounded";
-import PriceCheckRoundedIcon from "@mui/icons-material/PriceCheckRounded";
 import PreApproveResuests from "./preApproveRequests";
 import PreApproveRequest from "./preApproveRequests";
 import ApproveReimbursements from "./approveReimbursements";
@@ -71,7 +73,7 @@ export const ADMIN_SIDEBAR_DATA = [
     name: "Approve Reimbursements",
     page: <ApproveReimbursements />,
     path: "approveReimbursements",
-    icon: <PriceCheckRoundedIcon />,
+    icon: <ApproveIcon />,
   },
   {
     id: 6,
@@ -102,7 +104,7 @@ export const NEWFINANCE_SIDEBAR_DATA = [
     name: "Approved Reimbursements",
     page: <ApprovedReimbursementsFinance />,
     path: "financeApproveReimbursements",
-    icon: <PriceCheckRoundedIcon />,
+    icon: <ApproveIcon />,
   },
 ];
 
@@ -119,7 +121,7 @@ export const USER_SIDEBAR_DATA = [
     name: "Raise Request",
     page: <RaiseRequest />,
     path: "raiseRequest",
-    icon: <TravelIcon />,
+    icon: <BackHandRoundedIcon />,
   },
   {
     id: 3,
@@ -133,6 +135,6 @@ export const USER_SIDEBAR_DATA = [
     name: "View Claimed Requests",
     page: <ClaimedReimbursements />,
     path: "viewClaimedRequests",
-    icon: <AddmoneyIcon />,
+    icon: <ViewSidebarRoundedIcon />,
   },
 ];
