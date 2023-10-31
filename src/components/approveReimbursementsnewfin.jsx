@@ -8,7 +8,6 @@ import { useMode } from "../../src/theme";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { GET_APPROVED_REIMBURSEMENTS, GET_REIMBURSEMENTS, UPDATE_REIMBURSEMENTS } from "../gqloperations/mutations";
 
-
 const getTypeDescription = (type) => {
   switch (type) {
     case "ta":
@@ -54,6 +53,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
       0
     );
   };
+  
   const { loading, error, data } = useQuery(GET_APPROVED_REIMBURSEMENTS, {
     context: {
       headers: {
@@ -62,27 +62,57 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     },
   });
 
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  const formatDate = (dateString) => {
+  const dateParts = dateString.split("/");
+  if (dateParts.length !== 3) {
+    return "Invalid Date";
+  }
+
+  const day = dateParts[0];
+  const month = dateParts[1];
+
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
+    return "Invalid Date";
+  }
+
+  return `${day} ${months[parseInt(month, 10) - 1]}`;
+};
+
+const formatDateForForm = (dateString) => {
+    const dateParts = dateString.split("/");
+    if (dateParts.length !== 3) {
+      return "Invalid Date";
+    }
+  
+    const day = dateParts[0];
+    const month = dateParts[1];
+  
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+  
+    if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
+      return "Invalid Date";
+    }
+  
+    return `${day} ${months[parseInt(month, 10) - 1]}`;
+  };
+
   const reimbursements = data.approvedReimbursements.map(
     (reimbursement, index) => {
-      // Date format change karne ke liye
-      const fromDate = new Date(reimbursement.fromDate);
-      const toDate = new Date(reimbursement.toDate);
-
-      const formattedFromDate = `${fromDate.getDate()} ${fromDate.toLocaleString(
-        "en-US",
-        { month: "short" }
-      )}`;
-      const formattedToDate = `${toDate.getDate()} ${toDate.toLocaleString(
-        "en-US",
-        { month: "short" }
-      )}`;
+      const formattedFromDate = formatDate(reimbursement.fromDate);
+      const formattedToDate = formatDate(reimbursement.toDate);
 
       return {
-        //API se data fetch karne ke liye to show in table and form
         id: reimbursement._id,
         title: reimbursement.title,
         fromDate: formattedFromDate,
@@ -184,7 +214,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
         <div
           style={{
             position: "relative",
-            marginTop: "0.9em",
+            marginTop: "1.1em",
             marginLeft: "7.6em",
             width: "calc(70% - 8.8em)",
             backgroundColor: "white",
@@ -192,6 +222,9 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
             overflowY: "auto",
             borderLeft: "2px solid #ccc",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+            paddingRight:'0.2em',
+            paddingLeft:'0.2em',
+            backgroundColor: colors.greenAccent[900],
           }}
         >
           <div
@@ -200,15 +233,17 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
               top: "0",
               backgroundColor: "white",
               zIndex: 1,
+              marginLeft:'-0.4em',
+              width:'110%'
             }}
           >
             <h4
               style={{
                 marginBottom: "0.5em",
-                fontSize: "x-large",
-                fontSize: 50,
-                fontWeight: 400,
-                marginLeft: "-4.4em",
+                fontSize: "xx-large",
+                // fontSize: 50,
+                fontWeight: 500,
+                marginLeft: "-9.8em",
                 color: colors.blueAccent[200],
               }}
             >
@@ -217,7 +252,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
             <Typography
               style={{
                 fontSize: "xx-large",
-                marginTop: "-2.3em",
+                marginTop: "-1.8em",
                 marginLeft: "10.4em",
                 color: "#808080",
               }}
@@ -239,7 +274,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
               <h6
                 style={{
                   marginTop: index === 0 ? "-0.5em" : "0.2em",
-                  marginLeft: "-12.5em",
+                  marginLeft: "-16em",
                   marginBottom: "1em",
                   fontSize: "0.6em",
                 }}
@@ -267,9 +302,99 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                       readOnly: true,
                     }}
                     variant="standard"
-                    style={{ width: "4ch" }}
+                    style={{ width: "2ch" }}
                   />
                 </Box>
+                <Box
+                  component="form"
+                  sx={{
+                    "& .MuiTextField-root": { m: 1, width: "4ch" },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                  style={{ position: "relative", marginTop: "-0.16em" }}
+                >
+                  <TextField
+                    id="standard-read-only-input"
+                    label="#InvoiceID"
+                    defaultValue={`${expense.invoiceId}`}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="standard"
+                    style={{ width: "3ch" }}
+                  />
+                </Box>
+                <Box
+                  component="form"
+                  sx={{
+                    "& .MuiTextField-root": { m: 1, width: "4ch" },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                  style={{ position: "relative", marginTop: "-0.16em" }}
+                >
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Establishment"
+                    defaultValue={`${expense.establishment}`}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="standard"
+                    style={{ width: "3ch" }}
+                  />
+                </Box>
+                <Box
+                      component="form"
+                      sx={{
+                        "& .MuiTextField-root": { m: 1, width: "10ch" },
+                      }}
+                      noValidate
+                      autoComplete="off"
+                      style={{ position: "relative", marginTop: "-0.16em" }}
+                    >
+                      <TextField
+                        id="Type"
+                        label="Type"
+                        defaultValue={
+                          expense.type === "fe"
+                            ? "Meal Expense"
+                            : expense.type === "ae"
+                            ? "Accommodation Expense"
+                            : expense.type === "pe"
+                            ? "Purchase Expense"
+                            : expense.type === "te"
+                            ? "Travel Expense"
+                            : expense.type
+                        }
+                        variant="standard"
+                        style={{ width: "6.4ch" }}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                    <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "10ch" },
+            }}
+            noValidate
+            autoComplete="off"
+            style={{ position: "relative", marginTop: "-0.16em" }}
+          >
+            <TextField
+              id="Date"
+              label="Date"
+              defaultValue={formatDateForForm(expense.date)}
+              variant="standard"
+              style={{ width: "2ch" }}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Box>
               </div>
             </div>
           ))}
