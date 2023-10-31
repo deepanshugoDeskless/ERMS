@@ -34,6 +34,7 @@ import UserHome from "./userHome";
 import AdminHome from "./adminHome";
 import FinanceHome from "./financeHome";
 import ApprovedReimbursementsFinance from "./approvedReimbursementsFinance";
+import ClaimedReimbursements from "./claimedReimbursements";
 
 
 export const ADMIN_SIDEBAR_DATA = [
@@ -125,6 +126,13 @@ export const USER_SIDEBAR_DATA = [
     name: "Claim Request",
     page: <ClaimRequest />,
     path: "claimRequest",
+    icon: <AddmoneyIcon />,
+  },
+  {
+    id: 4,
+    name: "View Claimed Requests",
+    page: <ClaimedReimbursements />,
+    path: "viewClaimedRequests",
     icon: <AddmoneyIcon />,
   },
 ];
