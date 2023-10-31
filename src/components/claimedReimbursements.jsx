@@ -59,8 +59,13 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
     );
   };
 
-  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS);
-
+  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
+    context: {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    },
+  });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 

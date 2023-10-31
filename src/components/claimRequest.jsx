@@ -425,6 +425,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
   const [expenseAmount, setExpensesAmount] = useState("");
   const [expenseInvoiceId, setExpenseInvoidId] = useState("");
   const [expenseEstablishment, setExpenseEstablishment] = useState("");
+  const [expenseHeader, setExpenseHeader] = useState("");
 
   const colors = tokens(theme.palette.mode);
   const currencies = [
@@ -434,7 +435,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
     },
   ];
 
-  const top100Films = [
+  const expenseHeaders = [
     { label: "Expense Header 1" },
     { label: "Expense Header 2" },
     { label: "Expense Header 3" },
@@ -574,10 +575,10 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                     "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseEstablishment:",
                     expenseEstablishment
                   );
-                  // console.log(
-                  //   "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseHeader:",
-                  //   expenseHeader
-                  // );
+                  console.log(
+                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseHeader:",
+                    expenseHeader
+                  );
 
                   if (
                     expenseType &&
@@ -585,7 +586,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                     expenseDate &&
                     expenseAmount &&
                     expenseInvoiceId &&
-                    expenseEstablishment
+                    expenseEstablishment &&
+                    expenseHeader
                   ) {
                     addExpense({
                       type: expenseType.code,
@@ -595,6 +597,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                       invoiceId: expenseInvoiceId,
                       establishment: expenseEstablishment,
                       date: expenseDate,
+                      expenseHeader: expenseHeader,
                     });
                   } else {
                     alert("Please Fill Details.");
@@ -699,8 +702,11 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
             <Autocomplete
               disablePortal
               id="combo-box-demo"
-              options={top100Films}
+              options={expenseHeaders}
               sx={{ width: 500 }}
+              onChange={(event, selectedExpenseHeaders) => {
+                setExpenseHeader(selectedExpenseHeaders.label);
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Expense Header" style={{}} />
               )}
