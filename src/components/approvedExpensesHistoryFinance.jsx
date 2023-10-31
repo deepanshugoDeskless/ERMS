@@ -3,7 +3,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
-import { tokens } from "../../src/theme";
+import { tokens } from "../theme";
 import { Loader, Error } from "./loader";
 import { GET_REIMBURSEMENTS } from "../gqloperations/mutations";
 

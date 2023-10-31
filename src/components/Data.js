@@ -33,7 +33,7 @@ import ApprovedExpensesHistory from "./approvedexpenseshistory";
 import UserHome from "./userHome";
 import AdminHome from "./adminHome";
 import FinanceHome from "./financeHome";
-import ApprovedReimbursementsFinance from "./approveReimbursementsnewfin";
+import ApprovedReimbursementsFinance from "./approvedReimbursementsFinance";
 
 
 export const ADMIN_SIDEBAR_DATA = [
