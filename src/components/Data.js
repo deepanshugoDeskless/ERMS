@@ -37,6 +37,7 @@ import AdminHome from "./adminHome";
 import FinanceHome from "./financeHome";
 import ApprovedReimbursementsFinance from "./approvedReimbursementsFinance";
 import ClaimedReimbursements from "./claimedReimbursements";
+import ApprovedReimbursementsAdmin from "./approvedReimbursementsAdmin";
 
 
 export const ADMIN_SIDEBAR_DATA = [
@@ -78,7 +79,7 @@ export const ADMIN_SIDEBAR_DATA = [
   {
     id: 6,
     name: "Approved Requests",
-    page: <ApprovedExpensesHistory />,
+    page: <ApprovedReimbursementsAdmin />,
     path: "approvedrequests",
     icon: <HistoryIcon />,
   },
