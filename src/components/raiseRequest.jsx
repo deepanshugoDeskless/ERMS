@@ -46,6 +46,7 @@ const RaiseRequest = () => {
   };
 
   const [type, setType] = useState({});
+  const [purpose, setPurpose] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [place, setPlace] = useState("");
@@ -99,6 +100,8 @@ const RaiseRequest = () => {
   };
 
   const callRaiseReimbursementRequest = () => {
+    var numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
+
     createReimbursement({
       context: {
         headers: {
@@ -108,10 +111,11 @@ const RaiseRequest = () => {
       variables: {
         reimbursementNew: {
           title: title,
+          purpose: purpose,
           description: description,
           type: type.code,
           visitLocation: place,
-          noOfDays: "2",
+          noOfDays: numberOfDays,
           fromDate: fromDate,
           toDate: toDate,
           askedAmount: amount,
@@ -122,6 +126,7 @@ const RaiseRequest = () => {
         setTitle("");
         setDescription("");
         setType({});
+        setPurpose("");
         setPlace("");
         setFromDate(null);
         setToDate(null);
@@ -134,14 +139,29 @@ const RaiseRequest = () => {
       });
   };
 
+  function getDatesInRange(fromDateString, toDateString) {
+    const fromDate = new Date(fromDateString);
+    const toDate = new Date(toDateString);
+    const dateArray = [];
+
+    for (
+      let date = fromDate;
+      date <= toDate;
+      date.setDate(date.getDate() + 1)
+    ) {
+      dateArray.push(new Date(date));
+    }
+
+    return dateArray;
+  }
   if (loading) return <Loader />;
   if (error) return <Error />;
 
   const TypeMap = [
-    { label: "Travel Expense", code: "ta" },
-    { label: "Meal Expense", code: "fa" },
-    { label: "Accommodation Expense", code: "aa" },
-    { label: "Purchase Expense", code: "pa" },
+    { label: "Travel", code: "ta" },
+    { label: "Meal", code: "fa" },
+    { label: "Accommodation", code: "aa" },
+    { label: "Purchase", code: "pa" },
   ];
 
   const TypeNature = [
@@ -249,72 +269,51 @@ const RaiseRequest = () => {
             justifyContent: "space-between",
           }}
         >
-          <div
+          <Autocomplete
+            disablePortal
+            id="combo-box-nature"
+            maxRows={6}
+            options={TypeNature}
+            sx={{ width: 200, height: 80 }}
             style={{
-              display: "flex",
-              flexDirection: "row",
+              width: "4em",
+              marginLeft: "0.12em",
             }}
-          >
-            <Autocomplete
-              disablePortal
-              id="combo-box-nature"
-              maxRows={6}
-              options={TypeNature}
-              sx={{ width: 200, height: 80 }}
-              style={{
-                width: "4em",
-                marginTop: "0.15em",
-                marginLeft: "0.12em",
-              }}
-              onChange={(event, selectedType) => {
-                setType(selectedType);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Nature of Travel"
-                  value={type.label}
-                />
-              )}
-            />
-            <Autocomplete
-              disablePortal
-              id="combo-box-type"
-              maxRows={6}
-              options={TypeMap}
-              sx={{ width: 240, height: 80 }}
-              style={{
-                width: "4.8em",
-                marginLeft: "0.6em",
-                marginTop: "0.1em",
-              }}
-              onChange={(event, selectedType) => {
-                setType(selectedType);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Expense Type"
-                  value={type.label}
-                />
-              )}
-            />
-            <TextField
-              id="outlined-basic"
-              label="Title of Request"
-              variant="outlined"
-              value={title}
-              onChange={(titleInput) => {
-                setTitle(titleInput.target.value);
-              }}
-              style={{
-                ...styles.input,
-                width: "4em",
-                marginTop: "0.1em",
-                marginLeft: "1.3em",
-              }}
-            />
-          </div>
+            onChange={(event, selectedType) => {
+              setPurpose(selectedType?.label);
+            }}
+            renderInput={(params) => <TextField {...params} label="Purpose" />}
+          />
+          <Autocomplete
+            disablePortal
+            id="combo-box-type"
+            maxRows={6}
+            options={TypeMap}
+            sx={{ width: 240, height: 80 }}
+            style={{
+              width: "4.8em",
+              marginLeft: "0.6em",
+            }}
+            onChange={(event, selectedType) => {
+              setType(selectedType);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="Allowance Type"  value={type?.label}/>
+            )}
+          />
+          <TextField
+            id="outlined-basic"
+            label="Title of Request"
+            variant="outlined"
+            value={title}
+            onChange={(titleInput) => {
+              setTitle(titleInput.target.value);
+            }}
+            style={{
+              width: "3.5em",
+            }}
+          />
+
           <TextField
             id="outlined-multiline-static"
             label="Description"
@@ -327,7 +326,7 @@ const RaiseRequest = () => {
             onChange={(descriptionInput) => {
               setDescription(descriptionInput.target.value);
             }}
-            style={{ width: "4em", marginTop: "0.1em" }}
+            style={{ width: "6em" }}
           />
 
           <TextField
@@ -338,14 +337,14 @@ const RaiseRequest = () => {
             onChange={(placeInput) => {
               setPlace(placeInput.target.value);
             }}
-            style={{ width: "4em", marginTop: "0.1em" }}
+            style={{ width: "4em" }}
           />
         </div>
         <div
           style={{
             padding: "0.5em",
             width: "100%",
-            height: 120,
+            height: 110,
             display: "flex",
             flexDirection: "row",
             textAlign: "center",
