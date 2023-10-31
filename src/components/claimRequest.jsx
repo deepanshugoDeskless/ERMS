@@ -451,11 +451,13 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
       style={{
         width: "55vw",
         border: "2px solid #ccc",
-        borderRadius: 20,
+        borderRadius: "12px",
+        border: "1px solid #ccc",
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
         marginTop: "0.2em",
         padding: 8,
         paddingBottom: 8,
-        backgroundColor: colors.greenAccent[900],
+        // backgroundColor: colors.greenAccent[900],
         position: "relative",
         left: "0.4em",
       }}
