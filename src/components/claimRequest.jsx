@@ -437,22 +437,6 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
       value: "INR",
       label: "₹",
     },
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
   ];
 
   const top100Films = [

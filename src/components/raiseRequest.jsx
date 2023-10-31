@@ -91,22 +91,6 @@ const RaiseRequest = () => {
       value: "INR",
       label: "₹",
     },
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
   ];
 
   const handleInputChange = (e) => {
@@ -365,6 +349,7 @@ const RaiseRequest = () => {
             display: "flex",
             flexDirection: "row",
             textAlign: "center",
+            alignItems: "baseline",
             justifyContent: "space-between",
           }}
         >
@@ -437,7 +422,7 @@ const RaiseRequest = () => {
             variant="contained"
             style={{
               width: 180,
-              height: 60,
+              height: 50,
             }}
             onClick={() => {
               callRaiseReimbursementRequest();
