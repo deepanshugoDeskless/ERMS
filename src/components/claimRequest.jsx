@@ -64,10 +64,8 @@ const ClaimRequest = () => {
     amount: "",
     description: "",
     place: "",
-    invoiceId : "",
-    establishment:"",
-
-
+    invoiceId: "",
+    establishment: "",
   });
 
   const [expenses, setExpenses] = useState([]);
@@ -190,235 +188,224 @@ const ClaimRequest = () => {
 
   return (
     <>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+      <Box
+        style={{
+          position: "absolute",
+          bottom: "0px",
+          left: "5em",
+          right: "0px",
+        }}
+      >
+        <div
+          style={{
+            color: colors.blueAccent[200],
+            width: "100%",
+            height: 10,
+            paddingTop: 50,
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <h4
+            style={{
+              marginLeft: 20,
+              fontFamily: "Bebas Neue,sans-serif",
+              fontSize: "xxx-large",
+            }}
+          >
+            Claim Reimbursement
+          </h4>
+        </div>
+        <Box
+          style={{
+            flexDirection: "row",
+            display: "flex",
+          }}
+        >
           <Box
             style={{
-              bottom: "0px",
-              left: "5em",
-              marginRight: "5em",
-              width: "100%",
+              marginTop: "1.5em",
+              width: "33%",
               flexDirection: "column",
               display: "flex",
-              height: "100%",
-              overflowX: "hidden",
+              height: "77vh",
+              marginLeft: "0.3em",
             }}
           >
             <div
               style={{
-                color: colors.blueAccent[200],
-                width: "100%",
-                height: "2em",
                 display: "flex",
-                textAlign: "center",
-                justifyContent: "center",
-                position: "fixed",
-                top: "1.6em",
-                left: "2em",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginLeft: 8,
               }}
             >
-              <h4 style={{}}>Claim Reimbursement</h4>
+              <DoneAllRoundedIcon
+                style={{
+                  marginRight: 4,
+                  transform: "scale(1.5)",
+                }}
+              />
+              <h4
+                style={{
+                  marginLeft: 4,
+                  fontFamily: "Bebas Neue,sans-serif",
+                  fontSize: "xx-large",
+                }}
+              >
+                Approved For
+              </h4>
             </div>
             <Box
+              height="70vh"
               style={{
-                flexDirection: "row",
-                display: "flex",
+                width: "7.25em",
+                position: "fixed",
+                marginLeft: "-0.3em",
+                marginTop: "1.7em",
+                position: "fixed",
+                bottom: "0",
+              }}
+              sx={{
+                "& .MuiDataGrid-root": {
+                  border: "none",
+                },
+                "& .MuiDataGrid-cell": {
+                  borderBottom: "none",
+                },
+                "& .name-column--cell": {
+                  color: colors.greenAccent[300],
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: colors.blueAccent[700],
+                  borderBottom: "none",
+                },
+                "& .MuiDataGrid-virtualScroller": {
+                  backgroundColor: colors.primary[400],
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  borderTop: "none",
+                  backgroundColor: colors.blueAccent[700],
+                },
+                "& .MuiCheckbox-root": {
+                  color: `${colors.greenAccent[200]} !important`,
+                },
               }}
             >
-              <Box
-                style={{
-                  marginTop: "1.5em",
-                  width: "33%",
-                  flexDirection: "column",
-                  display: "flex",
-                  height: "77vh",
-                  marginLeft: "0.3em",
+              <DataGrid
+                onRowSelectionModelChange={(newRowSelectionModel) => {
+                  setRowSelectionModel(newRowSelectionModel);
+                  selectReimbursement(newRowSelectionModel);
                 }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    marginLeft: 8,
-                  }}
-                >
-                  <DoneAllRoundedIcon
-                    style={{
-                      marginRight: 4,
-                      transform: "scale(1.5)",
-                    }}
-                  />
-                  <h4
-                    style={{
-                      marginLeft: 4,
-                      fontFamily: "Bebas Neue,sans-serif",
-                      fontSize: "xx-large",
-                    }}
-                  >
-                    Approved For
-                  </h4>
-                </div>
-                <Box
-                  height="70vh"
-                  style={{
-                    width: "7.25em",
-                    position: "fixed",
-                    marginLeft: "-0.3em",
-                    marginTop: "1.7em",
-                    position: "fixed",
-                    bottom: "0",
-                  }}
-                  sx={{
-                    "& .MuiDataGrid-root": {
-                      border: "none",
-                    },
-                    "& .MuiDataGrid-cell": {
-                      borderBottom: "none",
-                    },
-                    "& .name-column--cell": {
-                      color: colors.greenAccent[300],
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                      backgroundColor: colors.blueAccent[700],
-                      borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                      backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                      borderTop: "none",
-                      backgroundColor: colors.blueAccent[700],
-                    },
-                    "& .MuiCheckbox-root": {
-                      color: `${colors.greenAccent[200]} !important`,
-                    },
-                  }}
-                >
-                  <DataGrid
-                    onRowSelectionModelChange={(newRowSelectionModel) => {
-                      setRowSelectionModel(newRowSelectionModel);
-                      selectReimbursement(newRowSelectionModel);
-                    }}
-                    rowSelectionModel={rowSelectionModel}
-                    rows={data.ireimbursements.filter(
-                      (element) => element.isPreApproved
-                    )}
-                    columns={columns}
-                    getRowId={(row) => row._id}
-                  />
-                </Box>
-              </Box>
-              <Box
-                style={{
-                  marginTop: "1.5em",
-                  width: "90%",
-                  flexDirection: "column",
-                  display: "flex",
-                  height: "100%",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginLeft: 8,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <CurrencyRupeeRoundedIcon
-                      style={{
-                        marginRight: 4,
-                        transform: "scale(1.5)",
-                      }}
-                    />
-                    <h4
-                      style={{
-                        marginLeft: 4,
-                        fontFamily: "Bebas Neue,sans-serif",
-                        fontSize: "xx-large",
-                      }}
-                    >
-                      Add Expenses
-                    </h4>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <h4
-                      style={{
-                        marginLeft: 4,
-                        fontFamily: "Bebas Neue,sans-serif",
-                        fontSize: "xx-large",
-                      }}
-                    >
-                        Total = {totalAmount} {/* Display the total amount */}
-                    </h4>
-                    {/* <h4
-                      style={{
-                        marginLeft: 4,
-                        fontFamily: "Bebas Neue,sans-serif",
-                        fontSize: "xx-large",
-                      }}
-                    >
-                      {"0"}
-                    </h4> */}
-                    <CurrencyRupeeRoundedIcon
-                      style={{
-                        marginRight: 4,
-                        transform: "scale(1.5)",
-                      }}
-                    />
-                  </div>
-
-                  <Button
-                    variant="contained"
-                    style={{
-                      borderRadius: 10,
-                      marginRight: 16,
-                    }}
-                    onClick={callBulkExpenseUpload}
-                  >
-                    Submit For Reimbursement
-                  </Button>
-                </div>
-                <div
-                  style={{
-                    width: "100%",
-                    padding: "20px",
-                    overflowY: "scroll",
-                    height: "70vh",
-                  }}
-                >
-                  {expenses.map((expense, index) => (
-                    <Form
-                      key={expense.formId}
-                      showPlusButton={index === expenses?.length - 1}
-                      addExpense={addExpense}
-                      reimbursement={reimbursement}
-                    />
-                  ))}
-                </div>
-              </Box>
+                rowSelectionModel={rowSelectionModel}
+                rows={data.ireimbursements.filter(
+                  (element) => element.isPreApproved
+                )}
+                columns={columns}
+                getRowId={(row) => row._id}
+              />
             </Box>
           </Box>
-        </ThemeProvider>
-      </ColorModeContext.Provider>
+          <Box
+            style={{
+              marginTop: "1.5em",
+              width: "90%",
+              flexDirection: "column",
+              display: "flex",
+              height: "100%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginLeft: 8,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <CurrencyRupeeRoundedIcon
+                  style={{
+                    marginRight: 4,
+                    transform: "scale(1.5)",
+                  }}
+                />
+                <h4
+                  style={{
+                    marginLeft: 4,
+                    fontFamily: "Bebas Neue,sans-serif",
+                    fontSize: "xx-large",
+                  }}
+                >
+                  Add Expenses
+                </h4>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <h4
+                  style={{
+                    marginLeft: 4,
+                    fontFamily: "Bebas Neue,sans-serif",
+                    fontSize: "xx-large",
+                  }}
+                >
+                  Total = {totalAmount} {/* Display the total amount */}
+                </h4>
+                <CurrencyRupeeRoundedIcon
+                  style={{
+                    marginRight: 4,
+                    transform: "scale(1.5)",
+                  }}
+                />
+              </div>
+
+              <Button
+                variant="contained"
+                style={{
+                  borderRadius: 10,
+                  marginRight: 16,
+                }}
+                onClick={callBulkExpenseUpload}
+              >
+                Submit For Reimbursement
+              </Button>
+            </div>
+            <div
+              style={{
+                width: "100%",
+                padding: "20px",
+                overflowY: "scroll",
+                height: "70vh",
+              }}
+            >
+              {expenses.map((expense, index) => (
+                <Form
+                  key={expense.formId}
+                  showPlusButton={index === expenses?.length - 1}
+                  addExpense={addExpense}
+                  reimbursement={reimbursement}
+                />
+              ))}
+            </div>
+          </Box>
+        </Box>
+      </Box>
     </>
   );
 };
@@ -435,8 +422,8 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
   const [expenseDescription, setExpenseDescrption] = useState("");
   const [expenseDate, setExpenseDate] = useState(null);
   const [expenseAmount, setExpensesAmount] = useState("");
-  const [expenseInvoiceId,setExpenseInvoidId]=useState("");
-  const [expenseEstablishment,setExpenseEstablishment]=useState("")
+  const [expenseInvoiceId, setExpenseInvoidId] = useState("");
+  const [expenseEstablishment, setExpenseEstablishment] = useState("");
 
   const colors = tokens(theme.palette.mode);
   const currencies = [
@@ -476,8 +463,9 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
         border: "2px solid #ccc",
         borderRadius: 20,
         marginTop: "0.2em",
-        height: "24vh",
         padding: 8,
+        paddingBottom: 8,
+        backgroundColor: colors.greenAccent[900],
         position: "relative",
         left: "0.4em",
       }}
@@ -485,153 +473,151 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
       <form>
         <div
           style={{
-            flexDirection: "row",
+            flexDirection: "column",
             display: "flex",
-            width: "100%",
-            height: "20vh",
-            marginTop: 10,
-            justifyContent: "space-between",
+            marginTop: 5,
+            justifyContent: "space-evenly",
             alignItems: "center",
           }}
         >
-          <Box
-            width="20vh"
-            component="form"
-            sx={{
-              "& .MuiTextField-root": {},
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={expenseTypes}
-              value={expenseType?.label ? expenseType?.label : ""}
-              onChange={(event, selectedType) => {
-                setExpenseType(selectedType);
-              }}
-              sx={{ width: 140 }}
-              style={{ position: "relative" }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Type"
-                  style={{ position: "relative", marginTop: "-1em" }}
-                />
-              )}
-            />
-          </Box>
-
-          <Box
-            component="form"
-            sx={{
-              "& > :not(style)": { m: 1, width: "2.4em" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-basic"
-              label="#Invoice ID"
-              value={expenseInvoiceId}
-              onChange={(e)=>setExpenseInvoidId(e.target.value)}
-              variant="outlined"
-              style={{
-                width: "2.9em",
-                position: "relative",
-                marginTop: "1em",
-                marginLeft: "-3em",
-              }}
-            />
-          </Box>
-
-          <Box
-            component="form"
-            sx={{
-              "& .MuiTextField-root": { width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-multiline-static"
-              label="Description"
-              multiline
-              value={expenseDescription}
-              onChange={(e) => setExpenseDescrption(e.target.value)}
-              style={{
-                width: "6em",
-                position: "relative",
-                marginLeft: "0em",
-                marginTop: "-1em",
-              }}
-            />
-          </Box>
-
-          <Box
-            component="form"
-            sx={{
-              "& > :not(style)": { m: 1, width: "2.4em" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-basic"
-              label="Establishment"
-              variant="outlined"
-              value={expenseEstablishment}
-              onChange={(e)=>setExpenseEstablishment(e.target.value)}
-              style={{
-                width: "3.9em",
-                position: "relative",
-                marginTop: "1em",
-                marginLeft: "-7.9em",
-              }}
-            />
-          </Box>
-
           <div
             style={{
-              paddingBottom: 24,
-              marginLeft: "0.1em",
-              marginTop: "-2em",
+              flexDirection: "row",
+              display: "flex",
             }}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker
-                  value={expenseDate}
-                  onChange={(expenseDateInput) => {
-                    setExpenseDate(
-                      new Date(expenseDateInput).toLocaleDateString()
-                    );
-                  }}
-                  label="Payment Date"
-                  style={{ position: "relative", marginLeft: "4em" }}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </div>
+            <Box
+              width="20vh"
+              height="10vh"
+              component="form"
+              sx={{
+                "& .MuiTextField-root": {},
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={expenseTypes}
+                value={expenseType?.label ? expenseType?.label : ""}
+                onChange={(event, selectedType) => {
+                  setExpenseType(selectedType);
+                }}
+                sx={{ width: 140 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Type" style={{}} />
+                )}
+              />
+            </Box>
 
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={top100Films}
-            sx={{ width: 500 }}
-            renderInput={(params) => (
+            <Box
+              component="form"
+              height="10vh"
+              sx={{
+                "& > :not(style)": { width: "2.4em" },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
-                {...params}
-                label="Expense Header"
+                id="outlined-multiline-static"
+                label="#Invoice ID"
+                value={expenseInvoiceId}
+                onChange={(e) => setExpenseInvoidId(e.target.value)}
                 style={{
-                  position: "relative",
-                  marginTop: "0.8em",
-                  marginLeft: "-12.4em",
+                  marginRight: 10,
+                  width: "2.9em",
                 }}
               />
+            </Box>
+
+            <Box
+              component="form"
+              height="10vh"
+              sx={{
+                "& .MuiTextField-root": { width: "25ch" },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-multiline-static"
+                label="Description"
+                multiline
+                value={expenseDescription}
+                onChange={(e) => setExpenseDescrption(e.target.value)}
+                style={{
+                  width: "7em",
+                  marginRight: 10,
+                }}
+              />
+            </Box>
+
+            {showPlusButton && (
+              <Button
+                variant="contained"
+                style={{
+                  borderRadius: 20,
+                  width: 100,
+                  height: 50,
+                }}
+                onClick={() => {
+                  console.log(
+                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseAmount:",
+                    expenseAmount
+                  );
+                  console.log(
+                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDate:",
+                    expenseDate
+                  );
+                  console.log(
+                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDescription:",
+                    expenseDescription
+                  );
+                  console.log(
+                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseType:",
+                    expenseType
+                  );
+                  console.log(
+                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseInvoiceid:",
+                    expenseInvoiceId
+                  );
+                  console.log(
+                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseEstablishment:",
+                    expenseEstablishment
+                  );
+                  // console.log(
+                  //   "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseHeader:",
+                  //   expenseHeader
+                  // );
+
+                  if (
+                    expenseType &&
+                    expenseDescription &&
+                    expenseDate &&
+                    expenseAmount &&
+                    expenseInvoiceId &&
+                    expenseEstablishment
+                  ) {
+                    addExpense({
+                      type: expenseType.code,
+                      amount: expenseAmount,
+                      description: expenseDescription,
+                      reimbursement: reimbursement,
+                      invoiceId: expenseInvoiceId,
+                      establishment: expenseEstablishment,
+                      date: expenseDate,
+                    });
+                  } else {
+                    alert("Please Fill Details.");
+                  }
+                }}
+              >
+                Add
+              </Button>
             )}
-          />
+          </div>
 
           <div
             style={{
@@ -640,8 +626,6 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               width: "100%",
               justifyContent: "center",
               alignItems: "center",
-              marginLeft: "-7em",
-              marginTop: "3.1em",
             }}
           >
             <Box
@@ -650,8 +634,6 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                 "& .MuiTextField-root": {
                   width: "2ch",
                   height: "1ch",
-                  position: "relative",
-                  marginTop: "-1em",
                 },
               }}
               noValidate
@@ -682,83 +664,61 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               <TextField
                 id="outlined-multiline-static"
                 label="Amount"
-                multiline
                 value={expenseAmount}
                 onChange={(e) => setExpensesAmount(e.target.value)}
                 style={{
                   width: "3em",
-                  position: "relative",
-                  marginTop: "-1em",
                 }}
               />
             </Box>
-          </div>
-
-          {showPlusButton && (
-            <Button
-              variant="contained"
-              style={{
-                borderRadius: 20,
-                position: "relative",
-                marginTop: "-8em",
-                marginLeft: "-8em",
+            <Box
+              component="form"
+              sx={{
+                "& > :not(style)": { width: "2.4em" },
               }}
-              onClick={() => {
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseAmount:",
-                  expenseAmount
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDate:",
-                  expenseDate
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDescription:",
-                  expenseDescription
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseType:",
-                  expenseType
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseInvoiceid:",
-                  expenseInvoiceId
-                );
-                console.log(
-                  "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseEstablishment:",
-                  expenseEstablishment
-                );
-                // console.log(
-                //   "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseHeader:",
-                //   expenseHeader
-                // );
-
-                if (
-                  expenseType &&
-                  expenseDescription &&
-                  expenseDate &&
-                  expenseAmount &&
-                  expenseInvoiceId &&
-                  expenseEstablishment
-
-                ) {
-                  addExpense({
-                    type: expenseType.code,
-                    amount: expenseAmount,
-                    description: expenseDescription,
-                    reimbursement: reimbursement,
-                    invoiceId : expenseInvoiceId,
-                    establishment :expenseEstablishment,
-                    date :expenseDate
-                  });
-                } else {
-                  alert("Please Fill Details.");
-                }
-              }}
+              noValidate
+              autoComplete="off"
             >
-              Add
-            </Button>
-          )}
+              <TextField
+                id="outlined-multiline-static"
+                label="Establishment"
+                multiline
+                variant="outlined"
+                value={expenseEstablishment}
+                onChange={(e) => setExpenseEstablishment(e.target.value)}
+                style={{
+                  width: "3.9em",
+                }}
+              />
+            </Box>
+
+            <div style={{ marginTop: -10 }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    value={expenseDate}
+                    onChange={(expenseDateInput) => {
+                      setExpenseDate(
+                        new Date(expenseDateInput).toLocaleDateString()
+                      );
+                    }}
+                    label="Payment Date"
+                    style={{ width: "3em" }}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </div>
+
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={top100Films}
+              sx={{ width: 500 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Expense Header" style={{}} />
+              )}
+            />
+          </div>
         </div>
       </form>
     </div>

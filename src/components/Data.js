@@ -23,7 +23,6 @@ import Home from "./Home";
 import Team from "./team";
 import RaiseRequest from "./raiseRequest";
 import AddEmployee from "./addBulkEmployee";
-import ClaimReimbursement, { claimReimbursement } from "./claimReimbursement";
 import ClaimRequest from "./claimRequest";
 import AirplaneTicketRoundedIcon from "@mui/icons-material/AirplaneTicketRounded";
 import PriceCheckRoundedIcon from "@mui/icons-material/PriceCheckRounded";

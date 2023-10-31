@@ -166,7 +166,6 @@ const PreApproveRequest = () => {
       >
         <div
           style={{
-            // backgroundColor: "yellow",
             color: colors.blueAccent[200],
             width: "100%",
             top: "0px",
