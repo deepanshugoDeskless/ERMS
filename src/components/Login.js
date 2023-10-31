@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import loginupdated from "../Assets/loginupdated.json";
 import Button from "@mui/material/Button";
-import {Loader, Error} from "./loader";
+import { Loader, Error } from "./loader";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -40,7 +40,20 @@ export default function Login() {
     localStorage.setItem("user-firstname", data.user.user.firstName);
     localStorage.setItem("user-lastname", data.user.user.lastName);
     localStorage.setItem("user-role", data.user.user.role);
-    navigate("/home");
+    switch (data.user.user.role) {
+      case "user":
+        navigate("/userHome");
+        break;
+      case "admin":
+        navigate("/adminHome");
+        break;
+      case "finance":
+        navigate("/financeHome");
+        break;
+      default:
+        navigate("/userHome");
+        break;
+    }
   }
 
   const handleEmailChange = (email) => {
