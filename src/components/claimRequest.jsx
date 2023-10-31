@@ -164,13 +164,19 @@ const ClaimRequest = () => {
             justifyContent="center"
             backgroundColor={
               row.isPreApproved
-                ? colors.greenAccent[600]
-                : colors.greenAccent[700]
+                ? row.expenses.length > 0
+                  ? colors.blueAccent[800]
+                  : "#0BF265"
+                : colors.redAccent[800]
             }
             borderRadius="4px"
           >
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {row.isPreApproved ? " Approved " : "Pending"}
+              {row.isPreApproved
+                ? row.expenses.length > 0
+                  ? "Claimed"
+                  : "Approved "
+                : "Pending"}
             </Typography>
           </Box>
         );

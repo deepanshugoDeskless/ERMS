@@ -94,6 +94,17 @@ export const GET_REIMBURSEMENTS = gql`
       totalAmount
       by
       isPreApproved
+      expenses {
+        date
+        type
+        _id
+        description
+        amount
+        approved
+        invoiceId
+        establishment
+        by
+      }
     }
   }
 `;
