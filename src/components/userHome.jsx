@@ -47,10 +47,10 @@ const UserHome = () => {
   if (errorRequests) return <Error />;
 
   const pendingPreRequests = dataRequests?.ireimbursements.filter(
-    (element) => !element.isPreApproved
+    (element) => !element.isPreApproved && !element.isApproved
   );
   const pendingReimbursementRequests = dataRequests?.ireimbursements.filter(
-    (element) => !element.isApproved
+    (element) => element.isPreApproved && !element.isApproved
   );
   console.log(
     "🚀 ~ file: userHome.jsx:54 ~ UserHome ~ pendingPreRequests:",

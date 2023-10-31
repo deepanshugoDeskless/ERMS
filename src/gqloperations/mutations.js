@@ -94,6 +94,7 @@ export const GET_REIMBURSEMENTS = gql`
       totalAmount
       by
       isPreApproved
+      isApproved
       expenses {
         date
         type
