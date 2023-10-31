@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import { tokens } from "../../src/theme";
 import { useMode } from "../../src/theme";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { UPDATE_REIMBURSEMENTS } from "../gqloperations/mutations";
+import { GET_APPROVED_REIMBURSEMENTS, GET_REIMBURSEMENTS, UPDATE_REIMBURSEMENTS } from "../gqloperations/mutations";
 
 
 const getTypeDescription = (type) => {
@@ -24,7 +24,7 @@ const getTypeDescription = (type) => {
   }
 };
 
-const PreApproveRequest = (key, showPlusButton, addForm) => {
+const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   const [isFormOpen, setFormOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [colorMode] = useMode();
@@ -54,8 +54,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
       0
     );
   };
-
-  const { loading, error, data, refetch } = useQuery(ADMIN_FETCH_REQUESTS, {
+  const { loading, error, data } = useQuery(GET_APPROVED_REIMBURSEMENTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
@@ -63,41 +62,11 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     },
   });
 
-  const [updateReimbursements, { updateData, updateLoading, updateError }] =
-    useMutation(UPDATE_REIMBURSEMENTS, {
-      onCompleted: () => {
-        refetch({
-          context: {
-            headers: {
-              Authorization: `${localStorage.getItem("token")}`,
-            },
-          },
-        });
-      },
-    });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const handleBulkApproveSubmit = () => {
-    updateReimbursements({
-      context: {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      },
-      variables: {
-        reimbursementsUpdateInput: {
-          ids: selectionModel,
-          reimbursementInput: {
-            isApproved: true,
-          },
-        },
-      },
-    });
-  };
-
-  const reimbursements = data.pendingReimbursements.map(
+  const reimbursements = data.approvedReimbursements.map(
     (reimbursement, index) => {
       // Date format change karne ke liye
       const fromDate = new Date(reimbursement.fromDate);
@@ -167,23 +136,8 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
               fontSize: "xxx-large",
             }}
           >
-            Approve Reimbursements
+            Approved Reimbursements
           </h4>
-          <Button
-            variant="contained"
-            type="submit"
-            onClick={() => {
-              handleBulkApproveSubmit();
-            }}
-            style={{
-              marginRight: 40,
-              fontSize: "medium",
-              width: "10%",
-              height: "50%",
-            }}
-          >
-            Approve
-          </Button>
         </div>
         <Box
           height="82.3vh"
@@ -215,7 +169,6 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
           }}
         >
           <DataGrid
-            checkboxSelection
             onRowSelectionModelChange={(newRowSelectionModel) => {
               handleSelectionModelChange(newRowSelectionModel);
             }}
@@ -326,4 +279,4 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
   );
 };
 
-export default PreApproveRequest;
+export default ApprovedReimbursementsFinance;

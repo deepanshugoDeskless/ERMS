@@ -136,7 +136,6 @@ export const GET_PRE_REQUESTS = gql`
   }
 `;
 
-
 export const GET_APPROVED_REIMBURSEMENTS = gql`
   query ApprovedReimbursements {
     approvedReimbursements {
@@ -152,7 +151,15 @@ export const GET_APPROVED_REIMBURSEMENTS = gql`
       totalAmount
       isPreApproved
       expenses {
+        date
+        type
+        _id
+        description
         amount
+        approved
+        invoiceId
+        establishment
+        by
       }
     }
   }
