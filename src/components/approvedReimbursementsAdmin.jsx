@@ -79,7 +79,7 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
               Authorization: `${localStorage.getItem("token")}`,
             },
           },
-        });approveReimbursements
+        });
       },
     });
 
