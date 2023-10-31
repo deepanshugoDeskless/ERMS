@@ -38,6 +38,7 @@ import FinanceHome from "./financeHome";
 import ApprovedReimbursementsFinance from "./approvedReimbursementsFinance";
 import ClaimedReimbursements from "./claimedReimbursements";
 import ApprovedReimbursementsAdmin from "./approvedReimbursementsAdmin";
+import ApprovedReimbursementsUser from "./approvedReimbursementsUser";
 
 
 export const ADMIN_SIDEBAR_DATA = [
@@ -137,5 +138,12 @@ export const USER_SIDEBAR_DATA = [
     page: <ClaimedReimbursements />,
     path: "viewClaimedRequests",
     icon: <ViewSidebarRoundedIcon />,
+  },
+  {
+    id: 5,
+    name: "View Approved Reimbursements",
+    page: <ApprovedReimbursementsUser />,
+    path: "viewApprovedReimbursementsUser",
+    icon: <ApproveIcon />,
   },
 ];

@@ -28,7 +28,7 @@ const getTypeDescription = (type) => {
   }
 };
 
-const ClaimedReimbursements = (key, showPlusButton, addForm) => {
+const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
   const [isFormOpen, setFormOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [colorMode] = useMode();
@@ -85,7 +85,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
   };
 
   const reimbursements = data.ireimbursements
-    .filter((element) => element.isPreApproved && !element.isApproved)
+    .filter((element) => element.isPreApproved && element.isApproved)
     .map((reimbursement, index) => {
       // Split the date strings into day, month, and year
       const fromDateStringParts = reimbursement.fromDate.split("/");
@@ -158,7 +158,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
               fontSize: "xxx-large",
             }}
           >
-            Claimed Reimbursements
+            Approved Reimbursements
           </h4>
         </div>
 
@@ -404,4 +404,4 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
   );
 };
 
-export default ClaimedReimbursements;
+export default ApprovedReimbursementsUser;
