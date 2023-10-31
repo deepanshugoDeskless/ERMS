@@ -207,16 +207,31 @@ const RaiseRequest = () => {
       renderCell: ({ row }) => {
         return (
           <Box
-            width="60%"
+            width="80%"
             m="0 auto"
             p="5px"
             display="flex"
             justifyContent="center"
-            backgroundColor={row.isPreApproved ? "#0BF265" : "#F4064A"}
+            backgroundColor={
+              row.isPreApproved
+                ? row.expenses.length > 0
+                  ? row.isApproved
+                    ? "#0BF265"
+                    : colors.blueAccent[500]
+                  : colors.greenAccent[500]
+                : colors.redAccent[500]
+            }
+            // backgroundColor={row.isPreApproved ? "#0BF265" : "#F4064A"}
             borderRadius="4px"
           >
             <Typography style={{ color: "white" }} sx={{ ml: "5px" }}>
-              {row.isPreApproved ? " Approved " : "Pending"}
+              {row.isPreApproved
+                ? row.expenses.length > 0
+                  ? row.isApproved
+                    ? "Approved"
+                    : "Claimed"
+                  : "Pre Approved "
+                : "Pending"}
             </Typography>
           </Box>
         );
@@ -298,7 +313,11 @@ const RaiseRequest = () => {
               setType(selectedType);
             }}
             renderInput={(params) => (
-              <TextField {...params} label="Allowance Type"  value={type?.label}/>
+              <TextField
+                {...params}
+                label="Allowance Type"
+                value={type?.label}
+              />
             )}
           />
           <TextField
