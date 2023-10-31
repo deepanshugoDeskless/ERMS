@@ -302,7 +302,7 @@ const ClaimRequest = () => {
                 }}
                 rowSelectionModel={rowSelectionModel}
                 rows={data.ireimbursements.filter(
-                  (element) => element.isPreApproved
+                  (element) => element.isPreApproved && !element.isApproved
                 )}
                 columns={columns}
                 getRowId={(row) => row._id}
