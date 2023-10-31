@@ -79,8 +79,9 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
     12: "Dec",
   };
 
-  const reimbursements = data.ireimbursements.map(
-    (reimbursement, index) => {
+  const reimbursements = data.ireimbursements
+    .filter((element) => element.isPreApproved && !element.isApproved)
+    .map((reimbursement, index) => {
       // Split the date strings into day, month, and year
       const fromDateStringParts = reimbursement.fromDate.split("/");
       const toDateStringParts = reimbursement.toDate.split("/");
@@ -110,8 +111,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
           reimbursement.toDate
         );
       }
-    }
-  );
+    });
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -242,11 +242,12 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                 </h4>
                 <Typography
                   style={{
-                    fontSize: "xx-large",
+                    fontSize: "xxx-large",
+                    fontWeight: 600,
                     color: "#808080",
                   }}
                 >
-                  Amount: ₹{calculateTotalAmount(selectedRowData.expenses)}
+                  ₹{calculateTotalAmount(selectedRowData.expenses)}
                 </Typography>
               </div>
               {selectedRowData.expenses.map((expense, index) => (

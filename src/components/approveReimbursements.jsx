@@ -285,10 +285,9 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
               >
                 <h4
                   style={{
-                    marginBottom: "0.5em",
                     fontSize: "x-large",
-                    fontSize: 50,
-                    fontWeight: 400,
+                    fontSize: 30,
+                    fontWeight: 500,
                     color: colors.blueAccent[200],
                   }}
                 >
@@ -296,11 +295,12 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                 </h4>
                 <Typography
                   style={{
-                    fontSize: "xx-large",
+                    fontSize: "xxx-large",
+                    fontWeight: 600,
                     color: "#808080",
                   }}
                 >
-                  Amount: ₹{calculateTotalAmount(selectedRowData.expenses)}
+                  ₹{calculateTotalAmount(selectedRowData.expenses)}
                 </Typography>
               </div>
               {selectedRowData.expenses.map((expense, index) => (

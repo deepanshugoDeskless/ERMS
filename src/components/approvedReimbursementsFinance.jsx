@@ -281,11 +281,12 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                 </h4>
                 <Typography
                   style={{
-                    fontSize: "xx-large",
+                    fontSize: "xxx-large",
+                    fontWeight: 600,
                     color: "#808080",
                   }}
                 >
-                  Amount: ₹{calculateTotalAmount(selectedRowData.expenses)}
+                  ₹{calculateTotalAmount(selectedRowData.expenses)}
                 </Typography>
               </div>
               {selectedRowData.expenses.map((expense, index) => (

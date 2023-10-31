@@ -109,11 +109,6 @@ const ClaimRequest = () => {
   };
 
   const callBulkExpenseUpload = () => {
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:137 ~ callBulkExpenseUpload ~ expenses:",
-      expenses
-    );
-    console.log("Calling bulk upload");
     expenses.shift();
     expenses.forEach((object) => {
       delete object["formId"];
