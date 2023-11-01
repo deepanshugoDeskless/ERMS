@@ -18,11 +18,12 @@ import CardTravelIcon from "@mui/icons-material/CardTravel";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import HistoryIcon from "@mui/icons-material/History";
 import ViewSidebarRoundedIcon from "@mui/icons-material/ViewSidebarRounded";
-import CottageRoundedIcon from '@mui/icons-material/CottageRounded';
-import BackHandRoundedIcon from '@mui/icons-material/BackHandRounded';
-import SavingsRoundedIcon from '@mui/icons-material/SavingsRounded';
-import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded';
-import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
+import CottageRoundedIcon from "@mui/icons-material/CottageRounded";
+import BackHandRoundedIcon from "@mui/icons-material/BackHandRounded";
+import SavingsRoundedIcon from "@mui/icons-material/SavingsRounded";
+import Groups2RoundedIcon from "@mui/icons-material/Groups2Rounded";
+import FactCheckRoundedIcon from "@mui/icons-material/FactCheckRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 export {
   CottageRoundedIcon as HomeIcon,
@@ -46,5 +47,6 @@ export {
   FactCheckRoundedIcon as ApproveIcon,
   HistoryIcon as HistoryIcon,
   ViewSidebarRoundedIcon as ViewSidebarRoundedIcon,
-  BackHandRoundedIcon as BackHandRoundedIcon
+  BackHandRoundedIcon as BackHandRoundedIcon,
+  DeleteRoundedIcon as DeleteRoundedIcon,
 };

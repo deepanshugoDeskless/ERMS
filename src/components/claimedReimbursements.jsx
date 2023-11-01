@@ -13,6 +13,7 @@ import {
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
+import { DeleteRoundedIcon } from "./Icons";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -67,8 +68,8 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
       },
     },
   });
-  if (loading) return <Loader/>;
-  if (error) return <Error/>;
+  if (loading) return <Loader />;
+  if (error) return <Error />;
 
   const months = {
     "01": "Jan",
@@ -270,16 +271,44 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                     alignItems: "self-start",
                   }}
                 >
-                  <h6
+                  <div
                     style={{
-                      padding: 8,
-                      marginBottom: "1em",
-                      fontSize: "0.4em",
-                      fontWeight: "400",
+                      // backgroundColor: "yellow",
+                      display: "flex",
+                      width: "100%",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {expense.description}
-                  </h6>
+                    <h6
+                      style={{
+                        padding: 8,
+                        marginBottom: "1em",
+                        fontSize: "0.4em",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {expense.description}
+                    </h6>
+                    <Button
+                      variant="outlined"
+                      style={{
+                        margin: 10,
+                      }}
+                      startIcon={<DeleteRoundedIcon />}
+                    >
+                      Delete
+                    </Button>
+                    {/* <Button
+                      variant="contained"
+                      color={colors.blueAccent[200]}
+                      onClick={() => {}}
+                     
+                    >
+                      Delete
+                    </Button> */}
+                  </div>
                   <div
                     className="innerbox"
                     style={{ display: "flex", justifyContent: "space-evenly" }}
