@@ -40,11 +40,6 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
 
-  const [
-    deleteExpense,
-    { deleteExpenseData, deleteExpenseLoading, deleteExpenseEerror },
-  ] = useMutation(DELETE_EXPENSE);
-
   const handleSelectionModelChange = (newSelection) => {
     setSelectionModel(newSelection);
 
@@ -60,6 +55,39 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
     }
   };
 
+  const calculateTotalAmount = (expenses) => {
+    return expenses.reduce(
+      (total, expense) => total + parseFloat(expense.amount),
+      0
+    );
+  };
+
+  const { loading, error, data, refetch } = useQuery(GET_REIMBURSEMENTS, {
+    context: {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    },
+  });
+
+  const [
+    deleteExpense,
+    { deleteExpenseData, deleteExpenseLoading, deleteExpenseEerror },
+  ] = useMutation(DELETE_EXPENSE, {
+    onCompleted: () => {
+      refetch({
+        context: {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        },
+      });
+    },
+  });
+
+  if (loading) return <Loader />;
+  if (error) return <Error />;
+
   const callDeleteExpense = (expenseId) => {
     deleteExpense({
       context: {
@@ -72,23 +100,6 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
       },
     });
   };
-
-  const calculateTotalAmount = (expenses) => {
-    return expenses.reduce(
-      (total, expense) => total + parseFloat(expense.amount),
-      0
-    );
-  };
-
-  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
-    context: {
-      headers: {
-        Authorization: `${localStorage.getItem("token")}`,
-      },
-    },
-  });
-  if (loading) return <Loader />;
-  if (error) return <Error />;
 
   const months = {
     "01": "Jan",
@@ -317,18 +328,18 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       }}
                       onClick={() => {
                         callDeleteExpense(expense._id);
+                        var newExpenses = selectedRowData.expenses.filter(
+                          (element) => element._id != expense._id
+                        );
+                        setSelectedRowData({
+                          ...selectedRowData,
+                          expenses: newExpenses,
+                        });
                       }}
                       startIcon={<DeleteRoundedIcon />}
                     >
                       Delete
                     </Button>
-                    {/* <Button
-                      variant="contained"
-                      color={colors.blueAccent[200]}
-                      
-                    >
-                      Delete
-                    </Button> */}
                   </div>
                   <div
                     className="innerbox"
