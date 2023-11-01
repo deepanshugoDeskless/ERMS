@@ -11,6 +11,7 @@ import {
   GET_APPROVED_REIMBURSEMENTS,
   GET_REIMBURSEMENTS,
   UPDATE_REIMBURSEMENTS,
+  DELETE_EXPENSE,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
 import { DeleteRoundedIcon } from "./Icons";
@@ -39,6 +40,11 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
 
+  const [
+    deleteExpense,
+    { deleteExpenseData, deleteExpenseLoading, deleteExpenseEerror },
+  ] = useMutation(DELETE_EXPENSE);
+
   const handleSelectionModelChange = (newSelection) => {
     setSelectionModel(newSelection);
 
@@ -52,6 +58,19 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
       setFormOpen(false);
       setSelectedRowData(null);
     }
+  };
+
+  const callDeleteExpense = (expenseId) => {
+    deleteExpense({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: {
+        expenseId: expenseId,
+      },
+    });
   };
 
   const calculateTotalAmount = (expenses) => {
@@ -296,6 +315,9 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       style={{
                         margin: 10,
                       }}
+                      onClick={() => {
+                        callDeleteExpense(expense._id);
+                      }}
                       startIcon={<DeleteRoundedIcon />}
                     >
                       Delete
@@ -303,8 +325,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                     {/* <Button
                       variant="contained"
                       color={colors.blueAccent[200]}
-                      onClick={() => {}}
-                     
+                      
                     >
                       Delete
                     </Button> */}

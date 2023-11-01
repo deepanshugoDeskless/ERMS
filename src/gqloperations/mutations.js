@@ -206,3 +206,8 @@ export const ADMIN_FETCH_REQUESTS = gql`
     }
   }
 `;
+export const DELETE_EXPENSE = gql`
+  mutation DeleteExpense($expenseId: ID!) {
+    String: deleteExpense(expenseId: $expenseId)
+  }
+`;
