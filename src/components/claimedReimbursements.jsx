@@ -11,8 +11,10 @@ import {
   GET_APPROVED_REIMBURSEMENTS,
   GET_REIMBURSEMENTS,
   UPDATE_REIMBURSEMENTS,
+  DELETE_EXPENSE,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
+import { DeleteRoundedIcon } from "./Icons";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -60,15 +62,44 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
     );
   };
 
-  const { loading, error, data } = useQuery(GET_REIMBURSEMENTS, {
+  const { loading, error, data, refetch } = useQuery(GET_REIMBURSEMENTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
       },
     },
   });
-  if (loading) return <Loader/>;
-  if (error) return <Error/>;
+
+  const [
+    deleteExpense,
+    { deleteExpenseData, deleteExpenseLoading, deleteExpenseEerror },
+  ] = useMutation(DELETE_EXPENSE, {
+    onCompleted: () => {
+      refetch({
+        context: {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        },
+      });
+    },
+  });
+
+  if (loading) return <Loader />;
+  if (error) return <Error />;
+
+  const callDeleteExpense = (expenseId) => {
+    deleteExpense({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: {
+        expenseId: expenseId,
+      },
+    });
+  };
 
   const formatDateString = (dateString) => {
     const date = new Date(dateString);
@@ -255,16 +286,46 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                     alignItems: "self-start",
                   }}
                 >
-                  <h6
+                  <div
                     style={{
-                      padding: 8,
-                      marginBottom: "1em",
-                      fontSize: "0.4em",
-                      fontWeight: "400",
+                      // backgroundColor: "yellow",
+                      display: "flex",
+                      width: "100%",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {expense.description}
-                  </h6>
+                    <h6
+                      style={{
+                        padding: 8,
+                        marginBottom: "1em",
+                        fontSize: "0.4em",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {expense.description}
+                    </h6>
+                    <Button
+                      variant="outlined"
+                      style={{
+                        margin: 10,
+                      }}
+                      onClick={() => {
+                        callDeleteExpense(expense._id);
+                        var newExpenses = selectedRowData.expenses.filter(
+                          (element) => element._id != expense._id
+                        );
+                        setSelectedRowData({
+                          ...selectedRowData,
+                          expenses: newExpenses,
+                        });
+                      }}
+                      startIcon={<DeleteRoundedIcon />}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                   <div
                     className="innerbox"
                     style={{ display: "flex", justifyContent: "space-evenly" }}
