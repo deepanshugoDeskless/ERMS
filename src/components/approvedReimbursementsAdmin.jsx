@@ -83,8 +83,8 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
       },
     });
 
-  if (loading) return <Loader/>;
-  if (error) return <Error/>;
+  if (loading) return <Loader />;
+  if (error) return <Error />;
 
   const handleBulkApproveSubmit = () => {
     updateReimbursements({
@@ -119,31 +119,52 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
     12: "Dec",
   };
 
+  const formatDateString = (dateString) => {
+    const dateParts = dateString.split("/");
+    if (dateParts.length === 3) {
+      const day = dateParts[1];
+      const month = dateParts[0];
+      const year = dateParts[2];
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      if (parseInt(month) >= 1 && parseInt(month) <= 12) {
+        return `${day} ${months[parseInt(month) - 1]}`;
+      }
+    }
+    return "Invalid Date";
+  };
+
   const reimbursements = data.approvedReimbursements.map(
     (reimbursement, index) => {
-      // Split the date strings into day, month, and year
-      const fromDateStringParts = reimbursement.fromDate.split("/");
-      const toDateStringParts = reimbursement.toDate.split("/");
-
-      // Ensure the date strings are in the format "DD/MM/YYYY"
-      if (fromDateStringParts.length === 3 && toDateStringParts.length === 3) {
-        const fromDay = fromDateStringParts[0];
-        const fromMonth = months[fromDateStringParts[1]];
-        const toDay = toDateStringParts[0];
-        const toMonth = months[toDateStringParts[1]];
-
+      const fromDateString = formatDateString(reimbursement.fromDate);
+      const toDateString = formatDateString(reimbursement.toDate);
+      if (
+        fromDateString !== "Invalid Date" &&
+        toDateString !== "Invalid Date"
+      ) {
         return {
           id: reimbursement._id,
           title: reimbursement.title,
-          fromDate: `${fromDay} ${fromMonth}`,
-          toDate: `${toDay} ${toMonth}`,
+          fromDate: fromDateString,
+          toDate: toDateString,
           type: getTypeDescription(reimbursement.type),
           askedAmount: reimbursement.askedAmount,
           expenses: reimbursement.expenses,
           description: reimbursement.description,
         };
       } else {
-        // Handle invalid date strings here
         console.error(
           "Invalid date format:",
           reimbursement.fromDate,
@@ -160,6 +181,33 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
     { field: "toDate", headerName: "To Date", flex: 0.8 },
     { field: "askedAmount", headerName: "Ask", flex: 0.7 },
   ];
+
+  const formatDate = (dateString) => {
+    const dateParts = dateString.split("/");
+    if (dateParts.length === 3) {
+      const day = dateParts[1];
+      const month = dateParts[0];
+      const year = dateParts[2];
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      if (parseInt(month) >= 1 && parseInt(month) <= 12) {
+        return `${day} ${months[parseInt(month) - 1]}`;
+      }
+    }
+    return "Invalid Date";
+  };
 
   return (
     <>
@@ -290,6 +338,7 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
                   ₹{calculateTotalAmount(selectedRowData.expenses)}
                 </Typography>
               </div>
+
               {selectedRowData.expenses.map((expense, index) => (
                 <div
                   key={index}
@@ -420,7 +469,7 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Date"
                         label="Date"
-                        defaultValue={expense.date}
+                        defaultValue={formatDate(expense.date)} // Format the date here
                         variant="standard"
                         style={{ width: "3ch" }}
                         InputProps={{

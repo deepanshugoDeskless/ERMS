@@ -70,54 +70,57 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
   if (loading) return <Loader/>;
   if (error) return <Error/>;
 
-  const months = {
-    "01": "Jan",
-    "02": "Feb",
-    "03": "Mar",
-    "04": "Apr",
-    "05": "May",
-    "06": "Jun",
-    "07": "Jul",
-    "08": "Aug",
-    "09": "Sep",
-    10: "Oct",
-    11: "Nov",
-    12: "Dec",
+  const formatDateString = (dateString) => {
+    const date = new Date(dateString);
+    if (isNaN(date)) {
+      return "Invalid Date";
+    }
+  
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' });
+  
+    return `${day} ${month}`;
   };
+  ;
 
   const reimbursements = data.ireimbursements
-    .filter((element) => element.isPreApproved && element.isApproved)
-    .map((reimbursement, index) => {
-      // Split the date strings into day, month, and year
-      const fromDateStringParts = reimbursement.fromDate.split("/");
-      const toDateStringParts = reimbursement.toDate.split("/");
+  .filter((element) => element.isPreApproved && !element.isApproved)
+  .map((reimbursement, index) => {
+    const fromDateString = formatDateString(reimbursement.fromDate);
+    const toDateString = formatDateString(reimbursement.toDate);
 
-      // Ensure the date strings are in the format "DD/MM/YYYY"
-      if (fromDateStringParts.length === 3 && toDateStringParts.length === 3) {
-        const fromDay = fromDateStringParts[0];
-        const fromMonth = months[fromDateStringParts[1]];
-        const toDay = toDateStringParts[0];
-        const toMonth = months[toDateStringParts[1]];
+    return {
+      id: reimbursement._id,
+      title: reimbursement.title,
+      fromDate: fromDateString,
+      toDate: toDateString,
+      type: getTypeDescription(reimbursement.type),
+      askedAmount: reimbursement.askedAmount,
+      expenses: reimbursement.expenses,
+      description: reimbursement.description,
+    };
+  });
 
-        return {
-          id: reimbursement._id,
-          title: reimbursement.title,
-          fromDate: `${fromDay} ${fromMonth}`,
-          toDate: `${toDay} ${toMonth}`,
-          type: getTypeDescription(reimbursement.type),
-          askedAmount: reimbursement.askedAmount,
-          expenses: reimbursement.expenses,
-          description: reimbursement.description,
-        };
-      } else {
-        // Handle invalid date strings here
-        console.error(
-          "Invalid date format:",
-          reimbursement.fromDate,
-          reimbursement.toDate
-        );
-      }
-    });
+
+    //     return {
+    //       id: reimbursement._id,
+    //       title: reimbursement.title,
+    //       fromDate: `${fromDay} ${fromMonth}`,
+    //       toDate: `${toDay} ${toMonth}`,
+    //       type: getTypeDescription(reimbursement.type),
+    //       askedAmount: reimbursement.askedAmount,
+    //       expenses: reimbursement.expenses,
+    //       description: reimbursement.description,
+    //     };
+    //   } else {
+    //     // Handle invalid date strings here
+    //     console.error(
+    //       "Invalid date format:",
+    //       reimbursement.fromDate,
+    //       reimbursement.toDate
+    //     );
+    //   }
+    // });
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },

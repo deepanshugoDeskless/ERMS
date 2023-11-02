@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@apollo/client";
@@ -7,15 +8,11 @@ import {
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "./Header";
 import { ColorModeContext, useMode } from "../../src/theme";
 import Button from "@mui/material/Button";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
-import { useState } from "react";
 import { Loader, Error } from "./loader";
 
 const PreApproveRequest = () => {
@@ -72,6 +69,14 @@ const PreApproveRequest = () => {
         },
       },
     });
+  };
+
+  // Define a function to format the date in "DD MMM" format
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = date.toLocaleDateString('en-US', { month: 'short' });
+    return `${day} ${month}`;
   };
 
   const columns = [
@@ -141,11 +146,13 @@ const PreApproveRequest = () => {
       field: "fromDate",
       headerName: "From",
       flex: 0.7,
+      valueFormatter: (params) => formatDate(params.value),
     },
     {
       field: "toDate",
       headerName: "To",
       flex: 0.7,
+      valueFormatter: (params) => formatDate(params.value),
     },
     {
       field: "askedAmount",
