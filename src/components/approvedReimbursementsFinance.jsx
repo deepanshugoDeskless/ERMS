@@ -12,6 +12,7 @@ import {
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
+import { DeleteRoundedIcon, SaveAsRoundedIcon } from "./Icons";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -83,8 +84,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
       },
     });
 
-  if (loading) return <Loader/>;
-  if (error) return <Error/>;
+  if (loading) return <Loader />;
+  if (error) return <Error />;
 
   const handleBulkApproveSubmit = () => {
     updateReimbursements({
@@ -119,7 +120,6 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     12: "Dec",
   };
 
- 
   const formatDateString = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
@@ -353,16 +353,77 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                     alignItems: "self-start",
                   }}
                 >
-                  <h6
+                  <div
                     style={{
-                      padding: 8,
-                      marginBottom: "1em",
-                      fontSize: "0.4em",
-                      fontWeight: "400",
+                      // backgroundColor: "yellow",
+                      display: "flex",
+                      width: "100%",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {expense.description}
-                  </h6>
+                    <h6
+                      style={{
+                        padding: 8,
+                        marginBottom: "1em",
+                        fontSize: "0.4em",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {expense.description}
+                    </h6>
+                    <div
+                      style={{
+                        // backgroundColor: "yellow",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box
+                        component="form"
+                        sx={{
+                          "& .MuiTextField-root": { m: 1, width: "3ch" },
+                        }}
+                        noValidate
+                        autoComplete="off"
+                        style={{ position: "relative", marginTop: "-0.16em" }}
+                      >
+                        <TextField
+                          id="outlined-basic"
+                          label="Amount"
+                          defaultValue={`₹${expense.amount}`}
+                          onChange={() => {}}
+                          variant="outlined"
+                          style={{ width: "2.4ch" , margin: 10}}
+                        />
+                        <TextField
+                          id="standard-read-only-input"
+                          label="Amount"
+                          defaultValue={`₹${expense.amount}`}
+                          InputProps={
+                            {
+                              // readOnly: true,
+                            }
+                          }
+                          variant="standard"
+                          style={{ width: "2.4ch" }}
+                        />
+                      </Box>
+                      <Button
+                        variant="outlined"
+                        style={{
+                          margin: 10,
+                        }}
+                        onClick={() => {}}
+                        startIcon={<SaveAsRoundedIcon />}
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+
                   <div
                     className="innerbox"
                     style={{ display: "flex", justifyContent: "space-evenly" }}
