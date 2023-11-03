@@ -33,15 +33,15 @@ const RaiseRequest = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   const [successAlert, setSuccessAlert] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [amountError, setAmountError] = useState(false); // State for amount error message
+  const [amountError, setAmountError] = useState(false);
 
   const handleAmountInput = (e) => {
     const input = e.target.value;
     if (/^\d*\.?\d*$/.test(input)) {
       setAmount(input);
-      setAmountError(false); // Clear the amount error message
+      setAmountError(false);
     } else {
-      setAmountError(true); // Set the amount error message
+      setAmountError(true);
     }
   };
 
@@ -221,7 +221,6 @@ const RaiseRequest = () => {
                   : colors.greenAccent[500]
                 : colors.redAccent[500]
             }
-            // backgroundColor={row.isPreApproved ? "#0BF265" : "#F4064A"}
             borderRadius="4px"
           >
             <Typography style={{ color: "white" }} sx={{ ml: "5px" }}>
