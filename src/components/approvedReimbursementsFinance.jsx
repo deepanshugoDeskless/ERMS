@@ -154,7 +154,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   const formatDateString = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[0]; // Change day to the first part of the date
+      const day = dateParts[0]; 
       const month = dateParts[1];
       const year = dateParts[2];
       const months = [
@@ -224,15 +224,11 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
       const year = dateParts[2];
       
       if (parseInt(month) >= 1 && parseInt(month) <= 12) {
-        // Create an array of month names
         const monthNames = [
           "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
         ];
-        
-        // Get the month name corresponding to the month number
         const monthName = monthNames[parseInt(month) - 1];
         
-        // Format the date as "DD MMM"
         return `${day} ${monthName}`;
       }
     }
@@ -326,7 +322,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
               rowSelectionModel={selectionModel}
               rows={reimbursements}
               columns={columns}
-              getRowId={(row) => row.id} // Make sure 'id' is a property in each row
+              getRowId={(row) => row.id} 
             />
           </Box>
 

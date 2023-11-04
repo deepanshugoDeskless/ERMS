@@ -79,8 +79,8 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
       },
     });
 
-  if (loading) return <Loader/>;
-  if (error) return <Error/>;
+  if (loading) return <Loader />;
+  if (error) return <Error />;
 
   const handleBulkApproveSubmit = () => {
     updateReimbursements({
@@ -100,90 +100,69 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     });
   };
 
-  // const months = {
-  //   "01": "Jan",
-  //   "02": "Feb",
-  //   "03": "Mar",
-  //   "04": "Apr",
-  //   "05": "May",
-  //   "06": "Jun",
-  //   "07": "Jul",
-  //   "08": "Aug",
-  //   "09": "Sep",
-  //   10: "Oct",
-  //   11: "Nov",
-  //   12: "Dec",
-  // };
-
   const formatDateToDDMMM = (dateString) => {
     const dateParts = dateString.split("/");
-    
+
     if (dateParts.length !== 3) {
       return "Invalid Date";
     }
-  
+
     const day = dateParts[0];
     const month = dateParts[1];
     const year = dateParts[2];
-  
-    // Check if the month appears to be in MM format (1-12), otherwise consider it as DD format
+
     if (month >= 1 && month <= 12) {
       const formattedDate = new Date(year, month - 1, day);
       if (isNaN(formattedDate.getTime())) {
         return "Invalid Date";
       }
-      return `${day} ${formattedDate.toLocaleString("default", { month: "short" })}`;
+      return `${day} ${formattedDate.toLocaleString("default", {
+        month: "short",
+      })}`;
     } else {
       const formattedDate = new Date(year, day - 1, month);
       if (isNaN(formattedDate.getTime())) {
         return "Invalid Date";
       }
-      return `${day} ${formattedDate.toLocaleString("default", { month: "short" })}`;
+      return `${day} ${formattedDate.toLocaleString("default", {
+        month: "short",
+      })}`;
     }
   };
-  
-
-  
-  
-  
 
   const reimbursements = data.pendingReimbursements
-  .filter(
-    (element) =>
-      element.expenses.length > 0 &&
-      element.isPreApproved &&
-      !element.isApproved
-  )
-  .map((reimbursement, index) => {
-    // Split the date strings into day, month, and year
-    const fromDateStringParts = reimbursement.fromDate.split("/");
-    const toDateStringParts = reimbursement.toDate.split("/");
+    .filter(
+      (element) =>
+        element.expenses.length > 0 &&
+        element.isPreApproved &&
+        !element.isApproved
+    )
+    .map((reimbursement, index) => {
+      const fromDateStringParts = reimbursement.fromDate.split("/");
+      const toDateStringParts = reimbursement.toDate.split("/");
 
-    // Ensure the date strings are in the format "DD/MM/YYYY"
-    if (fromDateStringParts.length === 3 && toDateStringParts.length === 3) {
-      const fromFormatted = formatDateToDDMMM(reimbursement.fromDate);
-      const toFormatted = formatDateToDDMMM(reimbursement.toDate);
+      if (fromDateStringParts.length === 3 && toDateStringParts.length === 3) {
+        const fromFormatted = formatDateToDDMMM(reimbursement.fromDate);
+        const toFormatted = formatDateToDDMMM(reimbursement.toDate);
 
-      return {
-        id: reimbursement._id,
-        title: reimbursement.title,
-        fromDate: fromFormatted,
-        toDate: toFormatted,
-        type: getTypeDescription(reimbursement.type),
-        askedAmount: reimbursement.askedAmount,
-        expenses: reimbursement.expenses,
-        description: reimbursement.description,
-      };
-    } else {
-      // Handle invalid date strings here
-      console.error(
-        "Invalid date format:",
-        reimbursement.fromDate,
-        reimbursement.toDate
-      );
-    }
-  });
-
+        return {
+          id: reimbursement._id,
+          title: reimbursement.title,
+          fromDate: fromFormatted,
+          toDate: toFormatted,
+          type: getTypeDescription(reimbursement.type),
+          askedAmount: reimbursement.askedAmount,
+          expenses: reimbursement.expenses,
+          description: reimbursement.description,
+        };
+      } else {
+        console.error(
+          "Invalid date format:",
+          reimbursement.fromDate,
+          reimbursement.toDate
+        );
+      }
+    });
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -304,8 +283,6 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                 marginLeft: 16,
                 marginRight: 16,
                 paddingBottom: 16,
-                // borderLeft: "2px solid #ccc",
-                // boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
                 right: "0px",
               }}
             >
@@ -348,7 +325,6 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                     borderRadius: "12px",
                     marginTop: "0.4em",
-                    // backgroundColor: 'yellow',
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "self-start",

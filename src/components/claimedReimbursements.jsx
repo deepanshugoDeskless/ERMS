@@ -106,34 +106,29 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
     if (isNaN(date)) {
       return "Invalid Date";
     }
-  
+
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'short' });
-  
+    const month = date.toLocaleString("default", { month: "short" });
+
     return `${day} ${month}`;
   };
-  ;
-  
-  
-
   const reimbursements = data.ireimbursements
-  .filter((element) => element.isPreApproved && !element.isApproved)
-  .map((reimbursement, index) => {
-    const fromDateString = formatDateString(reimbursement.fromDate);
-    const toDateString = formatDateString(reimbursement.toDate);
+    .filter((element) => element.isPreApproved && !element.isApproved)
+    .map((reimbursement, index) => {
+      const fromDateString = formatDateString(reimbursement.fromDate);
+      const toDateString = formatDateString(reimbursement.toDate);
 
-    return {
-      id: reimbursement._id,
-      title: reimbursement.title,
-      fromDate: fromDateString,
-      toDate: toDateString,
-      type: getTypeDescription(reimbursement.type),
-      askedAmount: reimbursement.askedAmount,
-      expenses: reimbursement.expenses,
-      description: reimbursement.description,
-    };
-  });
-
+      return {
+        id: reimbursement._id,
+        title: reimbursement.title,
+        fromDate: fromDateString,
+        toDate: toDateString,
+        type: getTypeDescription(reimbursement.type),
+        askedAmount: reimbursement.askedAmount,
+        expenses: reimbursement.expenses,
+        description: reimbursement.description,
+      };
+    });
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -280,7 +275,6 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                     borderRadius: "12px",
                     marginTop: "0.4em",
-                    // backgroundColor: 'yellow',
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "self-start",
@@ -288,7 +282,6 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                 >
                   <div
                     style={{
-                      // backgroundColor: "yellow",
                       display: "flex",
                       width: "100%",
                       flexDirection: "row",

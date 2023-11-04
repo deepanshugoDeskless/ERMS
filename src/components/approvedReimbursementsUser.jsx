@@ -73,18 +73,42 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
   if (error) return <Error />;
 
   const formatDateString = (dateString) => {
-    const date = new Date(dateString);
-    if (isNaN(date)) {
+    const dateParts = dateString.split("/");
+    if (dateParts.length !== 3) {
       return "Invalid Date";
     }
-
-    const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "short" });
-
-    return `${day} ${month}`;
+  
+    const day = dateParts[0];
+    const month = dateParts[1];
+    const year = dateParts[2];
+  
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+  
+    if (month >= 1 && month <= 12) {
+      const formattedMonth = monthNames[month - 1];
+      return `${day} ${formattedMonth} `;
+    } else {
+      return "Invalid Date";
+    }
   };
+  
+
+  
   const reimbursements = data.ireimbursements
-    .filter((element) => element.isPreApproved && !element.isApproved)
+    .filter((element) => element.isPreApproved && element.isApproved)
     .map((reimbursement, index) => {
       const fromDateString = formatDateString(reimbursement.fromDate);
       const toDateString = formatDateString(reimbursement.toDate);

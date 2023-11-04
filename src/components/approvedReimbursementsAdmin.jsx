@@ -394,7 +394,6 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                     borderRadius: "12px",
                     marginTop: "0.4em",
-                    // backgroundColor: 'yellow',
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "self-start",

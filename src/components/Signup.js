@@ -22,7 +22,6 @@ export default function Signup() {
     useMutation(VALIDATE_OTP);
   const navigate = useNavigate();
 
-  // State to manage OTP input fields
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [completeOtp, setCompleteOtp] = useState("");
   const [displayOtp, setDisplayOtp] = useState(false);
@@ -32,7 +31,6 @@ export default function Signup() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Handle form input changes
   const handleChange = (e) => {
     setEmailData(e.target.value);
     setFormData({
@@ -41,7 +39,6 @@ export default function Signup() {
     });
   };
 
-  // Handle OTP input changes
   const handleOtpChange = (e, index) => {
     const newOtp = [...otp];
     newOtp[index] = e.target.value;
@@ -123,7 +120,6 @@ export default function Signup() {
       <div
         className="container my-container"
         style={{
-          // backgroundColor: "gray",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

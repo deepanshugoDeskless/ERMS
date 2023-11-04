@@ -12,9 +12,9 @@ export function Loader() {
     lottie.loadAnimation({
       container: document.querySelector("#react-logo"),
       animationData: reactLogo,
-      renderer: "svg", // "canvas", "html"
-      loop: true, // boolean
-      autoplay: true, // boolean
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
     });
   }, []);
 
@@ -39,9 +39,9 @@ export function Error() {
     lottie.loadAnimation({
       container: document.querySelector("#react-logo"),
       animationData: reactError,
-      renderer: "svg", // "canvas", "html"
-      loop: true, // boolean
-      autoplay: true, // boolean
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
     });
   }, []);
 
@@ -82,7 +82,6 @@ export function PersonScroll() {
   );
 }
 
-
 export function UserDashboardAnimation() {
   return (
     <div
@@ -103,7 +102,6 @@ export function UserDashboardAnimation() {
     </div>
   );
 }
-
 
 export function FinanceDashboardAnimation() {
   return (

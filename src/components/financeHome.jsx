@@ -5,7 +5,12 @@ import { colorMode } from "../theme";
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Loader, Error, PersonScroll, FinanceDashboardAnimation } from "./loader";
+import {
+  Loader,
+  Error,
+  PersonScroll,
+  FinanceDashboardAnimation,
+} from "./loader";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@apollo/client";
@@ -14,7 +19,7 @@ import {
   GET_PRE_REQUESTS,
   ADMIN_FETCH_REQUESTS,
   UPDATE_REIMBURSEMENTS,
-  GET_APPROVED_REIMBURSEMENTS
+  GET_APPROVED_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { tokens } from "../../src/theme";
 import Header from "./Header";
@@ -52,8 +57,10 @@ const FinanceHome = () => {
     },
   });
 
-  if (loadingApprovedReimbursements || loadingReimbursementRequests) return <Loader />;
-  if (errorApprovedReimbursements || errorReimbursementRequests) return <Error />;
+  if (loadingApprovedReimbursements || loadingReimbursementRequests)
+    return <Loader />;
+  if (errorApprovedReimbursements || errorReimbursementRequests)
+    return <Error />;
 
   const userFirstName = `${localStorage.getItem("user-firstname")}`;
   const userLastName = `${localStorage.getItem("user-lastname")}`;
