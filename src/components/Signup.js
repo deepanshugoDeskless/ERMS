@@ -9,6 +9,8 @@ import { VALIDATE_OTP } from "../gqloperations/mutations";
 import { useNavigate } from "react-router-dom";
 import Home from "../components/Home";
 import Button from "@mui/material/Button";
+import { Typography, useTheme } from "@mui/material";
+import { tokens } from "../../src/theme";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
@@ -27,6 +29,8 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [displayPasswordFields, setDisplayPasswordFields] = useState(false);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -163,7 +167,7 @@ export default function Signup() {
           style={{
             paddingTop: 30,
             height: 150,
-            maeginTop: 50,
+            marginTop: 10,
           }}
           src={require("../Assets/gdklogo.png")}
         ></img>
@@ -194,7 +198,7 @@ export default function Signup() {
               onChange={handleChange}
               required
               style={{
-                width: 280,
+                width: 320,
               }}
             />
           </div>
@@ -205,8 +209,20 @@ export default function Signup() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              marginTop: "0.4em",
             }}
           >
+            <h4
+              style={{
+                marginLeft: 4,
+                fontFamily: "Bebas Neue,sans-serif",
+                fontSize: "x-large",
+                color: colors.blueAccent[200],
+                marginBottom: "0.4em",
+              }}
+            >
+              Please Enter the OTP
+            </h4>
             <div style={{ display: "flex", justifyContent: "center" }}>
               {otp.map((digit, index) => (
                 <input
@@ -238,7 +254,7 @@ export default function Signup() {
               onChange={handlePasswordChange}
               required
               style={{
-                marginTop: 8,
+                marginTop: 24,
                 width: "93%",
               }}
             />

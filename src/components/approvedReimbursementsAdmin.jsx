@@ -123,32 +123,33 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
   const formatDateString = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[1];
-      const month = dateParts[0];
+      const day = dateParts[0];
+      const month = dateParts[1];
       const year = dateParts[2];
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      if (parseInt(month) >= 1 && parseInt(month) <= 12) {
-        return `${day} ${months[parseInt(month) - 1]}`;
+      const months = {
+        "01": "Jan",
+        "02": "Feb",
+        "03": "Mar",
+        "04": "Apr",
+        "05": "May",
+        "06": "Jun",
+        "07": "Jul",
+        "08": "Aug",
+        "09": "Sep",
+        10: "Oct",
+        11: "Nov",
+        12: "Dec",
+      };
+
+      if (months[month]) {
+        return `${day} ${months[month]}`;
       }
     }
     return "Invalid Date";
   };
 
-  const reimbursements = data.approvedReimbursements.map(
-    (reimbursement, index) => {
+  const reimbursements = data.approvedReimbursements
+    .map((reimbursement, index) => {
       const fromDateString = formatDateString(reimbursement.fromDate);
       const toDateString = formatDateString(reimbursement.toDate);
       if (
@@ -172,8 +173,10 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
           reimbursement.toDate
         );
       }
-    }
-  );
+    })
+    .filter((reimbursement) => !!reimbursement);
+
+  // ...
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -182,6 +185,7 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
     { field: "toDate", headerName: "To Date", flex: 0.8 },
     { field: "askedAmount", headerName: "Ask", flex: 0.7 },
   ];
+
   const formatDate = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
@@ -282,6 +286,7 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
             variant="contained"
             color="primary"
             onClick={handleExportToExcel}
+            style={{ position: "relative", right: "1em" }}
           >
             Export to Excel
           </Button>

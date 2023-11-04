@@ -38,6 +38,8 @@ import { useMutation, useQuery, gql } from "@apollo/client";
 import { Loader, Error } from "./loader";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import dayjs from "dayjs";
+import { toDate } from "date-fns";
 
 const ClaimRequest = () => {
   const [colorMode] = useMode();
@@ -82,11 +84,13 @@ const ClaimRequest = () => {
     const newTotalAmount = totalAmount + parseFloat(expense.amount);
     setTotalAmount(newTotalAmount);
     const formId = Date.now();
+    const formattedExpenseDate = expense.date.format("DD/MM/YYYY");
     setExpenses([
       ...expenses,
       {
         formId,
         ...expense,
+        date: formattedExpenseDate,
       },
     ]);
     console.log(
@@ -718,12 +722,12 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
-                    value={expenseDate}
-                    onChange={(expenseDateInput) => {
-                      setExpenseDate(
-                        new Date(expenseDateInput).toLocaleDateString()
-                      );
-                    }}
+                    value={
+                      expenseDate
+                        ? dayjs(expenseDate, "DD/MM/YYYY").toDate()
+                        : null
+                    }
+                    onChange={(date) => setExpenseDate(date)}
                     label="Payment Date"
                     style={{ width: "3em" }}
                   />

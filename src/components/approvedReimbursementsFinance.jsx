@@ -154,8 +154,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   const formatDateString = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[1];
-      const month = dateParts[0];
+      const day = dateParts[0]; // Change day to the first part of the date
+      const month = dateParts[1];
       const year = dateParts[2];
       const months = [
         "Jan",
@@ -178,8 +178,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     return "Invalid Date";
   };
 
-  const reimbursements = data.approvedReimbursements.map(
-    (reimbursement, index) => {
+  const reimbursements = data.approvedReimbursements
+    .map((reimbursement, index) => {
       const fromDateString = formatDateString(reimbursement.fromDate);
       const toDateString = formatDateString(reimbursement.toDate);
       if (
@@ -203,8 +203,10 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
           reimbursement.toDate
         );
       }
-    }
-  );
+    })
+    .filter((reimbursement) => !!reimbursement);
+
+  // ...
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -275,7 +277,12 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
           >
             Approved Reimbursements
           </h4>
-          <Button variant="contained" color="primary" onClick={exportToExcel}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={exportToExcel}
+            style={{ position: "relative", right: "1em" }}
+          >
             Export to Excel
           </Button>
         </div>
@@ -319,13 +326,11 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
             }}
           >
             <DataGrid
-              onRowSelectionModelChange={(newRowSelectionModel) => {
-                handleSelectionModelChange(newRowSelectionModel);
-              }}
+              onRowSelectionModelChange={handleSelectionModelChange}
               rowSelectionModel={selectionModel}
               rows={reimbursements}
               columns={columns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row.id} // Make sure 'id' is a property in each row
             />
           </Box>
 

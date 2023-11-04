@@ -71,12 +71,40 @@ const PreApproveRequest = () => {
     });
   };
 
-  // Define a function to format the date in "DD MMM" format
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = date.toLocaleDateString('en-US', { month: 'short' });
-    return `${day} ${month}`;
+    if (!dateString) {
+      return "";
+    }
+
+    const parts = dateString.split("/");
+
+    if (parts.length !== 3) {
+      return "Invalid";
+    }
+
+    const day = parts[0].toString().padStart(2, "0");
+    const month = parts[1];
+    const year = parts[2];
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    if (month < 1 || month > 12) {
+      return "Invalid";
+    }
+
+    return `${day} ${monthNames[month - 1]}`;
   };
 
   const columns = [
@@ -93,7 +121,6 @@ const PreApproveRequest = () => {
       flex: 0.9,
       cellClassName: "name-column--cell",
       valueGetter: (params) => {
-        // Map the type value to the desired display text
         switch (params.value) {
           case "pa":
             return "Purchase Expense";
@@ -154,6 +181,7 @@ const PreApproveRequest = () => {
       flex: 0.7,
       valueFormatter: (params) => formatDate(params.value),
     },
+
     {
       field: "askedAmount",
       headerName: "Ask",

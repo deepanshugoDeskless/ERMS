@@ -24,7 +24,7 @@ import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import HistoryIcon from "@mui/icons-material/History";
 import Alert from "@mui/material/Alert";
-
+import dayjs from "dayjs"; // Import dayjs library
 import { useMutation, useQuery } from "@apollo/client";
 import { Loader, Error } from "./loader";
 
@@ -383,9 +383,13 @@ const RaiseRequest = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
-                  value={fromDate}
+                  value={
+                    fromDate ? dayjs(fromDate, "DD/MM/YYYY").toDate() : null
+                  }
                   onChange={(fromDateInput) => {
-                    setFromDate(new Date(fromDateInput).toLocaleDateString());
+                    const formattedDate =
+                      dayjs(fromDateInput).format("DD/MM/YYYY");
+                    setFromDate(formattedDate);
                   }}
                   label="From Date"
                 />
@@ -395,9 +399,11 @@ const RaiseRequest = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
-                  value={toDate}
+                  value={toDate ? dayjs(toDate, "DD/MM/YYYY").toDate() : null}
                   onChange={(toDateInput) => {
-                    setToDate(new Date(toDateInput).toLocaleDateString());
+                    const formattedDate =
+                      dayjs(toDateInput).format("DD/MM/YYYY");
+                    setToDate(formattedDate);
                   }}
                   label="To Date"
                 />
