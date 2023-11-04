@@ -219,25 +219,21 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   const formatDate = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[1];
-      const month = dateParts[0];
+      const day = dateParts[0];
+      const month = dateParts[1];
       const year = dateParts[2];
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
+      
       if (parseInt(month) >= 1 && parseInt(month) <= 12) {
-        return `${day} ${months[parseInt(month) - 1]}`;
+        // Create an array of month names
+        const monthNames = [
+          "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+        
+        // Get the month name corresponding to the month number
+        const monthName = monthNames[parseInt(month) - 1];
+        
+        // Format the date as "DD MMM"
+        return `${day} ${monthName}`;
       }
     }
     return "Invalid Date";
