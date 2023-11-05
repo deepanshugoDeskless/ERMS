@@ -172,6 +172,7 @@ export const GET_APPROVED_REIMBURSEMENTS = gql`
         invoiceId
         establishment
         by
+        expenseHeader
       }
     }
   }

@@ -430,27 +430,15 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                         }}
                         noValidate
                         autoComplete="off"
-                        style={{ position: "relative", marginTop: "-0.16em" }}
+                        style={{ }}
                       >
                         <TextField
                           id="outlined-basic"
-                          label="Amount"
-                          defaultValue={`₹${expense.amount}`}
+                          label="Header"
+                          defaultValue={`${expense.expenseHeader}`}
                           onChange={() => {}}
                           variant="outlined"
-                          style={{ width: "2.4ch", margin: 10 }}
-                        />
-                        <TextField
-                          id="standard-read-only-input"
-                          label="Amount"
-                          defaultValue={`₹${expense.amount}`}
-                          InputProps={
-                            {
-                              // readOnly: true,
-                            }
-                          }
-                          variant="standard"
-                          style={{ width: "2.4ch" }}
+                          style={{ width: "6ch", margin: 20 }}
                         />
                       </Box>
                       <Button
