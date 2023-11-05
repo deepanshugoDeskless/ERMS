@@ -13,6 +13,8 @@ import {
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
+import * as XLSX from "xlsx";
+import DropFileInput from "./drop-file-input/DropFileInput";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -67,61 +69,61 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
       },
     },
   });
-  if (loading) return <Loader/>;
-  if (error) return <Error/>;
+  if (loading) return <Loader />;
+  if (error) return <Error />;
 
   const formatDateString = (dateString) => {
-    const date = new Date(dateString);
-    if (isNaN(date)) {
+    const dateParts = dateString.split("/");
+    if (dateParts.length !== 3) {
       return "Invalid Date";
     }
   
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'short' });
+    const day = dateParts[0];
+    const month = dateParts[1];
+    const year = dateParts[2];
   
-    return `${day} ${month}`;
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+  
+    if (month >= 1 && month <= 12) {
+      const formattedMonth = monthNames[month - 1];
+      return `${day} ${formattedMonth} `;
+    } else {
+      return "Invalid Date";
+    }
   };
-  ;
+  
 
+  
   const reimbursements = data.ireimbursements
-  .filter((element) => element.isPreApproved && !element.isApproved)
-  .map((reimbursement, index) => {
-    const fromDateString = formatDateString(reimbursement.fromDate);
-    const toDateString = formatDateString(reimbursement.toDate);
+    .filter((element) => element.isPreApproved && element.isApproved)
+    .map((reimbursement, index) => {
+      const fromDateString = formatDateString(reimbursement.fromDate);
+      const toDateString = formatDateString(reimbursement.toDate);
 
-    return {
-      id: reimbursement._id,
-      title: reimbursement.title,
-      fromDate: fromDateString,
-      toDate: toDateString,
-      type: getTypeDescription(reimbursement.type),
-      askedAmount: reimbursement.askedAmount,
-      expenses: reimbursement.expenses,
-      description: reimbursement.description,
-    };
-  });
-
-
-    //     return {
-    //       id: reimbursement._id,
-    //       title: reimbursement.title,
-    //       fromDate: `${fromDay} ${fromMonth}`,
-    //       toDate: `${toDay} ${toMonth}`,
-    //       type: getTypeDescription(reimbursement.type),
-    //       askedAmount: reimbursement.askedAmount,
-    //       expenses: reimbursement.expenses,
-    //       description: reimbursement.description,
-    //     };
-    //   } else {
-    //     // Handle invalid date strings here
-    //     console.error(
-    //       "Invalid date format:",
-    //       reimbursement.fromDate,
-    //       reimbursement.toDate
-    //     );
-    //   }
-    // });
-
+      return {
+        id: reimbursement._id,
+        title: reimbursement.title,
+        fromDate: fromDateString,
+        toDate: toDateString,
+        type: getTypeDescription(reimbursement.type),
+        askedAmount: reimbursement.askedAmount,
+        expenses: reimbursement.expenses,
+        description: reimbursement.description,
+      };
+    });
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
     { field: "type", headerName: "Type", flex: 1.6 },
@@ -129,6 +131,46 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
     { field: "toDate", headerName: "To Date", flex: 0.8 },
     { field: "askedAmount", headerName: "Ask", flex: 0.7 },
   ];
+
+  const exportToExcel = () => {
+    const dataToExport = data.ireimbursements
+      .filter((element) => element.isPreApproved && element.isApproved)
+      .map((reimbursement) => {
+        const reimbursementData = {
+          Title: reimbursement.title,
+          Description: reimbursement.description,
+          Type: getTypeDescription(reimbursement.type),
+          VisitLocation: reimbursement.visitLocation,
+          NoOfDays: reimbursement.noOfDays,
+          FromDate: reimbursement.fromDate,
+          ToDate: reimbursement.toDate,
+          AskedAmount: reimbursement.askedAmount,
+        };
+
+        if (reimbursement.expenses.length > 0) {
+          reimbursement.expenses.forEach((expense, index) => {
+            reimbursementData[`Expense${index + 1}_Description`] =
+              expense.description;
+            reimbursementData[`Expense${index + 1}_Amount`] = expense.amount;
+            reimbursementData[`Expense${index + 1}_InvoiceID`] =
+              expense.invoiceId;
+            reimbursementData[`Expense${index + 1}_Establishment`] =
+              expense.establishment;
+            reimbursementData[`Expense${index + 1}_Type`] = getTypeDescription(
+              expense.type
+            );
+            reimbursementData[`Expense${index + 1}_Date`] = expense.date;
+          });
+        }
+
+        return reimbursementData;
+      });
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Reimbursements");
+    XLSX.writeFile(wb, "reimbursements.xlsx");
+  };
 
   return (
     <>
@@ -164,6 +206,14 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
           >
             Approved Reimbursements
           </h4>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={exportToExcel}
+            style={{ poition: "relative", left: "-2em" }}
+          >
+            Export to Excel
+          </Button>
         </div>
 
         <div
@@ -267,7 +317,6 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                     borderRadius: "12px",
                     marginTop: "0.4em",
-                    // backgroundColor: 'yellow',
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "self-start",

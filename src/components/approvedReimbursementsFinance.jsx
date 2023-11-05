@@ -13,6 +13,7 @@ import {
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
 import { DeleteRoundedIcon, SaveAsRoundedIcon } from "./Icons";
+import * as XLSX from "xlsx";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -105,6 +106,37 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     });
   };
 
+  const exportToExcel = () => {
+    const flatData = data.approvedReimbursements.flatMap((reimbursement) => {
+      return reimbursement.expenses.map((expense, index) => ({
+        Title: index === 0 ? reimbursement.title : "",
+        Description: index === 0 ? reimbursement.description : "",
+        Type: index === 0 ? getTypeDescription(reimbursement.type) : "",
+        VisitLocation: index === 0 ? reimbursement.visitLocation : "",
+        NoOfDays: index === 0 ? reimbursement.noOfDays : "",
+        FromDate: index === 0 ? reimbursement.fromDate : "",
+        ToDate: index === 0 ? reimbursement.toDate : "",
+        AskedAmount: index === 0 ? `₹${reimbursement.askedAmount}` : "",
+        ExpenseDate: expense.date,
+        ExpenseType: getTypeDescription(expense.type),
+        ExpenseDescription: expense.description,
+        ExpenseAmount: `₹${expense.amount}`,
+        InvoiceId: expense.invoiceId,
+        Establishment: expense.establishment,
+      }));
+    });
+
+    const ws = XLSX.utils.json_to_sheet(flatData);
+    const headers = Object.keys(flatData[0]);
+    const headerRow = headers.map((header) => ({ v: header }));
+    ws["A1"] = headerRow;
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Approved Reimbursements");
+
+    XLSX.writeFile(wb, "approved_reimbursements_finance_godeskless.xlsx");
+  };
+
   const months = {
     "01": "Jan",
     "02": "Feb",
@@ -123,8 +155,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   const formatDateString = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[1];
-      const month = dateParts[0];
+      const day = dateParts[0];
+      const month = dateParts[1];
       const year = dateParts[2];
       const months = [
         "Jan",
@@ -147,8 +179,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     return "Invalid Date";
   };
 
-  const reimbursements = data.approvedReimbursements.map(
-    (reimbursement, index) => {
+  const reimbursements = data.approvedReimbursements
+    .map((reimbursement, index) => {
       const fromDateString = formatDateString(reimbursement.fromDate);
       const toDateString = formatDateString(reimbursement.toDate);
       if (
@@ -172,8 +204,10 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
           reimbursement.toDate
         );
       }
-    }
-  );
+    })
+    .filter((reimbursement) => !!reimbursement);
+
+  // ...
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -186,25 +220,28 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   const formatDate = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[1];
-      const month = dateParts[0];
+      const day = dateParts[0];
+      const month = dateParts[1];
       const year = dateParts[2];
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
+
       if (parseInt(month) >= 1 && parseInt(month) <= 12) {
-        return `${day} ${months[parseInt(month) - 1]}`;
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const monthName = monthNames[parseInt(month) - 1];
+
+        return `${day} ${monthName}`;
       }
     }
     return "Invalid Date";
@@ -244,6 +281,14 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
           >
             Approved Reimbursements
           </h4>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={exportToExcel}
+            style={{ position: "relative", right: "1em" }}
+          >
+            Export to Excel
+          </Button>
         </div>
 
         <div
@@ -285,9 +330,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
             }}
           >
             <DataGrid
-              onRowSelectionModelChange={(newRowSelectionModel) => {
-                handleSelectionModelChange(newRowSelectionModel);
-              }}
+              onRowSelectionModelChange={handleSelectionModelChange}
               rowSelectionModel={selectionModel}
               rows={reimbursements}
               columns={columns}
@@ -347,7 +390,6 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                     borderRadius: "12px",
                     marginTop: "0.4em",
-                    // backgroundColor: 'yellow',
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "self-start",
@@ -396,7 +438,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                           defaultValue={`₹${expense.amount}`}
                           onChange={() => {}}
                           variant="outlined"
-                          style={{ width: "2.4ch" , margin: 10}}
+                          style={{ width: "2.4ch", margin: 10 }}
                         />
                         <TextField
                           id="standard-read-only-input"
@@ -530,7 +572,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Date"
                         label="Date"
-                        defaultValue={formatDate(expense.date)} // Format the date here
+                        defaultValue={formatDate(expense.date)}
                         variant="standard"
                         style={{ width: "3ch" }}
                         InputProps={{

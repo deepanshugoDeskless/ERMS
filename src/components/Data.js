@@ -40,7 +40,6 @@ import ClaimedReimbursements from "./claimedReimbursements";
 import ApprovedReimbursementsAdmin from "./approvedReimbursementsAdmin";
 import ApprovedReimbursementsUser from "./approvedReimbursementsUser";
 
-
 export const ADMIN_SIDEBAR_DATA = [
   {
     id: 1,
@@ -79,7 +78,7 @@ export const ADMIN_SIDEBAR_DATA = [
   },
   {
     id: 6,
-    name: "Approved Requests",
+    name: "Approved Reimbursements",
     page: <ApprovedReimbursementsAdmin />,
     path: "approvedrequests",
     icon: <HistoryIcon />,
@@ -127,7 +126,7 @@ export const USER_SIDEBAR_DATA = [
   },
   {
     id: 3,
-    name: "Claim Request",
+    name: "Claim Reimbursement",
     page: <ClaimRequest />,
     path: "claimRequest",
     icon: <AddmoneyIcon />,

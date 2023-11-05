@@ -128,16 +128,14 @@ export default function Login() {
               alignItems: "center",
               justifyContent: "flex-start",
               height: "40.5em",
-              width: "380px" /* Adjust the width as needed */,
-              margin: "0 auto" /* Center the container horizontally */,
+              width: "380px",
+              margin: "0 auto",
               padding: "10px 40px 0px 40px",
-              backgroundColor: "#ffffff" /* Background color */,
-              borderTopLeftRadius: "30px", // Adjust the value as needed
+              backgroundColor: "#ffffff",
+              borderTopLeftRadius: "30px",
               borderTopRightRadius: "30px",
-              boxShadow:
-                "0px 0px 10px rgba(0, 0, 0, 0.2)" /* Box shadow for a subtle elevation effect */,
-              transition:
-                "backgroundColor 0.3s ease, transform 0.3s ease" /* Add transitions */,
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+              transition: "backgroundColor 0.3s ease, transform 0.3s ease",
               marginTop: "-28em",
               marginLeft: "55em",
               position: "absolute",
@@ -169,7 +167,6 @@ export default function Login() {
             <form
               onSubmit={handleSubmit}
               style={{
-                // backgroundColor: "yellow",
                 flexDirection: "red",
                 display: "flex",
                 width: "100%",
@@ -180,7 +177,6 @@ export default function Login() {
             >
               <div
                 style={{
-                  //   backgroundColor: "yellow",
                   flexDirection: "column",
                   display: "flex",
                   width: "100%",

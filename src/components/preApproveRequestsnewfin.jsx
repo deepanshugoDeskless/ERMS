@@ -88,7 +88,6 @@ const PreApproveRequest = () => {
       flex: 0.9,
       cellClassName: "name-column--cell",
       valueGetter: (params) => {
-        // Map the type value to the desired display text
         switch (params.value) {
           case "pa":
             return "Purchase Expense";
@@ -166,7 +165,6 @@ const PreApproveRequest = () => {
       >
         <div
           style={{
-            // backgroundColor: "yellow",
             color: colors.blueAccent[200],
             width: "100%",
             top: "0px",

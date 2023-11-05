@@ -11,6 +11,7 @@ import {
   GET_APPROVED_REIMBURSEMENTS,
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
+import * as XLSX from "xlsx";
 import { Error, Loader } from "./loader";
 
 const getTypeDescription = (type) => {
@@ -122,32 +123,33 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
   const formatDateString = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[1];
-      const month = dateParts[0];
+      const day = dateParts[0];
+      const month = dateParts[1];
       const year = dateParts[2];
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      if (parseInt(month) >= 1 && parseInt(month) <= 12) {
-        return `${day} ${months[parseInt(month) - 1]}`;
+      const months = {
+        "01": "Jan",
+        "02": "Feb",
+        "03": "Mar",
+        "04": "Apr",
+        "05": "May",
+        "06": "Jun",
+        "07": "Jul",
+        "08": "Aug",
+        "09": "Sep",
+        10: "Oct",
+        11: "Nov",
+        12: "Dec",
+      };
+
+      if (months[month]) {
+        return `${day} ${months[month]}`;
       }
     }
     return "Invalid Date";
   };
 
-  const reimbursements = data.approvedReimbursements.map(
-    (reimbursement, index) => {
+  const reimbursements = data.approvedReimbursements
+    .map((reimbursement, index) => {
       const fromDateString = formatDateString(reimbursement.fromDate);
       const toDateString = formatDateString(reimbursement.toDate);
       if (
@@ -171,8 +173,10 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
           reimbursement.toDate
         );
       }
-    }
-  );
+    })
+    .filter((reimbursement) => !!reimbursement);
+
+  // ...
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
@@ -185,28 +189,63 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
   const formatDate = (dateString) => {
     const dateParts = dateString.split("/");
     if (dateParts.length === 3) {
-      const day = dateParts[1];
-      const month = dateParts[0];
+      const day = dateParts[0];
+      const month = dateParts[1];
       const year = dateParts[2];
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      if (parseInt(month) >= 1 && parseInt(month) <= 12) {
-        return `${day} ${months[parseInt(month) - 1]}`;
+      const months = {
+        "01": "Jan",
+        "02": "Feb",
+        "03": "Mar",
+        "04": "Apr",
+        "05": "May",
+        "06": "Jun",
+        "07": "Jul",
+        "08": "Aug",
+        "09": "Sep",
+        10: "Oct",
+        11: "Nov",
+        12: "Dec",
+      };
+      if (months[month]) {
+        return `${day} ${months[month]}`;
       }
     }
     return "Invalid Date";
+  };
+
+  const handleExportToExcel = () => {
+    const flatData = data.approvedReimbursements.flatMap((reimbursement) => {
+      const totalAmount = calculateTotalAmount(reimbursement.expenses);
+      return reimbursement.expenses.map((expense, index) => ({
+        Title: index === 0 ? reimbursement.title : "",
+        Description: index === 0 ? reimbursement.description : "",
+        Type: index === 0 ? getTypeDescription(reimbursement.type) : "",
+        VisitLocation: index === 0 ? reimbursement.visitLocation : "",
+        NoOfDays: index === 0 ? reimbursement.noOfDays : "",
+        FromDate: index === 0 ? reimbursement.fromDate : "",
+        ToDate: index === 0 ? reimbursement.toDate : "",
+        AskedAmount: index === 0 ? `₹${reimbursement.askedAmount}` : "",
+        TotalExpenseAmount: index === 0 ? `₹${totalAmount}` : "",
+        ExpenseDate: expense.date,
+        ExpenseType: getTypeDescription(expense.type),
+        ExpenseDescription: expense.description,
+        ExpenseAmount: `₹${expense.amount}`,
+        InvoiceId: expense.invoiceId,
+        Establishment: expense.establishment,
+      }));
+    });
+
+    const ws = XLSX.utils.json_to_sheet(flatData);
+
+    const headers = Object.keys(flatData[0]);
+    const headerRow = headers.map((header) => ({ v: header }));
+
+    ws["A1"] = headerRow;
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Approved Reimbursements");
+
+    XLSX.writeFile(wb, "approved_reimbursements_admin_godeskless.xlsx");
   };
 
   return (
@@ -243,6 +282,14 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
           >
             Approved Reimbursements
           </h4>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleExportToExcel}
+            style={{ position: "relative", right: "1em" }}
+          >
+            Export to Excel
+          </Button>
         </div>
 
         <div
@@ -347,7 +394,6 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
                     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                     borderRadius: "12px",
                     marginTop: "0.4em",
-                    // backgroundColor: 'yellow',
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "self-start",
@@ -469,7 +515,7 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Date"
                         label="Date"
-                        defaultValue={formatDate(expense.date)} // Format the date here
+                        defaultValue={formatDate(expense.date)}
                         variant="standard"
                         style={{ width: "3ch" }}
                         InputProps={{

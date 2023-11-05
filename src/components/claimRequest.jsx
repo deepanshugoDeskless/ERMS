@@ -33,16 +33,20 @@ import Autocomplete from "@mui/material/Autocomplete";
 import HistoryIcon from "@mui/icons-material/History";
 import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import DoneAllRoundedIcon from "@mui/icons-material/DoneAllRounded";
-
+import { FileUploader } from "react-drag-drop-files";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { Loader, Error } from "./loader";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import dayjs from "dayjs";
+import { toDate } from "date-fns";
 
 const ClaimRequest = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [totalAmount, setTotalAmount] = useState(0); // New state for total amount
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
     refetchQueries: [{ query: GET_REIMBURSEMENTS }],
@@ -80,11 +84,13 @@ const ClaimRequest = () => {
     const newTotalAmount = totalAmount + parseFloat(expense.amount);
     setTotalAmount(newTotalAmount);
     const formId = Date.now();
+    const formattedExpenseDate = expense.date.format("DD/MM/YYYY");
     setExpenses([
       ...expenses,
       {
         formId,
         ...expense,
+        date: formattedExpenseDate,
       },
     ]);
     console.log(
@@ -366,7 +372,7 @@ const ClaimRequest = () => {
                     fontSize: "xx-large",
                   }}
                 >
-                  Total = {totalAmount} {/* Display the total amount */}
+                  Total = {totalAmount}
                 </h4>
                 <CurrencyRupeeRoundedIcon
                   style={{
@@ -441,6 +447,35 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
     { label: "Expense Header 3" },
   ];
 
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [image, setImage] = useState("");
+  const submitImage = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "ermstesting");
+    data.append("cloud_name", "dscv7wuqq");
+
+    fetch("http://api.cloudinary.com/v1_1/dscv7wuqq/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((date) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const fileTypes = ["JPG", "PNG", "PDF"];
+  const [file, setFile] = useState(null);
+  const handleChange = (file) => {
+    setFile(file);
+  };
+
+  const AcceptedFileFormats = " PDF, JPG, PNG";
+  const [selectedFileName, setSelectedFileName] = useState("");
+
   return (
     <div
       key={key}
@@ -453,7 +488,6 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
         marginTop: "0.2em",
         padding: 8,
         paddingBottom: 8,
-        // backgroundColor: colors.greenAccent[900],
         position: "relative",
         left: "0.4em",
       }}
@@ -481,6 +515,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               sx={{
                 "& .MuiTextField-root": {},
               }}
+              style={{ position: "relative", left: "-0.3em" }}
               noValidate
               autoComplete="off"
             >
@@ -507,6 +542,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               }}
               noValidate
               autoComplete="off"
+              style={{ position: "relative", left: "-0.1em" }}
             >
               <TextField
                 id="outlined-multiline-static"
@@ -686,12 +722,12 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
-                    value={expenseDate}
-                    onChange={(expenseDateInput) => {
-                      setExpenseDate(
-                        new Date(expenseDateInput).toLocaleDateString()
-                      );
-                    }}
+                    value={
+                      expenseDate
+                        ? dayjs(expenseDate, "DD/MM/YYYY").toDate()
+                        : null
+                    }
+                    onChange={(date) => setExpenseDate(date)}
                     label="Payment Date"
                     style={{ width: "3em" }}
                   />
@@ -714,6 +750,77 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
           </div>
         </div>
       </form>
+
+      <div>
+        <label htmlFor="fileInput">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "77%",
+              height: "30%",
+              border: "2px dashed #2196F3",
+              borderRadius: "4px",
+              cursor: "pointer",
+              position: "relative",
+              overflow: "hidden",
+              top: "0.4em",
+              padding: "0.1em",
+            }}
+          >
+            <DriveFolderUploadIcon
+              style={{ position: "relative", right: "0.4em" }}
+            />
+            <input
+              type="file"
+              id="fileInput"
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                top: 0,
+                left: 0,
+                opacity: 0,
+                cursor: "pointer",
+              }}
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+
+            <span style={{ marginRight: "8px", fontSize: "medium" }}>
+              {selectedFileName || "Choose File"}{" "}
+            </span>
+            <div
+              style={{
+                display: "block",
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                padding: "2px 5px",
+                borderRadius: "4px",
+                fontSize: "medium",
+              }}
+            >
+              {AcceptedFileFormats}
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <button
+        onClick={submitImage}
+        style={{
+          backgroundColor: "#2196F3",
+          color: "white",
+          borderRadius: "4px",
+          padding: "8px 16px",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          top: "-3em",
+          left: "24em",
+        }}
+      >
+        Upload
+      </button>
     </div>
   );
 }

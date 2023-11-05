@@ -12,7 +12,7 @@ const ApprovedExpensesHistory = () => {
   const colors = tokens(theme.palette.mode);
   const { loading, error, data } = useQuery(GET_REIMBURSEMENTS);
 
-  // Function to format date as "date, month"
+
   const formatDate = (dateString) => {
     const options = { day: "numeric", month: "short" }; 
     const [month, day, year] = dateString.split("/");
@@ -22,7 +22,7 @@ const ApprovedExpensesHistory = () => {
     );
   };
 
-  // Function to map the types to expenses
+
   const mapTypeToExpense = (type) => {
     switch (type) {
       case "ta":
