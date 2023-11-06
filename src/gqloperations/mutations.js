@@ -92,7 +92,10 @@ export const GET_REIMBURSEMENTS = gql`
       toDate
       askedAmount
       totalAmount
-      by
+      by{
+        firstName
+        lastName
+      }
       isPreApproved
       isApproved
       purpose
