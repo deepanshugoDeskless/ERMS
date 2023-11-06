@@ -12,7 +12,6 @@ import Header from "./Header";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import React, { useState } from "react";
-import { forwardRef, useImperativeHandle, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../src/theme";
@@ -41,6 +40,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import dayjs from "dayjs";
 import { toDate } from "date-fns";
+import { AddmoneyIcon, SendIcon } from "./Icons";
 
 const ClaimRequest = () => {
   const [colorMode] = useMode();
@@ -76,11 +76,7 @@ const ClaimRequest = () => {
   const [expenses, setExpenses] = useState([]);
   const [reimbursement, setReimbursement] = useState({});
   const [rowSelectionModel, setRowSelectionModel] = useState();
-  const childRef = useRef(null);
 
-  const handleClick = () => {
-    childRef.current.submitImage();
-  };
   const addExpense = (expense) => {
     console.log(
       "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
@@ -120,7 +116,6 @@ const ClaimRequest = () => {
   };
 
   const callBulkExpenseUpload = () => {
-    handleClick()
     expenses.shift();
     expenses.forEach((object) => {
       delete object["formId"];
@@ -134,6 +129,7 @@ const ClaimRequest = () => {
       variables: { expenseNewArray: expenses },
     })
       .then(() => {
+        setExpenses([]);
         alert("Expenses uploaded successfully");
       })
       .catch((error) => {
@@ -416,8 +412,9 @@ const ClaimRequest = () => {
               {expenses.map((expense, index) => (
                 <Form
                   key={expense.formId}
-                  showPlusButton={index === expenses?.length - 1}
+                  isLastElement={index === expenses?.length - 1}
                   addExpense={addExpense}
+                  submitExpenses={callBulkExpenseUpload}
                   reimbursement={reimbursement}
                 />
               ))}
@@ -429,89 +426,99 @@ const ClaimRequest = () => {
   );
 };
 
-const Form = forwardRef(
-  ({ key, showPlusButton, addExpense, reimbursement }, ref) => {
-    const expenseTypes = [
-      { label: "Travel", code: "te" },
-      { label: "Meal", code: "fe" },
-      { label: "Accommodation", code: "ae" },
-      { label: "Purchase", code: "pe" },
-    ];
-    const theme = useTheme();
-    const [expenseType, setExpenseType] = useState({});
-    const [expenseDescription, setExpenseDescrption] = useState("");
-    const [expenseDate, setExpenseDate] = useState(null);
-    const [expenseAmount, setExpensesAmount] = useState("");
-    const [expenseInvoiceId, setExpenseInvoidId] = useState("");
-    const [expenseEstablishment, setExpenseEstablishment] = useState("");
-    const [expenseHeader, setExpenseHeader] = useState("");
+function Form({
+  key,
+  isLastElement,
+  addExpense,
+  submitExpenses,
+  reimbursement,
+}) {
+  const expenseTypes = [
+    { label: "Travel", code: "te" },
+    { label: "Meal", code: "fe" },
+    { label: "Accommodation", code: "ae" },
+    { label: "Purchase", code: "pe" },
+  ];
+  const theme = useTheme();
+  const [expenseType, setExpenseType] = useState({});
+  const [expenseDescription, setExpenseDescrption] = useState("");
+  const [expenseDate, setExpenseDate] = useState(null);
+  const [expenseAmount, setExpensesAmount] = useState("");
+  const [expenseInvoiceId, setExpenseInvoidId] = useState("");
+  const [expenseEstablishment, setExpenseEstablishment] = useState("");
+  const [expenseHeader, setExpenseHeader] = useState("");
 
-    const colors = tokens(theme.palette.mode);
-    const currencies = [
-      {
-        value: "INR",
-        label: "₹",
-      },
-    ];
+  const colors = tokens(theme.palette.mode);
+  const currencies = [
+    {
+      value: "INR",
+      label: "₹",
+    },
+  ];
 
-    const expenseHeaders = [
-      { label: "Expense Header 1" },
-      { label: "Expense Header 2" },
-      { label: "Expense Header 3" },
-    ];
+  const expenseHeaders = [
+    { label: "Expense Header 1" },
+    { label: "Expense Header 2" },
+    { label: "Expense Header 3" },
+  ];
 
-    const [image, setImage] = useState("");
+  const [image, setImage] = useState("");
 
-    useImperativeHandle(ref, () => ({
-      submitImage() {
-        const data = new FormData();
-        data.append("file", image);
-        data.append("upload_preset", "ermstesting");
-        data.append("cloud_name", "dscv7wuqq");
+  const submitImageAndAddExpense = () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "ermstesting");
+    data.append("cloud_name", "dscv7wuqq");
 
-        fetch("http://api.cloudinary.com/v1_1/dscv7wuqq/image/upload", {
-          method: "post",
-          body: data,
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(
-              "🚀 ~ file: claimRequest.jsx:471 ~ .then ~ data:",
-              data
-            );
-            console.log(data);
-            addExpense({
-              type: expenseType.code,
-              amount: expenseAmount,
-              description: expenseDescription,
-              reimbursement: reimbursement,
-              invoiceId: expenseInvoiceId,
-              establishment: expenseEstablishment,
-              date: expenseDate,
-              expenseHeader: expenseHeader,
-              attachment: data.url,
-            });
-          })
-          .catch((err) => {
-            console.error(err);
-            addExpense({
-              type: expenseType.code,
-              amount: expenseAmount,
-              description: expenseDescription,
-              reimbursement: reimbursement,
-              invoiceId: expenseInvoiceId,
-              establishment: expenseEstablishment,
-              date: expenseDate,
-              expenseHeader: expenseHeader,
-            });
-          });
-      },
-    }));
+    fetch("http://api.cloudinary.com/v1_1/dscv7wuqq/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("🚀 ~ file: claimRequest.jsx:471 ~ .then ~ data:", data);
+        console.log(data);
+        addExpense({
+          type: expenseType.code,
+          amount: expenseAmount,
+          description: expenseDescription,
+          reimbursement: reimbursement,
+          invoiceId: expenseInvoiceId,
+          establishment: expenseEstablishment,
+          date: expenseDate,
+          expenseHeader: expenseHeader,
+          attachment: data.url,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        addExpense({
+          type: expenseType.code,
+          amount: expenseAmount,
+          description: expenseDescription,
+          reimbursement: reimbursement,
+          invoiceId: expenseInvoiceId,
+          establishment: expenseEstablishment,
+          date: expenseDate,
+          expenseHeader: expenseHeader,
+        });
+      });
+  };
 
-    const AcceptedFileFormats = " PDF, JPG, PNG";
-    const [selectedFileName, setSelectedFileName] = useState("");
+  const AcceptedFileFormats = " PDF, JPG, PNG";
+  const [selectedFileName, setSelectedFileName] = useState("");
 
-    return (
+  return (
+    <div
+      key={key}
+      style={{
+        // backgroundColor: "red",
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
       <div
         key={key}
         style={{
@@ -524,7 +531,6 @@ const Form = forwardRef(
           padding: 8,
           paddingBottom: 8,
           position: "relative",
-          left: "0.4em",
         }}
       >
         <form>
@@ -539,12 +545,13 @@ const Form = forwardRef(
           >
             <div
               style={{
+                justifyContent: "space-between",
+                width: "100%",
                 flexDirection: "row",
                 display: "flex",
               }}
             >
               <Box
-                width="20vh"
                 height="10vh"
                 component="form"
                 sx={{
@@ -556,6 +563,7 @@ const Form = forwardRef(
               >
                 <Autocomplete
                   disablePortal
+                  disabled={!isLastElement}
                   id="combo-box-demo"
                   options={expenseTypes}
                   value={expenseType?.label ? expenseType?.label : ""}
@@ -571,29 +579,6 @@ const Form = forwardRef(
 
               <Box
                 component="form"
-                height="10vh"
-                sx={{
-                  "& > :not(style)": { width: "2.4em" },
-                }}
-                noValidate
-                autoComplete="off"
-                style={{}}
-              >
-                <TextField
-                  id="outlined-multiline-static"
-                  label="#Invoice ID"
-                  value={expenseInvoiceId}
-                  onChange={(e) => setExpenseInvoidId(e.target.value)}
-                  style={{
-                    marginRight: 10,
-                    width: "2.9em",
-                  }}
-                />
-              </Box>
-
-              <Box
-                component="form"
-                height="10vh"
                 sx={{
                   "& .MuiTextField-root": { width: "25ch" },
                 }}
@@ -604,53 +589,33 @@ const Form = forwardRef(
                   id="outlined-multiline-static"
                   label="Description"
                   multiline
+                  disabled={!isLastElement}
                   value={expenseDescription}
                   onChange={(e) => setExpenseDescrption(e.target.value)}
                   style={{
-                    width: "7em",
-                    marginRight: 10,
+                    width: "3em",
                   }}
                 />
               </Box>
 
-              {showPlusButton && (
-                <Button
-                  variant="contained"
-                  style={{
-                    borderRadius: 20,
-                    width: 100,
-                    height: 50,
-                  }}
-                  onClick={() => {
-                    if (
-                      expenseType &&
-                      expenseDescription &&
-                      expenseDate &&
-                      expenseAmount &&
-                      expenseInvoiceId &&
-                      expenseEstablishment &&
-                      expenseHeader
-                    ) {
-                      this.submitImage();
-                    } else {
-                      alert("Please Fill Details.");
-                    }
-                  }}
-                >
-                  Add
-                </Button>
-              )}
-            </div>
+              <div style={{ marginTop: -8 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      value={
+                        expenseDate
+                          ? dayjs(expenseDate, "DD/MM/YYYY").toDate()
+                          : null
+                      }
+                      disabled={!isLastElement}
+                      onChange={(date) => setExpenseDate(date)}
+                      label="Payment Date"
+                      style={{ width: "3em" }}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
 
-            <div
-              style={{
-                flexDirection: "row",
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
               <Box
                 component="form"
                 sx={{
@@ -666,6 +631,7 @@ const Form = forwardRef(
                   <TextField
                     id="outlined-select-currency"
                     select
+                    disabled={!isLastElement}
                     defaultValue="INR"
                   >
                     {currencies.map((option) => (
@@ -676,6 +642,7 @@ const Form = forwardRef(
                   </TextField>
                 </div>
               </Box>
+
               <Box
                 component="form"
                 sx={{
@@ -687,6 +654,7 @@ const Form = forwardRef(
                 <TextField
                   id="outlined-multiline-static"
                   label="Amount"
+                  disabled={!isLastElement}
                   value={expenseAmount}
                   onChange={(e) => setExpensesAmount(e.target.value)}
                   style={{
@@ -694,6 +662,18 @@ const Form = forwardRef(
                   }}
                 />
               </Box>
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                justifyContent: "space-between",
+                width: "100%",
+                flexDirection: "row",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <Box
                 component="form"
                 sx={{
@@ -706,6 +686,7 @@ const Form = forwardRef(
                   id="outlined-multiline-static"
                   label="Establishment"
                   multiline
+                  disabled={!isLastElement}
                   variant="outlined"
                   value={expenseEstablishment}
                   onChange={(e) => setExpenseEstablishment(e.target.value)}
@@ -715,28 +696,33 @@ const Form = forwardRef(
                 />
               </Box>
 
-              <div style={{ marginTop: -10 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker"]}>
-                    <DatePicker
-                      value={
-                        expenseDate
-                          ? dayjs(expenseDate, "DD/MM/YYYY").toDate()
-                          : null
-                      }
-                      onChange={(date) => setExpenseDate(date)}
-                      label="Payment Date"
-                      style={{ width: "3em" }}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </div>
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { width: "2.4em" },
+                }}
+                noValidate
+                autoComplete="off"
+                style={{}}
+              >
+                <TextField
+                  id="outlined-multiline-static"
+                  label="#Invoice ID"
+                  disabled={!isLastElement}
+                  value={expenseInvoiceId}
+                  onChange={(e) => setExpenseInvoidId(e.target.value)}
+                  style={{
+                    width: "2.9em",
+                  }}
+                />
+              </Box>
 
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 options={expenseHeaders}
                 sx={{ width: 500 }}
+                disabled={!isLastElement}
                 onChange={(event, selectedExpenseHeaders) => {
                   setExpenseHeader(selectedExpenseHeaders.label);
                 }}
@@ -745,6 +731,7 @@ const Form = forwardRef(
                 )}
               />
             </div>
+
             <div
               style={{
                 display: "flex",
@@ -756,7 +743,6 @@ const Form = forwardRef(
                 display: "flex",
               }}
             >
-              {/* <label htmlFor="fileInput"> */}
               <div
                 style={{
                   display: "flex",
@@ -765,7 +751,9 @@ const Form = forwardRef(
                   width: "100%",
                   flexDirection: "row",
                   display: "flex",
-                  border: "2px dashed #2196F3",
+                  border: !isLastElement
+                    ? "2px dashed #2196F3"
+                    : "2px dashed #2126F3",
                   height: 40,
                   borderRadius: "10px",
                   cursor: "pointer",
@@ -775,6 +763,7 @@ const Form = forwardRef(
                 <input
                   type="file"
                   id="fileInput"
+                  disabled={!isLastElement}
                   style={{
                     backgroundColor: "yellow",
                     position: "absolute",
@@ -810,30 +799,105 @@ const Form = forwardRef(
                   {AcceptedFileFormats}
                 </div>
               </div>
-              {/* </label> */}
-              {/* {image ? (
-              <button
-                onClick={submitImage}
-                style={{
-                  backgroundColor: "#2196F3",
-                  color: "white",
-                  borderRadius: "4px",
-                  padding: "8px 16px",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                Upload
-              </button>
-            ) : (
-              <></>
-            )} */}
             </div>
           </div>
         </form>
       </div>
-    );
-  }
-);
+      {isLastElement && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+            margin: 10,
+            paddingRight: 20,
+            paddingLeft: 20,
+            display: "flex",
+          }}
+        >
+          <div>
+            <Button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flex: 1,
+                flexDirection: "row",
+                display: "flex",
+                height: 40,
+                marginRight: 20,
+                borderRadius: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                if (
+                  expenseType &&
+                  expenseDescription &&
+                  expenseDate &&
+                  expenseAmount &&
+                  expenseInvoiceId &&
+                  expenseEstablishment &&
+                  expenseHeader
+                ) {
+                  submitImageAndAddExpense();
+                } else {
+                  alert("Please Fill Details.");
+                }
+              }}
+              color="secondary"
+              disabled={false}
+              size="medium"
+              variant="outlined"
+              startIcon={<AddmoneyIcon />}
+            >
+              Add More Expenses
+            </Button>
+          </div>
+          <div>
+            <Button
+              style={{
+                display: "flex",
+                marginLeft: 20,
+                alignItems: "center",
+                flex: 1,
+                justifyContent: "center",
+                flexDirection: "row",
+                display: "flex",
+                height: 40,
+                borderRadius: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                if (
+                  expenseType &&
+                  expenseDescription &&
+                  expenseDate &&
+                  expenseAmount &&
+                  expenseInvoiceId &&
+                  expenseEstablishment &&
+                  expenseHeader
+                ) {
+                  submitImageAndAddExpense();
+                  submitExpenses();
+                } else {
+                  alert("Please Fill Details.");
+                }
+              }}
+              color="secondary"
+              disabled={false}
+              size="medium"
+              variant="contained"
+              endIcon={<SendIcon />}
+            >
+              Submit Expenses
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default ClaimRequest;

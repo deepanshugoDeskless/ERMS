@@ -24,7 +24,9 @@ import SavingsRoundedIcon from "@mui/icons-material/SavingsRounded";
 import Groups2RoundedIcon from "@mui/icons-material/Groups2Rounded";
 import FactCheckRoundedIcon from "@mui/icons-material/FactCheckRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import SaveAsRoundedIcon from '@mui/icons-material/SaveAsRounded';
+import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SendIcon from "@mui/icons-material/Send";
 
 export {
   CottageRoundedIcon as HomeIcon,
@@ -50,5 +52,7 @@ export {
   ViewSidebarRoundedIcon as ViewSidebarRoundedIcon,
   BackHandRoundedIcon as BackHandRoundedIcon,
   DeleteRoundedIcon as DeleteRoundedIcon,
-  SaveAsRoundedIcon as SaveAsRoundedIcon
+  SaveAsRoundedIcon as SaveAsRoundedIcon,
+  DeleteIcon as DeleteIcon,
+  SendIcon as SendIcon,
 };
