@@ -5,12 +5,6 @@ import {
   GET_REIMBURSEMENTS,
   RAISE_REIMBURSEMENT_REQUEST,
 } from "../gqloperations/mutations";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import Header from "./Header";
-import { ThemeProvider } from "@emotion/react";
-import { CssBaseline } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../src/theme";
@@ -94,11 +88,6 @@ const RaiseRequest = () => {
     },
   ];
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setRequest({ ...request, [name]: value });
-  };
-
   const callRaiseReimbursementRequest = () => {
     var numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
 
@@ -141,8 +130,8 @@ const RaiseRequest = () => {
 
   function getDatesInRange(startDateStr, endDateStr) {
     // Parse the input date strings into Date objects
-    const startDate = new Date(startDateStr.split("/").reverse().join("/"));
-    const endDate = new Date(endDateStr.split("/").reverse().join("/"));
+    const startDate = new Date(startDateStr?.split("/").reverse().join("/"));
+    const endDate = new Date(endDateStr?.split("/").reverse().join("/"));
 
     // Initialize an array to store the date strings
     const dateArray = [];
@@ -150,13 +139,13 @@ const RaiseRequest = () => {
     // Start from the startDate and loop until the endDate
     let currentDate = startDate;
     while (currentDate <= endDate) {
-      const dd = String(currentDate.getDate()).padStart(2, "0");
-      const mm = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      const yyyy = currentDate.getFullYear();
-      dateArray.push(`${dd}/${mm}/${yyyy}`);
+      const dd = String(currentDate?.getDate()).padStart(2, "0");
+      const mm = String(currentDate?.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+      const yyyy = currentDate?.getFullYear();
+      dateArray?.push(`${dd}/${mm}/${yyyy}`);
 
       // Move to the next day
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDate?.setDate(currentDate.getDate() + 1);
     }
 
     return dateArray;
@@ -308,6 +297,7 @@ const RaiseRequest = () => {
             maxRows={6}
             options={TypeNature}
             sx={{ width: 200, height: 80 }}
+            value={purpose}
             style={{
               width: "4em",
               marginLeft: "0.12em",
@@ -315,7 +305,9 @@ const RaiseRequest = () => {
             onChange={(event, selectedType) => {
               setPurpose(selectedType?.label);
             }}
-            renderInput={(params) => <TextField {...params} label="Purpose" />}
+            renderInput={(params) => (
+              <TextField {...params} value={purpose} label="Purpose" />
+            )}
           />
           <Autocomplete
             disablePortal
@@ -327,6 +319,7 @@ const RaiseRequest = () => {
               width: "4.8em",
               marginLeft: "0.6em",
             }}
+            value={type?.label}
             onChange={(event, selectedType) => {
               setType(selectedType);
             }}
