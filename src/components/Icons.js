@@ -27,6 +27,7 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 export {
   CottageRoundedIcon as HomeIcon,
@@ -55,4 +56,5 @@ export {
   SaveAsRoundedIcon as SaveAsRoundedIcon,
   DeleteIcon as DeleteIcon,
   SendIcon as SendIcon,
+  AttachFileIcon as AttachFileIcon,
 };
