@@ -396,7 +396,7 @@ const ClaimRequest = () => {
                 }}
                 onClick={callBulkExpenseUpload}
               >
-                Submit For Reimbursement
+                Claim Reimbursement
               </Button>
             </div>
             <div
@@ -455,6 +455,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
 
   const [fileUploaded, setFileUploaded] = useState(false);
   const [image, setImage] = useState("");
+
   const submitImage = () => {
     const data = new FormData();
     data.append("file", image);
@@ -466,11 +467,32 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
       body: data,
     })
       .then((res) => res.json())
-      .then((date) => {
+      .then((data) => {
         console.log(data);
+        addExpense({
+          type: expenseType.code,
+          amount: expenseAmount,
+          description: expenseDescription,
+          reimbursement: reimbursement,
+          invoiceId: expenseInvoiceId,
+          establishment: expenseEstablishment,
+          date: expenseDate,
+          expenseHeader: expenseHeader,
+          attachment: data,
+        });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        addExpense({
+          type: expenseType.code,
+          amount: expenseAmount,
+          description: expenseDescription,
+          reimbursement: reimbursement,
+          invoiceId: expenseInvoiceId,
+          establishment: expenseEstablishment,
+          date: expenseDate,
+          expenseHeader: expenseHeader,
+        });
       });
   };
   const fileTypes = ["JPG", "PNG", "PDF"];
@@ -481,6 +503,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
 
   const AcceptedFileFormats = " PDF, JPG, PNG";
   const [selectedFileName, setSelectedFileName] = useState("");
+  console.log("🚀 ~ file: claimRequest.jsx:458 ~ Form ~ image:", image);
 
   return (
     <div
@@ -521,7 +544,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               sx={{
                 "& .MuiTextField-root": {},
               }}
-              style={{ position: "relative", left: "-0.3em" }}
+              style={{}}
               noValidate
               autoComplete="off"
             >
@@ -631,16 +654,17 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                     expenseEstablishment &&
                     expenseHeader
                   ) {
-                    addExpense({
-                      type: expenseType.code,
-                      amount: expenseAmount,
-                      description: expenseDescription,
-                      reimbursement: reimbursement,
-                      invoiceId: expenseInvoiceId,
-                      establishment: expenseEstablishment,
-                      date: expenseDate,
-                      expenseHeader: expenseHeader,
-                    });
+                    submitImage();
+                    // addExpense({
+                    //   type: expenseType.code,
+                    //   amount: expenseAmount,
+                    //   description: expenseDescription,
+                    //   reimbursement: reimbursement,
+                    //   invoiceId: expenseInvoiceId,
+                    //   establishment: expenseEstablishment,
+                    //   date: expenseDate,
+                    //   expenseHeader: expenseHeader,
+                    // });
                   } else {
                     alert("Please Fill Details.");
                   }
@@ -754,79 +778,93 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               )}
             />
           </div>
-        </div>
-      </form>
-
-      <div>
-        <label htmlFor="fileInput">
           <div
             style={{
               display: "flex",
               alignItems: "center",
+              flexDirection: "row",
               justifyContent: "center",
-              width: "77%",
-              height: "30%",
-              border: "2px dashed #2196F3",
-              borderRadius: "4px",
-              cursor: "pointer",
-              position: "relative",
-              overflow: "hidden",
-              top: "0.4em",
-              padding: "0.1em",
+              width: "100%",
+              margin: 10,
+              display: "flex",
             }}
           >
-            <DriveFolderUploadIcon
-              style={{ position: "relative", right: "0.4em" }}
-            />
-            <input
-              type="file"
-              id="fileInput"
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                top: 0,
-                left: 0,
-                opacity: 0,
-                cursor: "pointer",
-              }}
-              onChange={(e) => setImage(e.target.files[0])}
-            />
-
-            <span style={{ marginRight: "8px", fontSize: "medium" }}>
-              {selectedFileName || "Choose File"}{" "}
-            </span>
+            {/* <label htmlFor="fileInput"> */}
             <div
               style={{
-                display: "block",
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-                padding: "2px 5px",
-                borderRadius: "4px",
-                fontSize: "medium",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                flexDirection: "row",
+                display: "flex",
+                border: "2px dashed #2196F3",
+                height: 40,
+                borderRadius: "10px",
+                cursor: "pointer",
               }}
             >
-              {AcceptedFileFormats}
-            </div>
-          </div>
-        </label>
-      </div>
+              <DriveFolderUploadIcon style={{}} />
+              <input
+                type="file"
+                id="fileInput"
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  top: 0,
+                  left: 0,
+                  opacity: 0,
+                  cursor: "pointer",
+                }}
+                onChange={(e) => setImage(e.target.files[0])}
+              />
 
-      <button
-        onClick={submitImage}
-        style={{
-          backgroundColor: "#2196F3",
-          color: "white",
-          borderRadius: "4px",
-          padding: "8px 16px",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-          top: "-3em",
-          left: "24em",
-        }}
-      >
-        Upload
-      </button>
+              <span style={{ marginRight: "8px", fontSize: "medium" }}>
+                {selectedFileName?.name ?? "Choose File"}
+              </span>
+              <span
+                style={{
+                  marginRight: "8px",
+                  fontSize: "medium",
+                  color: "green",
+                }}
+              >
+                {image?.name}
+              </span>
+              <div
+                style={{
+                  display: "block",
+                  backgroundColor: "rgba(0, 0, 0, 0.1)",
+                  padding: "2px 5px",
+                  borderRadius: "4px",
+                  fontSize: "medium",
+                }}
+              >
+                {AcceptedFileFormats}
+              </div>
+            </div>
+            {/* </label> */}
+            {image ? (
+              <button
+                onClick={submitImage}
+                style={{
+                  backgroundColor: "#2196F3",
+                  color: "white",
+                  borderRadius: "4px",
+                  padding: "8px 16px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                Upload
+              </button>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+      </form>
     </div>
   );
 }
