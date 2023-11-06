@@ -12,7 +12,7 @@ import {
   UPDATE_REIMBURSEMENTS,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
-import { DeleteRoundedIcon, SaveAsRoundedIcon } from "./Icons";
+import { AttachFileIcon, DeleteRoundedIcon, SaveAsRoundedIcon } from "./Icons";
 import * as XLSX from "xlsx";
 
 const getTypeDescription = (type) => {
@@ -423,6 +423,30 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                         alignItems: "center",
                       }}
                     >
+                      <div>
+                        {expense.attachment != null && (
+                          <Button
+                            variant="outlined"
+                            style={{
+                              margin: 10,
+                            }}
+                            onClick={() => {
+                              if (expense.attachment != null) {
+                                const url = expense.attachment; // Replace this with your desired URL
+                                const newWindow = window.open(
+                                  url,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                );
+                                if (newWindow) newWindow.opener = null;
+                              }
+                            }}
+                            startIcon={<AttachFileIcon />}
+                          >
+                            View File
+                          </Button>
+                        )}
+                      </div>
                       <Box
                         component="form"
                         sx={{
@@ -430,7 +454,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                         }}
                         noValidate
                         autoComplete="off"
-                        style={{ }}
+                        style={{}}
                       >
                         <TextField
                           id="outlined-basic"

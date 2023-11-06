@@ -15,6 +15,7 @@ import {
 import { Error, Loader } from "./loader";
 import * as XLSX from "xlsx";
 import DropFileInput from "./drop-file-input/DropFileInput";
+import { AttachFileIcon } from "./Icons";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -77,11 +78,11 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
     if (dateParts.length !== 3) {
       return "Invalid Date";
     }
-  
+
     const day = dateParts[0];
     const month = dateParts[1];
     const year = dateParts[2];
-  
+
     const monthNames = [
       "Jan",
       "Feb",
@@ -96,7 +97,7 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
       "Nov",
       "Dec",
     ];
-  
+
     if (month >= 1 && month <= 12) {
       const formattedMonth = monthNames[month - 1];
       return `${day} ${formattedMonth} `;
@@ -104,9 +105,7 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
       return "Invalid Date";
     }
   };
-  
 
-  
   const reimbursements = data.ireimbursements
     .filter((element) => element.isPreApproved && element.isApproved)
     .map((reimbursement, index) => {
@@ -322,16 +321,50 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
                     alignItems: "self-start",
                   }}
                 >
-                  <h6
+                  <div
                     style={{
-                      padding: 8,
-                      marginBottom: "1em",
-                      fontSize: "0.4em",
-                      fontWeight: "400",
+                      display: "flex",
+                      width: "100%",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {expense.description}
-                  </h6>
+                    <h6
+                      style={{
+                        padding: 8,
+                        marginBottom: "1em",
+                        fontSize: "0.4em",
+                        fontWeight: "400",
+                      }}
+                    >
+                      {expense.description}
+                    </h6>
+                    <div>
+                      {expense.attachment != null && (
+                        <Button
+                          variant="outlined"
+                          style={{
+                            margin: 10,
+                          }}
+                          onClick={() => {
+                            if (expense.attachment != null) {
+                              const url = expense.attachment; // Replace this with your desired URL
+                              const newWindow = window.open(
+                                url,
+                                "_blank",
+                                "noopener,noreferrer"
+                              );
+                              if (newWindow) newWindow.opener = null;
+                            }
+                          }}
+                          startIcon={<AttachFileIcon />}
+                        >
+                          View File
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                   <div
                     className="innerbox"
                     style={{ display: "flex", justifyContent: "space-evenly" }}
