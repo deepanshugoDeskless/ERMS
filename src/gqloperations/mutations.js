@@ -95,6 +95,7 @@ export const GET_REIMBURSEMENTS = gql`
       by
       isPreApproved
       isApproved
+      purpose
       expenses {
         date
         type
@@ -137,6 +138,7 @@ export const GET_PRE_REQUESTS = gql`
       askedAmount
       totalAmount
       isPreApproved
+      purpose
       expenses {
         amount
       }
@@ -162,6 +164,7 @@ export const GET_APPROVED_REIMBURSEMENTS = gql`
       askedAmount
       totalAmount
       isPreApproved
+      purpose
       expenses {
         date
         type
@@ -193,6 +196,7 @@ export const ADMIN_FETCH_REQUESTS = gql`
       totalAmount
       isPreApproved
       isApproved
+      purpose
       expenses {
         date
         type

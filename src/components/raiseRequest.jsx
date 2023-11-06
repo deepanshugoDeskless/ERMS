@@ -93,7 +93,7 @@ const RaiseRequest = () => {
     }
   };
 
-  const reimbursements = data.ireimbursements.map((reimbursement, index) => {
+  const reimbursements = data?.ireimbursements?.map((reimbursement, index) => {
     return {
       ...reimbursement,
       type: getTypeDescription(reimbursement.type),
@@ -187,8 +187,13 @@ const RaiseRequest = () => {
     {
       field: "description",
       headerName: "Description",
-      flex: 1.5,
+      flex: 1.2,
       cellClassName: "name-column--cell",
+    },
+    {
+      field: "purpose",
+      headerName: "Purpose",
+      flex: 0.8,
     },
     {
       field: "type",
