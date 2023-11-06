@@ -105,6 +105,7 @@ export const GET_REIMBURSEMENTS = gql`
         approved
         invoiceId
         establishment
+        attachment
         by
       }
     }
@@ -141,6 +142,7 @@ export const GET_PRE_REQUESTS = gql`
       purpose
       expenses {
         amount
+        attachment
       }
       by {
         firstName
@@ -176,6 +178,7 @@ export const GET_APPROVED_REIMBURSEMENTS = gql`
         establishment
         by
         expenseHeader
+        attachment
       }
     }
   }
@@ -207,6 +210,7 @@ export const ADMIN_FETCH_REQUESTS = gql`
         invoiceId
         establishment
         by
+        attachment
       }
     }
   }

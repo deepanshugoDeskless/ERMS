@@ -468,6 +468,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("🚀 ~ file: claimRequest.jsx:471 ~ .then ~ data:", data);
         console.log(data);
         addExpense({
           type: expenseType.code,
@@ -478,7 +479,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
           establishment: expenseEstablishment,
           date: expenseDate,
           expenseHeader: expenseHeader,
-          attachment: data,
+          attachment: data.url,
         });
       })
       .catch((err) => {
@@ -571,7 +572,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               }}
               noValidate
               autoComplete="off"
-              style={{ position: "relative", left: "-0.1em" }}
+              style={{}}
             >
               <TextField
                 id="outlined-multiline-static"
@@ -809,11 +810,10 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
                 type="file"
                 id="fileInput"
                 style={{
+                  backgroundColor: "yellow",
                   position: "absolute",
                   width: "100%",
-                  height: "100%",
-                  top: 0,
-                  left: 0,
+                  height: 40,
                   opacity: 0,
                   cursor: "pointer",
                 }}
@@ -845,7 +845,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               </div>
             </div>
             {/* </label> */}
-            {image ? (
+            {/* {image ? (
               <button
                 onClick={submitImage}
                 style={{
@@ -861,7 +861,7 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
               </button>
             ) : (
               <></>
-            )}
+            )} */}
           </div>
         </div>
       </form>
