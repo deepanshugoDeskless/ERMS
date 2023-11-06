@@ -78,10 +78,6 @@ const ClaimRequest = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState();
 
   const addExpense = (expense) => {
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
-      expense
-    );
     const newTotalAmount = totalAmount + parseFloat(expense.amount);
     setTotalAmount(newTotalAmount);
     const formId = Date.now();
@@ -94,10 +90,6 @@ const ClaimRequest = () => {
         date: formattedExpenseDate,
       },
     ]);
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
-      expenses
-    );
   };
 
   const selectReimbursement = (reimbursement) => {
@@ -120,6 +112,11 @@ const ClaimRequest = () => {
     expenses.forEach((object) => {
       delete object["formId"];
     });
+    console.log(
+      "🚀 ~ file: claimRequest.jsx:115 ~ expenses.forEach ~ expenses:",
+      expenses
+    );
+
     createBulkExpenses({
       context: {
         headers: {
@@ -409,6 +406,10 @@ const ClaimRequest = () => {
                 height: "70vh",
               }}
             >
+              {console.log(
+                "🚀 ~ file: claimRequest.jsx:421 ~ ClaimRequest ~ expenses:",
+                expenses
+              )}
               {expenses.map((expense, index) => (
                 <Form
                   key={expense.formId}
@@ -464,7 +465,7 @@ function Form({
 
   const [image, setImage] = useState("");
 
-  const submitImageAndAddExpense = () => {
+  const submitImageAndAddExpense = (submit) => {
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "ermstesting");
@@ -489,6 +490,11 @@ function Form({
           expenseHeader: expenseHeader,
           attachment: data.url,
         });
+        // if (submit) {
+        //   setTimeout(() => {
+        //     submitExpenses();
+        //   }, 1000);
+        // }
       })
       .catch((err) => {
         console.error(err);
@@ -502,6 +508,12 @@ function Form({
           date: expenseDate,
           expenseHeader: expenseHeader,
         });
+        // if (submit) {
+        //   setTimeout(() => {
+        //     submitExpenses();
+        //   }, 1000);
+        //   submitExpenses();
+        // }
       });
   };
 
@@ -879,10 +891,9 @@ function Form({
                   expenseEstablishment &&
                   expenseHeader
                 ) {
-                  submitImageAndAddExpense();
-                  submitExpenses();
+                  submitImageAndAddExpense(true);
                 } else {
-                  alert("Please Fill Details.");
+                  alert("Please Fill Details Before Submitting .");
                 }
               }}
               color="secondary"
