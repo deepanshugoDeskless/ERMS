@@ -12,6 +12,7 @@ import Header from "./Header";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import React, { useState } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../src/theme";
@@ -75,7 +76,11 @@ const ClaimRequest = () => {
   const [expenses, setExpenses] = useState([]);
   const [reimbursement, setReimbursement] = useState({});
   const [rowSelectionModel, setRowSelectionModel] = useState();
+  const childRef = useRef(null);
 
+  const handleClick = () => {
+    childRef.current.submitImage();
+  };
   const addExpense = (expense) => {
     console.log(
       "🚀 ~ file: claimRequest.jsx:72 ~ addExpense ~ expense:",
@@ -115,6 +120,7 @@ const ClaimRequest = () => {
   };
 
   const callBulkExpenseUpload = () => {
+    handleClick()
     expenses.shift();
     expenses.forEach((object) => {
       delete object["formId"];
@@ -423,429 +429,389 @@ const ClaimRequest = () => {
   );
 };
 
-function Form({ key, showPlusButton, addExpense, reimbursement }) {
-  const expenseTypes = [
-    { label: "Travel", code: "te" },
-    { label: "Meal", code: "fe" },
-    { label: "Accommodation", code: "ae" },
-    { label: "Purchase", code: "pe" },
-  ];
-  const theme = useTheme();
-  const [expenseType, setExpenseType] = useState({});
-  const [expenseDescription, setExpenseDescrption] = useState("");
-  const [expenseDate, setExpenseDate] = useState(null);
-  const [expenseAmount, setExpensesAmount] = useState("");
-  const [expenseInvoiceId, setExpenseInvoidId] = useState("");
-  const [expenseEstablishment, setExpenseEstablishment] = useState("");
-  const [expenseHeader, setExpenseHeader] = useState("");
+const Form = forwardRef(
+  ({ key, showPlusButton, addExpense, reimbursement }, ref) => {
+    const expenseTypes = [
+      { label: "Travel", code: "te" },
+      { label: "Meal", code: "fe" },
+      { label: "Accommodation", code: "ae" },
+      { label: "Purchase", code: "pe" },
+    ];
+    const theme = useTheme();
+    const [expenseType, setExpenseType] = useState({});
+    const [expenseDescription, setExpenseDescrption] = useState("");
+    const [expenseDate, setExpenseDate] = useState(null);
+    const [expenseAmount, setExpensesAmount] = useState("");
+    const [expenseInvoiceId, setExpenseInvoidId] = useState("");
+    const [expenseEstablishment, setExpenseEstablishment] = useState("");
+    const [expenseHeader, setExpenseHeader] = useState("");
 
-  const colors = tokens(theme.palette.mode);
-  const currencies = [
-    {
-      value: "INR",
-      label: "₹",
-    },
-  ];
+    const colors = tokens(theme.palette.mode);
+    const currencies = [
+      {
+        value: "INR",
+        label: "₹",
+      },
+    ];
 
-  const expenseHeaders = [
-    { label: "Expense Header 1" },
-    { label: "Expense Header 2" },
-    { label: "Expense Header 3" },
-  ];
+    const expenseHeaders = [
+      { label: "Expense Header 1" },
+      { label: "Expense Header 2" },
+      { label: "Expense Header 3" },
+    ];
 
-  const [fileUploaded, setFileUploaded] = useState(false);
-  const [image, setImage] = useState("");
+    const [image, setImage] = useState("");
 
-  const submitImage = () => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "ermstesting");
-    data.append("cloud_name", "dscv7wuqq");
+    useImperativeHandle(ref, () => ({
+      submitImage() {
+        const data = new FormData();
+        data.append("file", image);
+        data.append("upload_preset", "ermstesting");
+        data.append("cloud_name", "dscv7wuqq");
 
-    fetch("http://api.cloudinary.com/v1_1/dscv7wuqq/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("🚀 ~ file: claimRequest.jsx:471 ~ .then ~ data:", data);
-        console.log(data);
-        addExpense({
-          type: expenseType.code,
-          amount: expenseAmount,
-          description: expenseDescription,
-          reimbursement: reimbursement,
-          invoiceId: expenseInvoiceId,
-          establishment: expenseEstablishment,
-          date: expenseDate,
-          expenseHeader: expenseHeader,
-          attachment: data.url,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        addExpense({
-          type: expenseType.code,
-          amount: expenseAmount,
-          description: expenseDescription,
-          reimbursement: reimbursement,
-          invoiceId: expenseInvoiceId,
-          establishment: expenseEstablishment,
-          date: expenseDate,
-          expenseHeader: expenseHeader,
-        });
-      });
-  };
-  const fileTypes = ["JPG", "PNG", "PDF"];
-  const [file, setFile] = useState(null);
-  const handleChange = (file) => {
-    setFile(file);
-  };
+        fetch("http://api.cloudinary.com/v1_1/dscv7wuqq/image/upload", {
+          method: "post",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(
+              "🚀 ~ file: claimRequest.jsx:471 ~ .then ~ data:",
+              data
+            );
+            console.log(data);
+            addExpense({
+              type: expenseType.code,
+              amount: expenseAmount,
+              description: expenseDescription,
+              reimbursement: reimbursement,
+              invoiceId: expenseInvoiceId,
+              establishment: expenseEstablishment,
+              date: expenseDate,
+              expenseHeader: expenseHeader,
+              attachment: data.url,
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            addExpense({
+              type: expenseType.code,
+              amount: expenseAmount,
+              description: expenseDescription,
+              reimbursement: reimbursement,
+              invoiceId: expenseInvoiceId,
+              establishment: expenseEstablishment,
+              date: expenseDate,
+              expenseHeader: expenseHeader,
+            });
+          });
+      },
+    }));
 
-  const AcceptedFileFormats = " PDF, JPG, PNG";
-  const [selectedFileName, setSelectedFileName] = useState("");
-  console.log("🚀 ~ file: claimRequest.jsx:458 ~ Form ~ image:", image);
+    const AcceptedFileFormats = " PDF, JPG, PNG";
+    const [selectedFileName, setSelectedFileName] = useState("");
 
-  return (
-    <div
-      key={key}
-      style={{
-        width: "55vw",
-        border: "2px solid #ccc",
-        borderRadius: "12px",
-        border: "1px solid #ccc",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-        marginTop: "0.2em",
-        padding: 8,
-        paddingBottom: 8,
-        position: "relative",
-        left: "0.4em",
-      }}
-    >
-      <form>
-        <div
-          style={{
-            flexDirection: "column",
-            display: "flex",
-            marginTop: 5,
-            justifyContent: "space-evenly",
-            alignItems: "center",
-          }}
-        >
+    return (
+      <div
+        key={key}
+        style={{
+          width: "55vw",
+          border: "2px solid #ccc",
+          borderRadius: "12px",
+          border: "1px solid #ccc",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          marginTop: "0.2em",
+          padding: 8,
+          paddingBottom: 8,
+          position: "relative",
+          left: "0.4em",
+        }}
+      >
+        <form>
           <div
             style={{
-              flexDirection: "row",
+              flexDirection: "column",
               display: "flex",
+              marginTop: 5,
+              justifyContent: "space-evenly",
+              alignItems: "center",
             }}
           >
-            <Box
-              width="20vh"
-              height="10vh"
-              component="form"
-              sx={{
-                "& .MuiTextField-root": {},
+            <div
+              style={{
+                flexDirection: "row",
+                display: "flex",
               }}
-              style={{}}
-              noValidate
-              autoComplete="off"
             >
+              <Box
+                width="20vh"
+                height="10vh"
+                component="form"
+                sx={{
+                  "& .MuiTextField-root": {},
+                }}
+                style={{}}
+                noValidate
+                autoComplete="off"
+              >
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={expenseTypes}
+                  value={expenseType?.label ? expenseType?.label : ""}
+                  onChange={(event, selectedType) => {
+                    setExpenseType(selectedType);
+                  }}
+                  sx={{ width: 140 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Type" style={{}} />
+                  )}
+                />
+              </Box>
+
+              <Box
+                component="form"
+                height="10vh"
+                sx={{
+                  "& > :not(style)": { width: "2.4em" },
+                }}
+                noValidate
+                autoComplete="off"
+                style={{}}
+              >
+                <TextField
+                  id="outlined-multiline-static"
+                  label="#Invoice ID"
+                  value={expenseInvoiceId}
+                  onChange={(e) => setExpenseInvoidId(e.target.value)}
+                  style={{
+                    marginRight: 10,
+                    width: "2.9em",
+                  }}
+                />
+              </Box>
+
+              <Box
+                component="form"
+                height="10vh"
+                sx={{
+                  "& .MuiTextField-root": { width: "25ch" },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  multiline
+                  value={expenseDescription}
+                  onChange={(e) => setExpenseDescrption(e.target.value)}
+                  style={{
+                    width: "7em",
+                    marginRight: 10,
+                  }}
+                />
+              </Box>
+
+              {showPlusButton && (
+                <Button
+                  variant="contained"
+                  style={{
+                    borderRadius: 20,
+                    width: 100,
+                    height: 50,
+                  }}
+                  onClick={() => {
+                    if (
+                      expenseType &&
+                      expenseDescription &&
+                      expenseDate &&
+                      expenseAmount &&
+                      expenseInvoiceId &&
+                      expenseEstablishment &&
+                      expenseHeader
+                    ) {
+                      this.submitImage();
+                    } else {
+                      alert("Please Fill Details.");
+                    }
+                  }}
+                >
+                  Add
+                </Button>
+              )}
+            </div>
+
+            <div
+              style={{
+                flexDirection: "row",
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                component="form"
+                sx={{
+                  "& .MuiTextField-root": {
+                    width: "2ch",
+                    height: "1ch",
+                  },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <div>
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    defaultValue="INR"
+                  >
+                    {currencies.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
+              </Box>
+              <Box
+                component="form"
+                sx={{
+                  "& .MuiTextField-root": { width: "25ch" },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Amount"
+                  value={expenseAmount}
+                  onChange={(e) => setExpensesAmount(e.target.value)}
+                  style={{
+                    width: "3em",
+                  }}
+                />
+              </Box>
+              <Box
+                component="form"
+                sx={{
+                  "& > :not(style)": { width: "2.4em" },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Establishment"
+                  multiline
+                  variant="outlined"
+                  value={expenseEstablishment}
+                  onChange={(e) => setExpenseEstablishment(e.target.value)}
+                  style={{
+                    width: "3.9em",
+                  }}
+                />
+              </Box>
+
+              <div style={{ marginTop: -10 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      value={
+                        expenseDate
+                          ? dayjs(expenseDate, "DD/MM/YYYY").toDate()
+                          : null
+                      }
+                      onChange={(date) => setExpenseDate(date)}
+                      label="Payment Date"
+                      style={{ width: "3em" }}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
-                options={expenseTypes}
-                value={expenseType?.label ? expenseType?.label : ""}
-                onChange={(event, selectedType) => {
-                  setExpenseType(selectedType);
+                options={expenseHeaders}
+                sx={{ width: 500 }}
+                onChange={(event, selectedExpenseHeaders) => {
+                  setExpenseHeader(selectedExpenseHeaders.label);
                 }}
-                sx={{ width: 140 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Type" style={{}} />
+                  <TextField {...params} label="Expense Header" style={{}} />
                 )}
               />
-            </Box>
-
-            <Box
-              component="form"
-              height="10vh"
-              sx={{
-                "& > :not(style)": { width: "2.4em" },
-              }}
-              noValidate
-              autoComplete="off"
-              style={{}}
-            >
-              <TextField
-                id="outlined-multiline-static"
-                label="#Invoice ID"
-                value={expenseInvoiceId}
-                onChange={(e) => setExpenseInvoidId(e.target.value)}
-                style={{
-                  marginRight: 10,
-                  width: "2.9em",
-                }}
-              />
-            </Box>
-
-            <Box
-              component="form"
-              height="10vh"
-              sx={{
-                "& .MuiTextField-root": { width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                multiline
-                value={expenseDescription}
-                onChange={(e) => setExpenseDescrption(e.target.value)}
-                style={{
-                  width: "7em",
-                  marginRight: 10,
-                }}
-              />
-            </Box>
-
-            {showPlusButton && (
-              <Button
-                variant="contained"
-                style={{
-                  borderRadius: 20,
-                  width: 100,
-                  height: 50,
-                }}
-                onClick={() => {
-                  console.log(
-                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseAmount:",
-                    expenseAmount
-                  );
-                  console.log(
-                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDate:",
-                    expenseDate
-                  );
-                  console.log(
-                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseDescription:",
-                    expenseDescription
-                  );
-                  console.log(
-                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseType:",
-                    expenseType
-                  );
-                  console.log(
-                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseInvoiceid:",
-                    expenseInvoiceId
-                  );
-                  console.log(
-                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseEstablishment:",
-                    expenseEstablishment
-                  );
-                  console.log(
-                    "🚀 ~ file: claimRequest.jsx:604 ~ Form ~ expenseHeader:",
-                    expenseHeader
-                  );
-
-                  if (
-                    expenseType &&
-                    expenseDescription &&
-                    expenseDate &&
-                    expenseAmount &&
-                    expenseInvoiceId &&
-                    expenseEstablishment &&
-                    expenseHeader
-                  ) {
-                    submitImage();
-                    // addExpense({
-                    //   type: expenseType.code,
-                    //   amount: expenseAmount,
-                    //   description: expenseDescription,
-                    //   reimbursement: reimbursement,
-                    //   invoiceId: expenseInvoiceId,
-                    //   establishment: expenseEstablishment,
-                    //   date: expenseDate,
-                    //   expenseHeader: expenseHeader,
-                    // });
-                  } else {
-                    alert("Please Fill Details.");
-                  }
-                }}
-              >
-                Add
-              </Button>
-            )}
-          </div>
-
-          <div
-            style={{
-              flexDirection: "row",
-              display: "flex",
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": {
-                  width: "2ch",
-                  height: "1ch",
-                },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <div>
-                <TextField
-                  id="outlined-select-currency"
-                  select
-                  defaultValue="INR"
-                >
-                  {currencies.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="outlined-multiline-static"
-                label="Amount"
-                value={expenseAmount}
-                onChange={(e) => setExpensesAmount(e.target.value)}
-                style={{
-                  width: "3em",
-                }}
-              />
-            </Box>
-            <Box
-              component="form"
-              sx={{
-                "& > :not(style)": { width: "2.4em" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="outlined-multiline-static"
-                label="Establishment"
-                multiline
-                variant="outlined"
-                value={expenseEstablishment}
-                onChange={(e) => setExpenseEstablishment(e.target.value)}
-                style={{
-                  width: "3.9em",
-                }}
-              />
-            </Box>
-
-            <div style={{ marginTop: -10 }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    value={
-                      expenseDate
-                        ? dayjs(expenseDate, "DD/MM/YYYY").toDate()
-                        : null
-                    }
-                    onChange={(date) => setExpenseDate(date)}
-                    label="Payment Date"
-                    style={{ width: "3em" }}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
             </div>
-
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={expenseHeaders}
-              sx={{ width: 500 }}
-              onChange={(event, selectedExpenseHeaders) => {
-                setExpenseHeader(selectedExpenseHeaders.label);
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Expense Header" style={{}} />
-              )}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "row",
-              justifyContent: "center",
-              width: "100%",
-              margin: 10,
-              display: "flex",
-            }}
-          >
-            {/* <label htmlFor="fileInput"> */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
+                flexDirection: "row",
                 justifyContent: "center",
                 width: "100%",
-                flexDirection: "row",
+                margin: 10,
                 display: "flex",
-                border: "2px dashed #2196F3",
-                height: 40,
-                borderRadius: "10px",
-                cursor: "pointer",
               }}
             >
-              <DriveFolderUploadIcon style={{}} />
-              <input
-                type="file"
-                id="fileInput"
-                style={{
-                  backgroundColor: "yellow",
-                  position: "absolute",
-                  width: "100%",
-                  height: 40,
-                  opacity: 0,
-                  cursor: "pointer",
-                }}
-                onChange={(e) => setImage(e.target.files[0])}
-              />
-
-              <span style={{ marginRight: "8px", fontSize: "medium" }}>
-                {selectedFileName?.name ?? "Choose File"}
-              </span>
-              <span
-                style={{
-                  marginRight: "8px",
-                  fontSize: "medium",
-                  color: "green",
-                }}
-              >
-                {image?.name}
-              </span>
+              {/* <label htmlFor="fileInput"> */}
               <div
                 style={{
-                  display: "block",
-                  backgroundColor: "rgba(0, 0, 0, 0.1)",
-                  padding: "2px 5px",
-                  borderRadius: "4px",
-                  fontSize: "medium",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  flexDirection: "row",
+                  display: "flex",
+                  border: "2px dashed #2196F3",
+                  height: 40,
+                  borderRadius: "10px",
+                  cursor: "pointer",
                 }}
               >
-                {AcceptedFileFormats}
+                <DriveFolderUploadIcon style={{}} />
+                <input
+                  type="file"
+                  id="fileInput"
+                  style={{
+                    backgroundColor: "yellow",
+                    position: "absolute",
+                    width: "100%",
+                    height: 40,
+                    opacity: 0,
+                    cursor: "pointer",
+                  }}
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+
+                <span style={{ marginRight: "8px", fontSize: "medium" }}>
+                  {selectedFileName?.name ?? "Choose File"}
+                </span>
+                <span
+                  style={{
+                    marginRight: "8px",
+                    fontSize: "medium",
+                    color: "green",
+                  }}
+                >
+                  {image?.name}
+                </span>
+                <div
+                  style={{
+                    display: "block",
+                    backgroundColor: "rgba(0, 0, 0, 0.1)",
+                    padding: "2px 5px",
+                    borderRadius: "4px",
+                    fontSize: "medium",
+                  }}
+                >
+                  {AcceptedFileFormats}
+                </div>
               </div>
-            </div>
-            {/* </label> */}
-            {/* {image ? (
+              {/* </label> */}
+              {/* {image ? (
               <button
                 onClick={submitImage}
                 style={{
@@ -862,11 +828,12 @@ function Form({ key, showPlusButton, addExpense, reimbursement }) {
             ) : (
               <></>
             )} */}
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
-  );
-}
+        </form>
+      </div>
+    );
+  }
+);
 
 export default ClaimRequest;
