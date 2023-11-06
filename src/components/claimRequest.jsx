@@ -142,6 +142,12 @@ const ClaimRequest = () => {
     {
       field: "title",
       headerName: "Title",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "fromDate",
+      headerName: "Date",
       flex: 1.2,
       cellClassName: "name-column--cell",
     },
@@ -158,7 +164,7 @@ const ClaimRequest = () => {
       renderCell: ({ row }) => {
         return (
           <Box
-            width="90%"
+            width="99%"
             m="0 auto"
             p="5px"
             display="flex"
