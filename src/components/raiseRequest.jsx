@@ -28,17 +28,6 @@ const RaiseRequest = () => {
   const [successAlert, setSuccessAlert] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [amountError, setAmountError] = useState(false);
-
-  const handleAmountInput = (e) => {
-    const input = e.target.value;
-    if (/^\d*\.?\d*$/.test(input)) {
-      setAmount(input);
-      setAmountError(false);
-    } else {
-      setAmountError(true);
-    }
-  };
-
   const [type, setType] = useState({});
   const [purpose, setPurpose] = useState("");
   const [title, setTitle] = useState("");
@@ -72,21 +61,44 @@ const RaiseRequest = () => {
     },
   });
 
-  const [request, setRequest] = useState({
-    name: "",
-    fromDate: "",
-    toDate: "",
-    amount: "",
-    description: "",
-    place: "",
-  });
-
   const currencies = [
     {
       value: "INR",
       label: "₹",
     },
   ];
+
+  const getTypeDescription = (type) => {
+    switch (type) {
+      case "ta":
+        return "Travel ";
+      case "pa":
+        return "Purchase ";
+      case "fa":
+        return "Meal ";
+      case "aa":
+        return "Accomodation";
+      default:
+        return type;
+    }
+  };
+
+  const handleAmountInput = (e) => {
+    const input = e.target.value;
+    if (/^\d*\.?\d*$/.test(input)) {
+      setAmount(input);
+      setAmountError(false);
+    } else {
+      setAmountError(true);
+    }
+  };
+
+  const reimbursements = data.ireimbursements.map((reimbursement, index) => {
+    return {
+      ...reimbursement,
+      type: getTypeDescription(reimbursement.type),
+    };
+  });
 
   const callRaiseReimbursementRequest = () => {
     var numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
@@ -177,6 +189,11 @@ const RaiseRequest = () => {
       headerName: "Description",
       flex: 1.5,
       cellClassName: "name-column--cell",
+    },
+    {
+      field: "type",
+      headerName: "Type",
+      flex: 1,
     },
     {
       field: "fromDate",
@@ -554,7 +571,7 @@ const RaiseRequest = () => {
         }}
       >
         <DataGrid
-          rows={data.ireimbursements}
+          rows={reimbursements}
           columns={columns}
           getRowId={(row) => row._id}
         />
