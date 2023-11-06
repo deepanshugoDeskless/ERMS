@@ -335,7 +335,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       <TextField
                         id="standard-read-only-input"
                         label="Amount"
-                        defaultValue={`₹${expense.amount}`}
+                        value={`₹${expense.amount}`}
                         InputProps={{
                           readOnly: true,
                         }}
@@ -355,7 +355,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       <TextField
                         id="invoiceId"
                         label="Invoice ID"
-                        defaultValue={expense.invoiceId}
+                        value={expense.invoiceId}
                         variant="standard"
                         style={{ width: "3ch" }}
                         InputProps={{
@@ -375,7 +375,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       <TextField
                         id="establishment"
                         label="Establishment"
-                        defaultValue={expense.establishment}
+                        value={expense.establishment}
                         variant="standard"
                         style={{ width: "3ch" }}
                         InputProps={{
@@ -395,7 +395,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Type"
                         label="Type"
-                        defaultValue={
+                        value={
                           expense.type === "fe"
                             ? "Meal Expense"
                             : expense.type === "ae"
@@ -425,7 +425,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Date"
                         label="Date"
-                        defaultValue={expense.date}
+                        value={expense.date}
                         variant="standard"
                         style={{ width: "3ch" }}
                         InputProps={{
