@@ -65,6 +65,7 @@ const customHeaderCell = (params) => {
       (total, expense) => total + parseFloat(expense.amount),
       0
     );
+    return expenses.length; // Return the length of the expenses array
   };
 
 const AllApprovedReimbursementsFinance = () => {
@@ -106,11 +107,14 @@ const AllApprovedReimbursementsFinance = () => {
     askedAmount: row.askedAmount,
     totalAmount: row.totalAmount,
     isPreApproved: row.isPreApproved,
+    isApproved:row.isApproved,
+    isPaid:row.isPaid,
     purpose: row.purpose,
     sumOfExpenses: calculateTotalAmount(row.expenses),
     requestedBy: `${row.by.firstName} ${row.by.lastName}`, // Combine firstName and lastName
   }));
-  
+
+  console.log("Rows data:", rows);
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1, headerRender: customHeaderCell },
@@ -218,62 +222,69 @@ const AllApprovedReimbursementsFinance = () => {
           );
         },
       },
-    //   {
-    //     field: "status",
-    //     headerName: "Status",
-    //     flex: 1,
-    //     headerRender: customHeaderCell,
-    //     renderCell: (params) => {
-    //       const isPreApproved = params.row.isPreApproved;
-    //       const isApproved = params.row.isApproved;
       
-    //       if (isApproved && isPreApproved) {
-    //         return "Approved";
-    //       } else if (isPreApproved && !isApproved) {
-    //         return "Preapproved";
-    //       } else {
-    //         return "Pending";
-    //       }
-    //     },
-    //   }
+{
+  field: "isPreApproved",
+  headerName: "Status",
+  flex: 1.4,
+  renderCell: ({ row }) => {
+    console.log("isPreApproved:", row.isPreApproved);
+    console.log("isApproved:", row.isApproved);
+    console.log("expenses.length:", row.expenses.length);
+
+    let status = "Pending";
+
+    if (row.isPreApproved) {
+      if (row.expenses.length > 0) {
+        if (row.isApproved) {
+          status = "Approved";
+        } else {
+          status = "Claimed";
+        }
+      } else {
+        status = "Pre Approved";
+      }
+    }
+
+    if (row.isPaid) {
+      status = "Disbursed";
+    }
+
+    return (
+      <Box
+        width="120%"
+        m="0 auto"
+        p="5px"
+        display="flex"
+        justifyContent="center"
+        backgroundColor={
+          status === "Approved"
+            ? "#0BF265"
+            : status === "Claimed"
+            ? colors.blueAccent[500]
+            : status === "Pre Approved"
+            ? colors.greenAccent[500]
+            : status === "Disbursed"
+            ? colors.blueAccent[600]
+            : colors.redAccent[500]
+        }
+        borderRadius="4px"
+      >
+        <Typography style={{ color: "white" }} sx={{ ml: "5px" }}>
+          {status}
+        </Typography>
+      </Box>
+    );
+  },
+}
+
       
-      {
-        field: "isPreApproved",
-        headerName: "Pre Approved",
-        flex: 1.4,
-        renderCell: ({ row }) => {
-          return (
-            <Box
-              width="120%"
-              m="0 auto"
-              p="5px"
-              display="flex"
-              justifyContent="center"
-              backgroundColor={
-                row.isPreApproved
-                  ? row.expenses.length > 0
-                    ? row.isApproved
-                      ? "#0BF265"
-                      : colors.blueAccent[500]
-                    : colors.greenAccent[500]
-                  : colors.redAccent[500]
-              }
-              borderRadius="4px"
-            >
-              <Typography style={{ color: "white" }} sx={{ ml: "5px" }}>
-                {row.isPreApproved
-                  ? row.expenses.length > 0
-                    ? row.isApproved
-                      ? "Approved"
-                      : "Claimed"
-                    : "Pre Approved "
-                  : "Pending"}
-              </Typography>
-            </Box>
-          );
-        },
-      },
+      
   ];
+
+  console.log("GraphQL data:", data);
+
+
    return (
     <>
       <Box
