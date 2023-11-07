@@ -21,6 +21,7 @@ import Alert from "@mui/material/Alert";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
 import { Loader, Error } from "./loader";
+import 'dayjs/locale/en-gb';
 
 const RaiseRequest = () => {
   const [colorMode] = useMode();
@@ -233,11 +234,11 @@ const RaiseRequest = () => {
     {
       field: "isPreApproved",
       headerName: "Pre Approved",
-      flex: 1,
+      flex: 1.4,
       renderCell: ({ row }) => {
         return (
           <Box
-            width="80%"
+            width="120%"
             m="0 auto"
             p="5px"
             display="flex"
@@ -414,7 +415,7 @@ const RaiseRequest = () => {
               alignItems: "center",
             }}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
                   value={
@@ -430,7 +431,7 @@ const RaiseRequest = () => {
               </DemoContainer>
             </LocalizationProvider>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} >
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
                   value={toDate ? dayjs(toDate, "DD/MM/YYYY").toDate() : null}

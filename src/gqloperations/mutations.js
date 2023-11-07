@@ -98,6 +98,7 @@ export const GET_REIMBURSEMENTS = gql`
       }
       isPreApproved
       isApproved
+      isPaid
       purpose
       expenses {
         date
@@ -118,7 +119,10 @@ export const RAISE_REIMBURSEMENT_REQUEST = gql`
   mutation RaiseRequest($reimbursementNew: ReimbursementInput!) {
     Reimbursement: createReimbursment(reimbursementNew: $reimbursementNew) {
       _id
-      by
+      by{
+        firstName
+        lastName
+      }
     }
   }
 `;
@@ -183,6 +187,10 @@ export const GET_APPROVED_REIMBURSEMENTS = gql`
         expenseHeader
         attachment
       }
+      by{
+        firstName
+        lastName
+      }
     }
   }
 `;
@@ -202,12 +210,15 @@ export const ADMIN_FETCH_REQUESTS = gql`
       totalAmount
       isPreApproved
       isApproved
+      isPaid
       purpose
       expenses {
         date
         type
         _id
         description
+        establishment
+        invoiceId
         amount
         approved
         invoiceId
@@ -223,3 +234,38 @@ export const DELETE_EXPENSE = gql`
     String: deleteExpense(expenseId: $expenseId)
   }
 `;
+
+export const GET_ALL_REIMBURSEMENTS = gql`
+query GetAllReimbursements {
+  reimbursements {
+    _id
+    title
+    purpose
+    description
+    type
+    visitLocation
+    noOfDays
+    fromDate
+    toDate
+    askedAmount
+    totalAmount
+    isPreApproved
+    isApproved
+    isPaid
+    by{
+      firstName
+      lastName
+    }
+    expenses{
+     date
+        type
+        _id
+        description
+        amount
+        approved
+        invoiceId
+        establishment
+    }
+  }
+}
+`

@@ -39,6 +39,9 @@ import ApprovedReimbursementsFinance from "./approvedReimbursementsFinance";
 import ClaimedReimbursements from "./claimedReimbursements";
 import ApprovedReimbursementsAdmin from "./approvedReimbursementsAdmin";
 import ApprovedReimbursementsUser from "./approvedReimbursementsUser";
+import AllApprovedReimbursementsFinance from "./AllApprovedReimbursementsFinance";
+import AllApprovedReimbursementsAdmin from "./AllApprovedReimbursementsAdmin";
+import DisburseReimbursement from "./DisburseReimbursement";
 
 export const ADMIN_SIDEBAR_DATA = [
   {
@@ -81,6 +84,13 @@ export const ADMIN_SIDEBAR_DATA = [
     name: "Approved Reimbursements",
     page: <ApprovedReimbursementsAdmin />,
     path: "approvedrequests",
+    icon: <ApproveIcon />,
+  },
+  {
+    id: 7,
+    name: "History",
+    page: <AllApprovedReimbursementsAdmin />,
+    path: "AllApprovedRequests",
     icon: <HistoryIcon />,
   },
 ];
@@ -102,11 +112,25 @@ export const NEWFINANCE_SIDEBAR_DATA = [
   },
   {
     id: 3,
+    name: "Disburse Reimbursements",
+    page: <DisburseReimbursement />,
+    path: "DisbursementFinance",
+    icon: <PeopleIcon />,
+  },
+  {
+    id: 4,
     name: "Approved Reimbursements",
     page: <ApprovedReimbursementsFinance />,
     path: "financeApproveReimbursements",
     icon: <ApproveIcon />,
   },
+  {
+    id: 5,
+    name: "History",
+    page: <AllApprovedReimbursementsFinance />,
+    path: "financAlleApprovedReimbursements",
+    icon: <HistoryIcon />,
+  }
 ];
 
 export const USER_SIDEBAR_DATA = [
