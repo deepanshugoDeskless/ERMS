@@ -109,6 +109,7 @@ const PreApproveRequest = () => {
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1 },
+    { field: "purpose", headerName: "Purpose", flex: 1 },
     {
       field: "description",
       headerName: "Description",
@@ -118,23 +119,43 @@ const PreApproveRequest = () => {
     {
       field: "type",
       headerName: "Type",
-      flex: 0.9,
+      flex: 1.2,
       cellClassName: "name-column--cell",
       valueGetter: (params) => {
         switch (params.value) {
           case "pa":
-            return "Purchase Expense";
+            return "Purchase";
           case "ta":
-            return "Travel Expense";
+            return "Travel";
           case "aa":
-            return "Accommodation Expense";
+            return "Accommodation";
           case "fa":
-            return "Meal Expense";
+            return "Meal";
           default:
             return params.value;
         }
       },
     },
+    
+    {
+      field: "visitLocation",
+      headerName: "Place",
+      flex: 0.8,
+    },
+    {
+      field: "fromDate",
+      headerName: "From",
+      flex: 0.7,
+      valueFormatter: (params) => formatDate(params.value),
+    },
+    {
+      field: "toDate",
+      headerName: "To",
+      flex: 0.7,
+      valueFormatter: (params) => formatDate(params.value),
+    },
+    { field: "noOfDays", headerName: "Days", flex: 0.4 },
+
     {
       field: "by",
       headerName: "Requested By",
@@ -163,23 +184,6 @@ const PreApproveRequest = () => {
           </Box>
         );
       },
-    },
-    {
-      field: "visitLocation",
-      headerName: "Place",
-      flex: 0.5,
-    },
-    {
-      field: "fromDate",
-      headerName: "From",
-      flex: 0.7,
-      valueFormatter: (params) => formatDate(params.value),
-    },
-    {
-      field: "toDate",
-      headerName: "To",
-      flex: 0.7,
-      valueFormatter: (params) => formatDate(params.value),
     },
 
     {

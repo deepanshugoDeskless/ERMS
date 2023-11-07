@@ -16,13 +16,13 @@ import { AttachFileIcon } from "./Icons";
 const getTypeDescription = (type) => {
   switch (type) {
     case "ta":
-      return "Travel Expense";
+      return "Travel";
     case "pa":
-      return "Purchase Expense";
+      return "Purchase";
     case "fa":
-      return "Meal Expense";
+      return "Meal";
     case "aa":
-      return "Acco Expense";
+      return "Accomodation";
     default:
       return type;
   }
@@ -155,6 +155,9 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
           askedAmount: reimbursement.askedAmount,
           expenses: reimbursement.expenses,
           description: reimbursement.description,
+          purpose : reimbursement.purpose,
+          place: reimbursement.visitLocation,
+          Expenses: reimbursement.expenses.length,
         };
       } else {
         console.error(
@@ -166,11 +169,15 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     });
 
   const columns = [
-    { field: "title", headerName: "Title", flex: 1.4 },
-    { field: "type", headerName: "Type", flex: 1.6 },
-    { field: "fromDate", headerName: "From Date", flex: 0.8 },
-    { field: "toDate", headerName: "To Date", flex: 0.8 },
-    { field: "askedAmount", headerName: "Ask", flex: 0.7 },
+    { field: "title", headerName: "Title", flex: 1 },
+    { field: "purpose", headerName: "Purpose", flex: 1.2 },
+    { field: "type", headerName: "Type", flex: 1.2 },
+    { field: "fromDate", headerName: "From Date", flex: 1.4},
+    { field: "toDate", headerName: "To Date", flex: 1.2 },
+    { field: "place", headerName: "Place", flex: 1},
+    { field: "askedAmount", headerName: "Ask", flex: 1.2 },
+    { field: "Expenses", headerName: "Expenses", flex: 0.7 },
+  
   ];
 
   return (
@@ -235,7 +242,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
         >
           <Box
             height="82.3vh"
-            width="40vw"
+            width="42vw"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
@@ -481,9 +488,9 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Date"
                         label="Date"
-                        value={expense.date}
+                        value={formatDateToDDMMM (expense.date)}
                         variant="standard"
-                        style={{ width: "3ch" }}
+                        style={{ width: "1.8ch" }}
                         InputProps={{
                           readOnly: true,
                         }}

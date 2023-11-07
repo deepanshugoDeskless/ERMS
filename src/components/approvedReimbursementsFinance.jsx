@@ -18,13 +18,13 @@ import * as XLSX from "xlsx";
 const getTypeDescription = (type) => {
   switch (type) {
     case "ta":
-      return "Travel Expense";
+      return "Travel";
     case "pa":
-      return "Purchase Expense";
+      return "Purchase";
     case "fa":
-      return "Meal Expense";
+      return "Meal";
     case "aa":
-      return "Acco Expense";
+      return "Accomodation";
     default:
       return type;
   }
@@ -196,6 +196,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
           askedAmount: reimbursement.askedAmount,
           expenses: reimbursement.expenses,
           description: reimbursement.description,
+          purpose : reimbursement.purpose,
+          place : reimbursement.visitLocation,
         };
       } else {
         console.error(
@@ -211,10 +213,28 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
+    { field: "purpose", headerName: "Purpose", flex: 1.4 },
     { field: "type", headerName: "Type", flex: 1.6 },
-    { field: "fromDate", headerName: "From Date", flex: 0.8 },
-    { field: "toDate", headerName: "To Date", flex: 0.8 },
-    { field: "askedAmount", headerName: "Ask", flex: 0.7 },
+    { field: "fromDate", headerName: "From Date", flex: 1.4 },
+    { field: "toDate", headerName: "To Date", flex: 1.4 },
+    { field: "place", headerName: "Place", flex: 1.2 },
+    { field: "askedAmount", headerName: "Ask", flex: 1.2},
+    {
+      field: "claimed",
+      headerName: "Claimed",
+      flex: 1.1,
+      renderCell: (params) => {
+        const claimedAmount = calculateTotalAmount(params.row.expenses);
+        const askedAmount = params.row.askedAmount;
+        const isClaimedAmountGreater = claimedAmount > askedAmount;
+  
+        return (
+          <div style={{ color: isClaimedAmountGreater ? "red" : "inherit" }}>
+            {`${claimedAmount}`}
+          </div>
+        );
+      },
+    },
   ];
 
   const formatDate = (dateString) => {
@@ -302,7 +322,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
         >
           <Box
             height="82.3vh"
-            width="40vw"
+            width="42vw"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
@@ -586,7 +606,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                         label="Date"
                         value={formatDate(expense.date)}
                         variant="standard"
-                        style={{ width: "3ch" }}
+                        style={{ width: "1.8ch" }}
                         InputProps={{
                           readOnly: true,
                         }}
