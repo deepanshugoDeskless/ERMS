@@ -25,23 +25,23 @@ const Team = () => {
   if (error) return <Error />;
 
   const columns = [
-    { field: "employeeCode", headerName: "Employee ID", flex: 1 },
+    { field: "employeeCode", headerName: "Employee ID", flex: 0.8 },
     {
       field: "firstName",
       headerName: "First Name",
-      flex: 0.7,
+      flex: 1.4,
       cellClassName: "name-column--cell",
     },
     {
       field: "lastName",
       headerName: "Last Name",
-      flex: 1,
+      flex: 1.2,
       cellClassName: "name-column--cell",
     },
     {
       field: "email",
       headerName: "Email",
-      flex: 1.8,
+      flex: 2.8,
       valueFormatter: (params) => params.value.toLowerCase(),
     },
     {
@@ -51,7 +51,7 @@ const Team = () => {
       renderCell: ({ row }) => {
         return (
           <Box
-            width="60%"
+            width="80%"
             m="0 auto"
             p="5px"
             display="flex"
@@ -78,12 +78,24 @@ const Team = () => {
     {
       field: "username",
       headerName: "Username",
-      flex: 1.5,
+      flex: 2.4,
     },
     {
       field: "sex",
       headerName: "Gender",
+      flex: 0.7,
+    },
+    {
+      field: "bank_account_no",
+      headerName: "# Bank Acc",
+      flex: 1.6,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "bank_ifsc_code",
+      headerName: "# Bank IFSC",
       flex: 1,
+      cellClassName: "name-column--cell",
     },
   ];
 
@@ -102,7 +114,7 @@ const Team = () => {
             color: colors.blueAccent[200],
             width: "84vw",
             position: "fixed",
-            top: "01.5em",
+            top: "01.2em",
             height: "2em",
             display: "flex",
             textAlign: "center",

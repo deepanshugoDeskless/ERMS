@@ -56,6 +56,8 @@ const AddEmployee = () => {
   const [file, setFile] = useState("");
   const [jsonData, setJsonData] = useState([]);
   const [displayTable, setDisplayTable] = useState(false);
+  const [individualBankAccNumber, setIndividualBankAccNumber] = useState("");
+  const [individualIFSCCode, setIndividualIFSCCode] = useState("");
 
   const [
     bulkUserCreate,
@@ -150,6 +152,8 @@ const AddEmployee = () => {
             individualLasttName +
             "-" +
             "godeskless",
+            bank_account_no :individualBankAccNumber,
+            bank_ifsc_code:individualIFSCCode,
         },
       },
     })
@@ -159,6 +163,9 @@ const AddEmployee = () => {
         setIndividualEmail("");
         setIndividualPhone("");
         setIndividualEmployeeCode("");
+        setIndividualBankAccNumber("");
+        setIndividualIFSCCode("");
+
       })
       .catch((error) => {
         console.error(error);
@@ -383,7 +390,45 @@ const AddEmployee = () => {
                     }}
                   />
                 </div>
+                {/* New fields for Bank Account Number and IFSC Code */}
+                <div style={{ flexDirection: "row",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",}}>
                 <TextField
+                  id="outlined-basic"
+                  label="Bank Account Number"
+                  variant="outlined"
+                  value={individualBankAccNumber}
+                  type="text"
+                  placeholder="Enter Bank Account Number"
+                  name="bankAccountNumber"
+                  onChange={(e) => setIndividualBankAccNumber(e.target.value)}
+                  required
+                  style={{
+                    width: "60%",
+                    margin: 4,
+                  }}
+                />
+
+                <TextField
+                  id="outlined-basic"
+                  label="IFSC Code"
+                  variant="outlined"
+                  value={individualIFSCCode}
+                  type="text"
+                  placeholder="Enter IFSC Code"
+                  name="ifscCode"
+                  onChange={(e) => setIndividualIFSCCode(e.target.value)}
+                  required
+                  style={{
+                    width: "60%",
+                    margin: 4,
+                  }}
+                />
+                </div>
+
+                 <TextField
                   id="outlined-basic"
                   label="Employee Code"
                   variant="outlined"
@@ -398,6 +443,7 @@ const AddEmployee = () => {
                     marginTop: 4,
                   }}
                 />
+
                 <div
                   style={{
                     flexDirection: "column",

@@ -431,7 +431,7 @@ const RaiseRequest = () => {
               </DemoContainer>
             </LocalizationProvider>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs} >
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb" >
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
                   value={toDate ? dayjs(toDate, "DD/MM/YYYY").toDate() : null}
