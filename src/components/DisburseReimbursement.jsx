@@ -9,6 +9,7 @@ import { useQuery, gql, useMutation } from "@apollo/client";
 import {
   ADMIN_FETCH_REQUESTS,
   UPDATE_REIMBURSEMENTS,
+  GET_APPROVED_REIMBURSEMENTS
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
 
@@ -61,7 +62,7 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
     );
   };
 
-  const { loading, error, data, refetch } = useQuery(ADMIN_FETCH_REQUESTS, {
+  const { loading, error, data, refetch } = useQuery(GET_APPROVED_REIMBURSEMENTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
@@ -133,12 +134,12 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
     }
   };
 
-  const reimbursements = data.pendingReimbursements
+  const reimbursements = data.approvedReimbursements
     .filter(
       (element) =>
         element.expenses.length > 0 &&
         element.isPreApproved &&
-        !element.isApproved&&
+        element.isApproved &&
         !element.isPaid
         
     )
@@ -314,7 +315,6 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
         >
           <Box
             height="82.3vh"
-            width="42vw"
             width={tableWidth} // Dynamic table width
             sx={{
               "& .MuiDataGrid-root": {

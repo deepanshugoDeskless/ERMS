@@ -178,6 +178,8 @@ export const GET_APPROVED_REIMBURSEMENTS = gql`
       askedAmount
       totalAmount
       isPreApproved
+      isApproved
+      isPaid
       purpose
       expenses {
         date

@@ -21,7 +21,7 @@ import Alert from "@mui/material/Alert";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
 import { Loader, Error } from "./loader";
-import 'dayjs/locale/en-gb';
+import "dayjs/locale/en-gb";
 
 const RaiseRequest = () => {
   const [colorMode] = useMode();
@@ -247,7 +247,9 @@ const RaiseRequest = () => {
               row.isPreApproved
                 ? row.expenses.length > 0
                   ? row.isApproved
-                    ? "#0BF265"
+                    ? row.isPaid
+                      ? colors.blueAccent[300]
+                      : "#0BF265"
                     : colors.blueAccent[500]
                   : colors.greenAccent[500]
                 : colors.redAccent[500]
@@ -258,7 +260,9 @@ const RaiseRequest = () => {
               {row.isPreApproved
                 ? row.expenses.length > 0
                   ? row.isApproved
-                    ? "Approved"
+                    ? row.isPaid
+                      ? "Disbursed"
+                      : "Approved"
                     : "Claimed"
                   : "Pre Approved "
                 : "Pending"}
@@ -415,7 +419,10 @@ const RaiseRequest = () => {
               alignItems: "center",
             }}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              adapterLocale="en-gb"
+            >
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
                   value={
@@ -431,7 +438,10 @@ const RaiseRequest = () => {
               </DemoContainer>
             </LocalizationProvider>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb" >
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              adapterLocale="en-gb"
+            >
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
                   value={toDate ? dayjs(toDate, "DD/MM/YYYY").toDate() : null}
