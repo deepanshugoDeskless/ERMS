@@ -196,8 +196,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
           askedAmount: reimbursement.askedAmount,
           expenses: reimbursement.expenses,
           description: reimbursement.description,
-          purpose : reimbursement.purpose,
-          place : reimbursement.visitLocation,
+          purpose: reimbursement.purpose,
+          place: reimbursement.visitLocation,
         };
       } else {
         console.error(
@@ -218,7 +218,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     { field: "fromDate", headerName: "From Date", flex: 1.4 },
     { field: "toDate", headerName: "To Date", flex: 1.4 },
     { field: "place", headerName: "Place", flex: 1.2 },
-    { field: "askedAmount", headerName: "Ask", flex: 1.2},
+    { field: "askedAmount", headerName: "Ask", flex: 1.2 },
     {
       field: "claimed",
       headerName: "Claimed",
@@ -227,7 +227,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
         const claimedAmount = calculateTotalAmount(params.row.expenses);
         const askedAmount = params.row.askedAmount;
         const isClaimedAmountGreater = claimedAmount > askedAmount;
-  
+
         return (
           <div style={{ color: isClaimedAmountGreater ? "red" : "inherit" }}>
             {`${claimedAmount}`}
@@ -236,36 +236,6 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
       },
     },
   ];
-
-  const formatDate = (dateString) => {
-    const dateParts = dateString.split("/");
-    if (dateParts.length === 3) {
-      const day = dateParts[0];
-      const month = dateParts[1];
-      const year = dateParts[2];
-
-      if (parseInt(month) >= 1 && parseInt(month) <= 12) {
-        const monthNames = [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ];
-        const monthName = monthNames[parseInt(month) - 1];
-
-        return `${day} ${monthName}`;
-      }
-    }
-    return "Invalid Date";
-  };
 
   return (
     <>
@@ -402,224 +372,268 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
                   ₹{calculateTotalAmount(selectedRowData.expenses)}
                 </Typography>
               </div>
-              {selectedRowData.expenses.map((expense, index) => (
-                <div
-                  key={index}
-                  style={{
-                    border: "1px solid #ccc",
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                    borderRadius: "12px",
-                    marginTop: "0.4em",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "self-start",
-                  }}
-                >
-                  <div
-                    style={{
-                      // backgroundColor: "yellow",
-                      display: "flex",
-                      width: "100%",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <h6
-                      style={{
-                        padding: 8,
-                        marginBottom: "1em",
-                        fontSize: "0.4em",
-                        fontWeight: "400",
-                      }}
-                    >
-                      {expense.description}
-                    </h6>
-                    <div
-                      style={{
-                        // backgroundColor: "yellow",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <div>
-                        {expense.attachment != null && (
-                          <Button
-                            variant="outlined"
-                            style={{
-                              margin: 10,
-                            }}
-                            onClick={() => {
-                              if (expense.attachment != null) {
-                                const url = expense.attachment; // Replace this with your desired URL
-                                const newWindow = window.open(
-                                  url,
-                                  "_blank",
-                                  "noopener,noreferrer"
-                                );
-                                if (newWindow) newWindow.opener = null;
-                              }
-                            }}
-                            startIcon={<AttachFileIcon />}
-                          >
-                            View File
-                          </Button>
-                        )}
-                      </div>
-                      <Box
-                        component="form"
-                        sx={{
-                          "& .MuiTextField-root": { m: 1, width: "3ch" },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                        style={{}}
-                      >
-                        <TextField
-                          id="outlined-basic"
-                          label="Header"
-                          value={`${expense.expenseHeader}`}
-                          onChange={() => {}}
-                          variant="outlined"
-                          style={{ width: "6ch", margin: 20 }}
-                        />
-                      </Box>
-                      <Button
-                        variant="outlined"
-                        style={{
-                          margin: 10,
-                        }}
-                        onClick={() => {}}
-                        startIcon={<SaveAsRoundedIcon />}
-                      >
-                        Save
-                      </Button>
-                    </div>
-                  </div>
 
-                  <div
-                    className="innerbox"
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <Box
-                      component="form"
-                      sx={{
-                        "& .MuiTextField-root": { m: 1, width: "3ch" },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                      style={{ position: "relative", marginTop: "-0.16em" }}
-                    >
-                      <TextField
-                        id="standard-read-only-input"
-                        label="Amount"
-                        value={`₹${expense.amount}`}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        variant="standard"
-                        style={{ width: "2.4ch" }}
-                      />
-                    </Box>
-                    <Box
-                      component="form"
-                      sx={{
-                        "& .MuiTextField-root": { m: 1, width: "10ch" },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                      style={{ position: "relative", marginTop: "-0.16em" }}
-                    >
-                      <TextField
-                        id="invoiceId"
-                        label="Invoice ID"
-                        value={expense.invoiceId}
-                        variant="standard"
-                        style={{ width: "3ch" }}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
-                    </Box>
-                    <Box
-                      component="form"
-                      sx={{
-                        "& .MuiTextField-root": { m: 1, width: "10ch" },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                      style={{ position: "relative", marginTop: "-0.16em" }}
-                    >
-                      <TextField
-                        id="establishment"
-                        label="Establishment"
-                        value={expense.establishment}
-                        variant="standard"
-                        style={{ width: "3ch" }}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
-                    </Box>
-                    <Box
-                      component="form"
-                      sx={{
-                        "& .MuiTextField-root": { m: 1, width: "10ch" },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                      style={{ position: "relative", marginTop: "-0.16em" }}
-                    >
-                      <TextField
-                        id="Type"
-                        label="Type"
-                        value={
-                          expense.type === "fe"
-                            ? "Meal Expense"
-                            : expense.type === "ae"
-                            ? "Accommodation Expense"
-                            : expense.type === "pe"
-                            ? "Purchase Expense"
-                            : expense.type === "te"
-                            ? "Travel Expense"
-                            : expense.type
-                        }
-                        variant="standard"
-                        style={{ width: "6.4ch" }}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
-                    </Box>
-                    <Box
-                      component="form"
-                      sx={{
-                        "& .MuiTextField-root": { m: 1, width: "10ch" },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                      style={{ position: "relative", marginTop: "-0.16em" }}
-                    >
-                      <TextField
-                        id="Date"
-                        label="Date"
-                        value={formatDate(expense.date)}
-                        variant="standard"
-                        style={{ width: "1.8ch" }}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
-                    </Box>
-                  </div>
-                </div>
-              ))}
+              {selectedRowData && selectedRowData.expenses ? (
+                selectedRowData.expenses.map((expense, index) => (
+                  <ExpenseElement expense={expense} index={index} key={index} />
+                ))
+              ) : (
+                <div>Loading...</div>
+              )}
             </div>
           )}
         </div>
       </Box>
     </>
+  );
+};
+
+const ExpenseElement = ({expense, index}) => {
+  console.log(
+    "🚀 ~ file: approvedReimbursementsFinance.jsx:387 ~ ExpenseElement ~ expense:",
+    expense.expense
+  );
+  const formatDate = (dateString) => {
+    const dateParts = dateString?.split("/");
+    if (dateParts?.length === 3) {
+      const day = dateParts[0];
+      const month = dateParts[1];
+      const year = dateParts[2];
+
+      if (parseInt(month) >= 1 && parseInt(month) <= 12) {
+        const monthNames = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const monthName = monthNames[parseInt(month) - 1];
+
+        return `${day} ${monthName}`;
+      }
+    }
+    return "Invalid Date";
+  };
+  return (
+    <div
+      key={index}
+      style={{
+        border: "1px solid #ccc",
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+        borderRadius: "12px",
+        marginTop: "0.4em",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "self-start",
+      }}
+    >
+      <div
+        style={{
+          // backgroundColor: "yellow",
+          display: "flex",
+          width: "100%",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <h6
+          style={{
+            padding: 8,
+            marginBottom: "1em",
+            fontSize: "0.4em",
+            fontWeight: "400",
+          }}
+        >
+          {expense.description}
+        </h6>
+        <div
+          style={{
+            // backgroundColor: "yellow",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            {expense.attachment != null && (
+              <Button
+                variant="outlined"
+                style={{
+                  margin: 10,
+                }}
+                onClick={() => {
+                  if (expense.attachment != null) {
+                    const url = expense.attachment; // Replace this with your desired URL
+                    const newWindow = window.open(
+                      url,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                    if (newWindow) newWindow.opener = null;
+                  }
+                }}
+                startIcon={<AttachFileIcon />}
+              >
+                View File
+              </Button>
+            )}
+          </div>
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "3ch" },
+            }}
+            noValidate
+            autoComplete="off"
+            style={{}}
+          >
+            <TextField
+              id="outlined-basic"
+              label="Header"
+              defaultValue={`${expense.expenseHeader}`}
+              onChange={() => {}}
+              variant="outlined"
+              style={{ width: "6ch", margin: 20 }}
+            />
+          </Box>
+          <Button
+            variant="outlined"
+            style={{
+              margin: 10,
+            }}
+            onClick={() => {}}
+            startIcon={<SaveAsRoundedIcon />}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+
+      <div
+        className="innerbox"
+        style={{ display: "flex", justifyContent: "space-evenly" }}
+      >
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "3ch" },
+          }}
+          noValidate
+          autoComplete="off"
+          style={{ position: "relative", marginTop: "-0.16em" }}
+        >
+          <TextField
+            id="standard-read-only-input"
+            label="Amount"
+            value={`₹${expense.amount}`}
+            InputProps={{
+              readOnly: true,
+            }}
+            variant="standard"
+            style={{ width: "2.4ch" }}
+          />
+        </Box>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "10ch" },
+          }}
+          noValidate
+          autoComplete="off"
+          style={{ position: "relative", marginTop: "-0.16em" }}
+        >
+          <TextField
+            id="invoiceId"
+            label="Invoice ID"
+            value={expense.invoiceId}
+            variant="standard"
+            style={{ width: "3ch" }}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Box>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "10ch" },
+          }}
+          noValidate
+          autoComplete="off"
+          style={{ position: "relative", marginTop: "-0.16em" }}
+        >
+          <TextField
+            id="establishment"
+            label="Establishment"
+            value={expense.establishment}
+            variant="standard"
+            style={{ width: "3ch" }}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Box>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "10ch" },
+          }}
+          noValidate
+          autoComplete="off"
+          style={{ position: "relative", marginTop: "-0.16em" }}
+        >
+          <TextField
+            id="Type"
+            label="Type"
+            value={
+              expense.type === "fe"
+                ? "Meal Expense"
+                : expense.type === "ae"
+                ? "Accommodation Expense"
+                : expense.type === "pe"
+                ? "Purchase Expense"
+                : expense.type === "te"
+                ? "Travel Expense"
+                : expense.type
+            }
+            variant="standard"
+            style={{ width: "6.4ch" }}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Box>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "10ch" },
+          }}
+          noValidate
+          autoComplete="off"
+          style={{ position: "relative", marginTop: "-0.16em" }}
+        >
+          <TextField
+            id="Date"
+            label="Date"
+            value={formatDate(expense.date)}
+            variant="standard"
+            style={{ width: "1.8ch" }}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Box>
+      </div>
+    </div>
   );
 };
 
