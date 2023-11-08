@@ -155,7 +155,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
           askedAmount: reimbursement.askedAmount,
           expenses: reimbursement.expenses,
           description: reimbursement.description,
-          purpose : reimbursement.purpose,
+          purpose: reimbursement.purpose,
           place: reimbursement.visitLocation,
           Expenses: reimbursement.expenses.length,
         };
@@ -172,12 +172,19 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     { field: "title", headerName: "Title", flex: 1 },
     { field: "purpose", headerName: "Purpose", flex: 1.2 },
     { field: "type", headerName: "Type", flex: 1.2 },
-    { field: "fromDate", headerName: "From Date", flex: 1.4},
-    { field: "toDate", headerName: "To Date", flex: 1.2 },
-    { field: "place", headerName: "Place", flex: 1},
-    { field: "askedAmount", headerName: "Ask", flex: 1.2 },
+    { field: "fromDate", headerName: "From Date", flex: 1.4 },
+    { field: "toDate", headerName: "To Date", flex: 1.4 },
+    { field: "place", headerName: "Place", flex: 1 },
+    { field: "askedAmount", headerName: "Ask", flex: 1.4 },
     { field: "Expenses", headerName: "Expenses", flex: 0.7 },
-  
+    {
+      field: "claimed",
+      headerName: "Claimed",
+      flex: 1.4,
+      valueGetter: (params) => {
+        return `${calculateTotalAmount(params.row.expenses)}`;
+      },
+    },
   ];
 
   return (
@@ -319,7 +326,12 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                   style={{
                     fontSize: "xxx-large",
                     fontWeight: 600,
-                    color: "#808080",
+                    color:
+                      selectedRowData &&
+                      calculateTotalAmount(selectedRowData.expenses) >
+                        selectedRowData.askedAmount
+                        ? "#D0342C"
+                        : "#808080",
                   }}
                 >
                   ₹{calculateTotalAmount(selectedRowData.expenses)}
@@ -488,7 +500,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Date"
                         label="Date"
-                        value={formatDateToDDMMM (expense.date)}
+                        value={formatDateToDDMMM(expense.date)}
                         variant="standard"
                         style={{ width: "1.8ch" }}
                         InputProps={{

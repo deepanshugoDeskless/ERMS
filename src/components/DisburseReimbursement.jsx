@@ -8,13 +8,9 @@ import { useMode } from "../../src/theme";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import {
   ADMIN_FETCH_REQUESTS,
-  GET_APPROVED_REIMBURSEMENTS,
-  GET_REIMBURSEMENTS,
   UPDATE_REIMBURSEMENTS,
-  DELETE_EXPENSE,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
-import { AttachFileIcon, DeleteRoundedIcon } from "./Icons";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -31,7 +27,7 @@ const getTypeDescription = (type) => {
   }
 };
 
-const ClaimedReimbursements = (key, showPlusButton, addForm) => {
+const PreApproveRequest = (key, showPlusButton, addForm) => {
   const [isFormOpen, setFormOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [colorMode] = useMode();
@@ -62,7 +58,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
     );
   };
 
-  const { loading, error, data, refetch } = useQuery(GET_REIMBURSEMENTS, {
+  const { loading, error, data, refetch } = useQuery(ADMIN_FETCH_REQUESTS, {
     context: {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
@@ -70,76 +66,126 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
     },
   });
 
-  const [
-    deleteExpense,
-    { deleteExpenseData, deleteExpenseLoading, deleteExpenseEerror },
-  ] = useMutation(DELETE_EXPENSE, {
-    onCompleted: () => {
-      refetch({
-        context: {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
+  const [updateReimbursements, { updateData, updateLoading, updateError }] =
+    useMutation(UPDATE_REIMBURSEMENTS, {
+      onCompleted: () => {
+        refetch({
+          context: {
+            headers: {
+              Authorization: `${localStorage.getItem("token")}`,
+            },
           },
-        },
-      });
-    },
-  });
+        });
+      },
+    });
 
   if (loading) return <Loader />;
   if (error) return <Error />;
 
-  const callDeleteExpense = (expenseId) => {
-    deleteExpense({
+  const handleBulkApproveSubmit = () => {
+    updateReimbursements({
       context: {
         headers: {
           Authorization: `${localStorage.getItem("token")}`,
         },
       },
       variables: {
-        expenseId: expenseId,
+        reimbursementsUpdateInput: {
+          ids: selectionModel,
+          reimbursementInput: {
+            isPaid: true,
+          },
+        },
       },
     });
   };
 
-  const formatDateString = (dateString) => {
-    const date = new Date(dateString);
-    if (isNaN(date)) {
+  const formatDateToDDMMM = (dateString) => {
+    const dateParts = dateString.split("/");
+
+    if (dateParts.length !== 3) {
       return "Invalid Date";
     }
 
-    const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "short" });
+    const day = dateParts[0];
+    const month = dateParts[1];
+    const year = dateParts[2];
 
-    return `${day} ${month}`;
+    if (month >= 1 && month <= 12) {
+      const formattedDate = new Date(year, month - 1, day);
+      if (isNaN(formattedDate.getTime())) {
+        return "Invalid Date";
+      }
+      return `${day} ${formattedDate.toLocaleString("default", {
+        month: "short",
+      })}`;
+    } else {
+      const formattedDate = new Date(year, day - 1, month);
+      if (isNaN(formattedDate.getTime())) {
+        return "Invalid Date";
+      }
+      return `${day} ${formattedDate.toLocaleString("default", {
+        month: "short",
+      })}`;
+    }
   };
-  const reimbursements = data.ireimbursements
-    .filter((element) => element.isPreApproved && !element.isApproved)
-    .map((reimbursement, index) => {
-      const fromDateString = formatDateString(reimbursement.fromDate);
-      const toDateString = formatDateString(reimbursement.toDate);
 
-      return {
-        id: reimbursement._id,
-        title: reimbursement.title,
-        fromDate: fromDateString,
-        toDate: toDateString,
-        type: getTypeDescription(reimbursement.type),
-        askedAmount: reimbursement.askedAmount,
-        expenses: reimbursement.expenses,
-        description: reimbursement.description,
-        purpose : reimbursement.purpose,
-        placeOfVisit: reimbursement.visitLocation,
-      };
+  const reimbursements = data.pendingReimbursements
+    .filter(
+      (element) =>
+        element.expenses.length > 0 &&
+        element.isPreApproved &&
+        !element.isApproved&&
+        !element.isPaid
+        
+    )
+    .map((reimbursement, index) => {
+      const fromDateStringParts = reimbursement.fromDate.split("/");
+      const toDateStringParts = reimbursement.toDate.split("/");
+
+      if (fromDateStringParts.length === 3 && toDateStringParts.length === 3) {
+        const fromFormatted = formatDateToDDMMM(reimbursement.fromDate);
+        const toFormatted = formatDateToDDMMM(reimbursement.toDate);
+
+        return {
+          id: reimbursement._id,
+          title: reimbursement.title,
+          fromDate: fromFormatted,
+          toDate: toFormatted,
+          type: getTypeDescription(reimbursement.type),
+          askedAmount: reimbursement.askedAmount,
+          expenses: reimbursement.expenses,
+          description: reimbursement.description,
+          purpose: reimbursement.purpose,
+          place: reimbursement.visitLocation,
+          Expenses: reimbursement.expenses.length,
+        };
+      } else {
+        console.error(
+          "Invalid date format:",
+          reimbursement.fromDate,
+          reimbursement.toDate
+        );
+      }
     });
 
   const columns = [
-    { field: "title", headerName: "Title", flex: 1.8 },
-    {field:"purpose", headerName:'Purpose', flex:2.2},
-    { field: "type", headerName: "Type", flex: 1.6 },
+    { field: "title", headerName: "Title", flex: 1 },
+    { field: "purpose", headerName: "Purpose", flex: 1.2 },
+    { field: "type", headerName: "Type", flex: 1.2 },
     { field: "fromDate", headerName: "From Date", flex: 1.4 },
-    { field: "toDate", headerName: "To Date", flex: 1.2 },
-    {field:"placeOfVisit", headerName:'Place', flex: 1.8},
-    { field: "askedAmount", headerName: "Ask", flex: 1.2 },
+    { field: "toDate", headerName: "To Date", flex: 1.4 },
+    { field: "place", headerName: "Place", flex: 1 },
+    { field: "askedAmount", headerName: "Ask", flex: 1.4 },
+    { field: "Expenses", headerName: "Expenses", flex: 0.7 },
+    {
+      field: "claimed",
+      headerName: "Claimed",
+      flex: 1.4,
+      valueGetter: (params) => {
+        return `${calculateTotalAmount(params.row.expenses)}`;
+      },
+    },
   ];
 
   return (
@@ -174,8 +220,23 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
               fontSize: "xxx-large",
             }}
           >
-            Claimed Reimbursements
+            Disburse Reimbursements
           </h4>
+          <Button
+            variant="contained"
+            type="submit"
+            onClick={() => {
+              handleBulkApproveSubmit();
+            }}
+            style={{
+              marginRight: 40,
+              fontSize: "medium",
+              width: "10%",
+              height: "50%",
+            }}
+          >
+            Disburse
+          </Button>
         </div>
 
         <div
@@ -217,6 +278,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
             }}
           >
             <DataGrid
+              checkboxSelection
               onRowSelectionModelChange={(newRowSelectionModel) => {
                 handleSelectionModelChange(newRowSelectionModel);
               }}
@@ -265,7 +327,12 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                   style={{
                     fontSize: "xxx-large",
                     fontWeight: 600,
-                    color: calculateTotalAmount(selectedRowData.expenses) > selectedRowData.askedAmount ? "#D0342C" : "#808080",
+                    color:
+                      selectedRowData &&
+                      calculateTotalAmount(selectedRowData.expenses) >
+                        selectedRowData.askedAmount
+                        ? "#D0342C"
+                        : "#808080",
                   }}
                 >
                   ₹{calculateTotalAmount(selectedRowData.expenses)}
@@ -284,69 +351,16 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                     alignItems: "self-start",
                   }}
                 >
-                  <div
+                  <h6
                     style={{
-                      display: "flex",
-                      width: "100%",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
+                      padding: 8,
+                      marginBottom: "1em",
+                      fontSize: "0.4em",
+                      fontWeight: "400",
                     }}
                   >
-                    <h6
-                      style={{
-                        padding: 8,
-                        marginBottom: "1em",
-                        fontSize: "0.4em",
-                        fontWeight: "400",
-                      }}
-                    >
-                      {expense.description}
-                    </h6>
-                    <div>
-                      {expense.attachment != null && (
-                        <Button
-                          variant="outlined"
-                          style={{
-                            margin: 10,
-                          }}
-                          onClick={() => {
-                            if (expense.attachment != null) {
-                              const url = expense.attachment; // Replace this with your desired URL
-                              const newWindow = window.open(
-                                url,
-                                "_blank",
-                                "noopener,noreferrer"
-                              );
-                              if (newWindow) newWindow.opener = null;
-                            }
-                          }}
-                          startIcon={<AttachFileIcon />}
-                        >
-                          View File
-                        </Button>
-                      )}
-                      <Button
-                        variant="outlined"
-                        style={{
-                          margin: 10,
-                        }}
-                        onClick={() => {
-                          callDeleteExpense(expense._id);
-                          var newExpenses = selectedRowData.expenses.filter(
-                            (element) => element._id != expense._id
-                          );
-                          setSelectedRowData({
-                            ...selectedRowData,
-                            expenses: newExpenses,
-                          });
-                        }}
-                        endIcon={<DeleteRoundedIcon />}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
+                    {expense.description}
+                  </h6>
                   <div
                     className="innerbox"
                     style={{ display: "flex", justifyContent: "space-evenly" }}
@@ -453,7 +467,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                       <TextField
                         id="Date"
                         label="Date"
-                        value={formatDateString(expense.date)}
+                        value={formatDateToDDMMM(expense.date)}
                         variant="standard"
                         style={{ width: "1.8ch" }}
                         InputProps={{
@@ -472,4 +486,4 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
   );
 };
 
-export default ClaimedReimbursements;
+export default PreApproveRequest;

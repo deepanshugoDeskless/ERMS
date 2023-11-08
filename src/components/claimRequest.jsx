@@ -136,7 +136,6 @@ const ClaimRequest = () => {
 
   if (loading) return <Loader />;
   if (error) return <Error />;
-
   const columns = [
     {
       field: "title",
@@ -147,7 +146,7 @@ const ClaimRequest = () => {
     {
       field: "fromDate",
       headerName: "Date",
-      flex: 1.2,
+      flex: 1,
       cellClassName: "name-column--cell",
     },
     {
@@ -158,37 +157,55 @@ const ClaimRequest = () => {
     },
     {
       field: "isPreApproved",
-      headerName: "Approval",
-      flex: 1,
+      headerName: "Pre Approved",
+      flex: 1.4,
       renderCell: ({ row }) => {
+        let status = "Pending";
+        if (row.isPreApproved) {
+          if (row.expenses.length > 0) {
+            if (row.isApproved) {
+              status = "Approved";
+            } else {
+              status = "Claimed";
+            }
+          } else {
+            status = "Pre Approved";
+          }
+        }
+    
+        if (row.isPaid) {
+          status = "Disbursed";
+        }
+    
         return (
           <Box
-            width="99%"
+            width="120%"
             m="0 auto"
             p="5px"
             display="flex"
             justifyContent="center"
             backgroundColor={
-              row.isPreApproved
-                ? row.expenses.length > 0
-                  ? colors.blueAccent[800]
-                  : "#0BF265"
-                : colors.redAccent[800]
+              status === "Approved"
+                ? "#0BF265"
+                : status === "Claimed"
+                ? colors.blueAccent[500]
+                : status === "Pre Approved"
+                ? colors.greenAccent[500]
+                : status === "Disbursed"
+                ? colors.purple[500]
+                : colors.redAccent[500]
             }
             borderRadius="4px"
           >
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {row.isPreApproved
-                ? row.expenses.length > 0
-                  ? "Claimed"
-                  : "Approved "
-                : "Pending"}
+            <Typography style={{ color: "white" }} sx={{ ml: "5px" }}>
+              {status}
             </Typography>
           </Box>
         );
       },
-    },
+    }
   ];
+  
   const approvedReimbursements = data?.ireimbursement?.filter(
     (reimbursement) => {
       return (
@@ -274,7 +291,7 @@ const ClaimRequest = () => {
             <Box
               height="70vh"
               style={{
-                width: "7.25em",
+                width:'7.5em',
                 position: "fixed",
                 marginLeft: "-0.3em",
                 marginTop: "1.7em",

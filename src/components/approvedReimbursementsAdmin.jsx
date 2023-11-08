@@ -193,9 +193,17 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
     {
       field: "claimed",
       headerName: "Claimed",
-      flex: 1.2,
-      valueGetter: (params) => {
-        return `${calculateTotalAmount(params.row.expenses)}`;
+      flex: 1.1,
+      renderCell: (params) => {
+        const claimedAmount = calculateTotalAmount(params.row.expenses);
+        const askedAmount = params.row.askedAmount;
+        const isClaimedAmountGreater = claimedAmount > askedAmount;
+  
+        return (
+          <div style={{ color: isClaimedAmountGreater ? "red" : "inherit" }}>
+            {`${claimedAmount}`}
+          </div>
+        );
       },
     },
   ];

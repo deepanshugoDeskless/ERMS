@@ -107,20 +107,30 @@ const PreApproveRequest = () => {
     return `${day} ${monthNames[month - 1]}`;
   };
 
+  const customHeaderCell = (params) => {
+    return (
+      <Box display="flex" justifyContent="center">
+        {params.label}
+      </Box>
+    );
+  };
+
   const columns = [
-    { field: "title", headerName: "Title", flex: 1 },
-    { field: "purpose", headerName: "Purpose", flex: 1 },
+    { field: "title", headerName: "Title", flex: 1, headerRender: customHeaderCell },
+    { field: "purpose", headerName: "Purpose", flex: 1, headerRender: customHeaderCell },
     {
       field: "description",
       headerName: "Description",
       flex: 0.9,
       cellClassName: "name-column--cell",
+      headerRender: customHeaderCell,
     },
     {
       field: "type",
       headerName: "Type",
       flex: 1.2,
       cellClassName: "name-column--cell",
+      headerRender: customHeaderCell,
       valueGetter: (params) => {
         switch (params.value) {
           case "pa":
@@ -141,29 +151,32 @@ const PreApproveRequest = () => {
       field: "visitLocation",
       headerName: "Place",
       flex: 0.8,
+      headerRender: customHeaderCell,
     },
     {
       field: "fromDate",
       headerName: "From",
       flex: 0.7,
       valueFormatter: (params) => formatDate(params.value),
+      headerRender: customHeaderCell,
     },
     {
       field: "toDate",
       headerName: "To",
       flex: 0.7,
       valueFormatter: (params) => formatDate(params.value),
+      headerRender: customHeaderCell,
     },
-    { field: "noOfDays", headerName: "Days", flex: 0.4 },
+    { field: "noOfDays", headerName: "Days", flex: 0.4, headerRender: customHeaderCell },
 
     {
       field: "by",
       headerName: "Requested By",
-      flex: 1,
+      flex: 1.2,
       renderCell: ({ row }) => {
         return (
           <Box
-            width="60%"
+            width="110%"
             m="0 auto"
             p="5px"
             display="flex"
@@ -184,12 +197,14 @@ const PreApproveRequest = () => {
           </Box>
         );
       },
+      headerRender: customHeaderCell,
     },
 
     {
       field: "askedAmount",
       headerName: "Ask",
       flex: 1,
+      headerRender: customHeaderCell,
     },
   ];
 
