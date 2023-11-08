@@ -14,7 +14,7 @@ import {
   DELETE_EXPENSE,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
-import { AttachFileIcon, DeleteRoundedIcon } from "./Icons";
+import { AttachFileIcon,DeleteRoundedIcon } from "./Icons";
 
 const getTypeDescription = (type) => {
   switch (type) {
@@ -323,49 +323,25 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
                     >
                       {expense.description}
                     </h6>
-                    <div>
-                      {expense.attachment != null && (
-                        <Button
-                          variant="outlined"
-                          style={{
-                            margin: 10,
-                          }}
-                          onClick={() => {
-                            if (expense.attachment != null) {
-                              const url = expense.attachment; // Replace this with your desired URL
-                              const newWindow = window.open(
-                                url,
-                                "_blank",
-                                "noopener,noreferrer"
-                              );
-                              if (newWindow) newWindow.opener = null;
-                            }
-                          }}
-                          startIcon={<AttachFileIcon />}
-                        >
-                          View File
-                        </Button>
-                      )}
-                      <Button
-                        variant="outlined"
-                        style={{
-                          margin: 10,
-                        }}
-                        onClick={() => {
-                          callDeleteExpense(expense._id);
-                          var newExpenses = selectedRowData.expenses.filter(
-                            (element) => element._id != expense._id
-                          );
-                          setSelectedRowData({
-                            ...selectedRowData,
-                            expenses: newExpenses,
-                          });
-                        }}
-                        endIcon={<DeleteRoundedIcon />}
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                    <Button
+                      variant="outlined"
+                      style={{
+                        margin: 10,
+                      }}
+                      onClick={() => {
+                        callDeleteExpense(expense._id);
+                        var newExpenses = selectedRowData.expenses.filter(
+                          (element) => element._id != expense._id
+                        );
+                        setSelectedRowData({
+                          ...selectedRowData,
+                          expenses: newExpenses,
+                        });
+                      }}
+                      startIcon={<DeleteRoundedIcon />}
+                    >
+                      Delete
+                    </Button>
                   </div>
                   <div
                     className="innerbox"

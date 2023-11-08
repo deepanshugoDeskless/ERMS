@@ -76,6 +76,7 @@ const ClaimRequest = () => {
   const [expenses, setExpenses] = useState([]);
   const [reimbursement, setReimbursement] = useState({});
   const [rowSelectionModel, setRowSelectionModel] = useState();
+  const [selectedReimbursementTitle, setSelectedReimbursementTitle] = useState(""); // Add this state variable
 
   const addExpense = (expense) => {
     const newTotalAmount = totalAmount + parseFloat(expense.amount);
@@ -93,11 +94,8 @@ const ClaimRequest = () => {
   };
 
   const selectReimbursement = (reimbursement) => {
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:94 ~ selectReimbursement ~ reimbursement:",
-      reimbursement[0]
-    );
     setReimbursement(reimbursement[0]);
+    setSelectedReimbursementTitle(reimbursement[0].title); // Set the selected reimbursement title
     const formId = Date.now();
     setExpenses([
       {
@@ -106,6 +104,7 @@ const ClaimRequest = () => {
       },
     ]);
   };
+
 
   const callBulkExpenseUpload = () => {
     expenses.shift();
@@ -148,6 +147,10 @@ const ClaimRequest = () => {
       headerName: "Date",
       flex: 1,
       cellClassName: "name-column--cell",
+      valueFormatter: (params) => {
+        const date = dayjs(params.value, "DD/MM/YYYY");
+        return date.format("DD MMM");
+      },
     },
     {
       field: "askedAmount",
@@ -157,8 +160,8 @@ const ClaimRequest = () => {
     },
     {
       field: "isPreApproved",
-      headerName: "Pre Approved",
-      flex: 1.4,
+      headerName: "Status",
+      flex: 1.6,
       renderCell: ({ row }) => {
         let status = "Pending";
         if (row.isPreApproved) {
@@ -222,7 +225,8 @@ const ClaimRequest = () => {
           position: "absolute",
           bottom: "0px",
           left: "5em",
-          right: "0px",
+          right:'0px',
+          // width: "100%", // Change the width to 100% to occupy the full available width
         }}
       >
         <div
@@ -356,30 +360,7 @@ const ClaimRequest = () => {
                 marginLeft: 8,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <CurrencyRupeeRoundedIcon
-                  style={{
-                    marginRight: 4,
-                    transform: "scale(1.5)",
-                  }}
-                />
-                <h4
-                  style={{
-                    marginLeft: 4,
-                    fontFamily: "Bebas Neue,sans-serif",
-                    fontSize: "xx-large",
-                  }}
-                >
-                  Add Expenses
-                </h4>
-              </div>
-
+  
               <div
                 style={{
                   display: "flex",
@@ -560,6 +541,7 @@ function Form({
           padding: 8,
           paddingBottom: 8,
           position: "relative",
+          // left:'-2.4em'
         }}
       >
         <form>
@@ -628,7 +610,7 @@ function Form({
               </Box>
 
               <div style={{ marginTop: -8 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                   <DemoContainer components={["DatePicker"]}>
                     <DatePicker
                       value={
