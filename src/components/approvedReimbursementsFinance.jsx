@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
@@ -10,6 +10,7 @@ import {
   ADMIN_FETCH_REQUESTS,
   GET_APPROVED_REIMBURSEMENTS,
   UPDATE_REIMBURSEMENTS,
+  UPDATE_EXPENSES,
 } from "../gqloperations/mutations";
 import { Error, Loader } from "./loader";
 import { AttachFileIcon, DeleteRoundedIcon, SaveAsRoundedIcon } from "./Icons";
@@ -375,7 +376,22 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
 
               {selectedRowData && selectedRowData.expenses ? (
                 selectedRowData.expenses.map((expense, index) => (
-                  <ExpenseElement expense={expense} index={index} key={index} />
+                  <ExpenseElement
+                    expense={expense}
+                    index={index}
+                    reimbursmentsState={selectedRowData}
+                    setReimbursementsState={setSelectedRowData}
+                    reloadReimbursements={() => {
+                      refetch({
+                        context: {
+                          headers: {
+                            Authorization: `${localStorage.getItem("token")}`,
+                          },
+                        },
+                      });
+                    }}
+                    key={index}
+                  />
                 ))
               ) : (
                 <div>Loading...</div>
@@ -388,8 +404,52 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   );
 };
 
-const ExpenseElement = ({ expense, index }) => {
-  const [expenseHeader, setExpenseHeader] = useState(null);
+const ExpenseElement = ({
+  expense,
+  index,
+  reloadReimbursements,
+  reimbursmentsState,
+  setReimbursementsState,
+}) => {
+  const [expenseHeader, setExpenseHeader] = useState(expense.expenseHeader);
+  const [savedExpenseHeader, setSavedExpenseHeader] = useState(null);
+  useEffect(() => {
+    if (expenseHeader == expense.expenseHeader) {
+      setTimeout(() => {
+        setExpenseHeader(expense.expenseHeader);
+      }, 500);
+    }
+  });
+  useEffect(() => {
+    setExpenseHeader(expense.expenseHeader);
+  });
+
+  const [
+    updateExpenses,
+    { updateExpensesData, updateExpensesLoading, updateExpensesError },
+  ] = useMutation(UPDATE_EXPENSES, {
+    onCompleted: () => {
+      reloadReimbursements();
+    },
+  });
+
+  const callUpdateExpenseHeader = () => {
+    updateExpenses({
+      context: {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      },
+      variables: {
+        updateExpense: {
+          expenseId: expense._id,
+          expenseNew: {
+            expenseHeader: expenseHeader,
+          },
+        },
+      },
+    });
+  };
   const formatDate = (dateString) => {
     const dateParts = dateString?.split("/");
     if (dateParts?.length === 3) {
@@ -419,6 +479,7 @@ const ExpenseElement = ({ expense, index }) => {
     }
     return "Invalid Date";
   };
+
   return (
     <div
       key={index}
@@ -496,7 +557,7 @@ const ExpenseElement = ({ expense, index }) => {
             <TextField
               id="outlined-basic"
               label="Header"
-              defaultValue={`${expense.expenseHeader}`}
+              value={expenseHeader}
               onChange={(header) => {
                 console.log(
                   "🚀 ~ file: approvedReimbursementsFinance.jsx:505 ~ ExpenseElement ~ header:",
@@ -510,14 +571,38 @@ const ExpenseElement = ({ expense, index }) => {
           </Box>
           <Button
             variant={
-              expenseHeader == expense.expenseHeader || expenseHeader == "" || expenseHeader == null
+              (expenseHeader == expense.expenseHeader &&
+                savedExpenseHeader == null) ||
+              expenseHeader == "" ||
+              expenseHeader == null ||
+              expenseHeader == savedExpenseHeader
                 ? "outlined"
                 : "contained"
+            }
+            disabled={
+              (expenseHeader == expense.expenseHeader &&
+                savedExpenseHeader == null) ||
+              expenseHeader == "" ||
+              expenseHeader == null ||
+              expenseHeader == savedExpenseHeader ||
+              updateExpensesLoading ||
+              updateExpensesError ||
+              updateExpensesData
+                ? true
+                : false
             }
             style={{
               margin: 10,
             }}
-            onClick={() => {}}
+            onClick={() => {
+              callUpdateExpenseHeader();
+              setSavedExpenseHeader(expenseHeader);
+              setExpenseHeader(null);
+              window.location.reload();
+              // var newExpenseArray = reimbursmentsState
+              // newExpenseArray.expenses[index].expenseHeader = expenseHeader
+              // setReimbursementsState(newExpenseArray)
+            }}
             endIcon={<SaveAsRoundedIcon />}
           >
             Save
