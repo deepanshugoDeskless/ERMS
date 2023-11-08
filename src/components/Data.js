@@ -121,7 +121,7 @@ export const NEWFINANCE_SIDEBAR_DATA = [
     id: 4,
     name: "Approved Reimbursements",
     page: <ApprovedReimbursementsFinance />,
-    path: "financeApproveReimbursements",
+    path: "financeApprovedReimbursements",
     icon: <ApproveIcon />,
   },
   {

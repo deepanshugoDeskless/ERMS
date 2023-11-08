@@ -92,7 +92,7 @@ export default function Signup() {
       if (password === confirmPassword) {
         // Passwords match, continue with activation logic
         console.log("Activation logic here");
-
+  
         reSetPassword({
           variables: {
             reSetPasswordInput: {
@@ -101,6 +101,9 @@ export default function Signup() {
               otp: completeOtp,
             },
           },
+        }).then(() => {
+          // Successful activation, navigate to the sign-in page
+          navigate("/login"); // Navigate to the sign-in page
         });
       } else {
         // Passwords do not match, show an error or handle accordingly
@@ -108,6 +111,7 @@ export default function Signup() {
       }
     }
   };
+  
 
   return (
     <>

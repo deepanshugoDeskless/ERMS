@@ -36,6 +36,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
+  const [tableWidth, setTableWidth] = useState("100%"); // Initial table width
 
   const handleSelectionModelChange = (newSelection) => {
     setSelectionModel(newSelection);
@@ -46,9 +47,11 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
       );
       setSelectedRowData(selectedReimbursement);
       setFormOpen(true);
+      setTableWidth("50%"); // Adjust table width when a row is selected
     } else {
       setFormOpen(false);
       setSelectedRowData(null);
+      setTableWidth("100%"); // Reset table width when no row is selected
     }
   };
 
@@ -146,6 +149,12 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
         const fromFormatted = formatDateToDDMMM(reimbursement.fromDate);
         const toFormatted = formatDateToDDMMM(reimbursement.toDate);
 
+           // Access firstName and lastName from the by object
+           const { firstName, lastName } = reimbursement.by;
+
+           // Create a new field that combines firstName and lastName
+           const requestBy = `${firstName} ${lastName}`;
+
         return {
           id: reimbursement._id,
           title: reimbursement.title,
@@ -158,6 +167,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
           purpose: reimbursement.purpose,
           place: reimbursement.visitLocation,
           Expenses: reimbursement.expenses.length,
+          requestBy, // New field combining firstName and lastName
         };
       } else {
         console.error(
@@ -168,6 +178,15 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
       }
     });
 
+    const customHeaderCell = (params) => {
+      return (
+        <Box display="flex" justifyContent="center">
+          {params.label}
+        </Box>
+      );
+    };
+    
+
   const columns = [
     { field: "title", headerName: "Title", flex: 1 },
     { field: "purpose", headerName: "Purpose", flex: 1.2 },
@@ -176,6 +195,37 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     { field: "toDate", headerName: "To Date", flex: 1.4 },
     { field: "place", headerName: "Place", flex: 1 },
     { field: "askedAmount", headerName: "Ask", flex: 1.4 },
+    {
+      field: "requestBy",
+      headerName: "Requested By",
+      flex: 1.2,
+      renderCell: (params) => {
+        const role = params.row.by?.role;
+        return (
+          <Box
+            width="100%"
+            m="0 auto"
+            p="5px"
+            display="flex"
+            justifyContent="center"
+            backgroundColor={
+              role === "admin"
+                ? colors.greenAccent[600]
+                : role === "manager"
+                ? colors.greenAccent[700]
+                : colors.greenAccent[700]
+            }
+            borderRadius="4px"
+          >
+            {params.row.requestBy}
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              {role}
+            </Typography>
+          </Box>
+        );
+      },
+      headerRender: customHeaderCell,
+    },
     { field: "Expenses", headerName: "Expenses", flex: 0.7 },
     {
       field: "claimed",
@@ -250,6 +300,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
           <Box
             height="82.3vh"
             width="42vw"
+            width={tableWidth} // Dynamic table width
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",

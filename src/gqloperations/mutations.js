@@ -3,6 +3,9 @@ export const SIGNUP_USER = gql`
   mutation createUser($userNew: UserInput!) {
     user: signupUser(userNew: $userNew) {
       firstName
+      lastName
+      bank_account_no
+      bank_ifsc_code
     }
   }
 `;
@@ -50,6 +53,8 @@ export const GET_TEAM_MEMBERS = gql`
       username
       employeeCode
       sex
+      bank_account_no
+      bank_ifsc_code
     }
   }
 `;
@@ -225,6 +230,12 @@ export const ADMIN_FETCH_REQUESTS = gql`
         establishment
         by
         attachment
+      }
+      by{
+        firstName
+        lastName
+        bank_account_no
+        bank_ifsc_code
       }
     }
   }

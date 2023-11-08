@@ -192,7 +192,7 @@ const ClaimRequest = () => {
                 : status === "Pre Approved"
                 ? colors.greenAccent[500]
                 : status === "Disbursed"
-                ? colors.purple[500]
+                ? colors.blueAccent[500]
                 : colors.redAccent[500]
             }
             borderRadius="4px"

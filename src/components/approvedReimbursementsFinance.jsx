@@ -39,20 +39,36 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
+  const [tableWidth, setTableWidth] = useState("100%"); // Initial table width
 
+
+  
   const handleSelectionModelChange = (newSelection) => {
-    setSelectionModel(newSelection);
-
-    if (newSelection.length > 0) {
-      const selectedReimbursement = reimbursements.find(
-        (row) => row.id === newSelection[0]
-      );
-      setSelectedRowData(selectedReimbursement);
-      setFormOpen(true);
-    } else {
+    console.log("🚀 ~ file: approvedReimbursementsAdmin.jsx:43 ~ handleSelectionModelChange ~ newSelection:", newSelection)
+    console.log("🚀 ~ file: approvedReimbursementsAdmin.jsx:45 ~ handleSelectionModelChange ~ selectionModel:", selectionModel)
+    if (newSelection[0] == selectionModel[0]){
       setFormOpen(false);
       setSelectedRowData(null);
+      setTableWidth("100%"); // Reset table width when no row is selected
+      setSelectionModel ([]);
     }
+    else{
+      setSelectionModel(newSelection);
+
+      if (newSelection.length > 0) {
+        const selectedReimbursement = reimbursements.find(
+          (row) => row.id === newSelection[0]
+        );
+        setSelectedRowData(selectedReimbursement);
+        setFormOpen(true);
+        setTableWidth("50%"); // Adjust table width when a row is selected
+      } else {
+        setFormOpen(false);
+        setSelectedRowData(null);
+        setTableWidth("100%"); // Reset table width when no row is selected
+      }
+    }
+
   };
 
   const calculateTotalAmount = (expenses) => {
@@ -184,6 +200,13 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     .map((reimbursement, index) => {
       const fromDateString = formatDateString(reimbursement.fromDate);
       const toDateString = formatDateString(reimbursement.toDate);
+       // Access firstName and lastName from the by object
+       const { firstName, lastName } = reimbursement.by;
+
+       // Create a new field that combines firstName and lastName
+       const requestBy = `${firstName} ${lastName}`;
+
+
       if (
         fromDateString !== "Invalid Date" &&
         toDateString !== "Invalid Date"
@@ -197,8 +220,9 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
           askedAmount: reimbursement.askedAmount,
           expenses: reimbursement.expenses,
           description: reimbursement.description,
-          purpose: reimbursement.purpose,
-          place: reimbursement.visitLocation,
+          purpose : reimbursement.purpose,
+          place : reimbursement.visitLocation,
+          requestBy, // New field combining firstName and lastName
         };
       } else {
         console.error(
@@ -212,6 +236,14 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
 
   // ...
 
+  const customHeaderCell = (params) => {
+    return (
+      <Box display="flex" justifyContent="center">
+        {params.label}
+      </Box>
+    );
+  };
+
   const columns = [
     { field: "title", headerName: "Title", flex: 1.4 },
     { field: "purpose", headerName: "Purpose", flex: 1.4 },
@@ -219,7 +251,38 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     { field: "fromDate", headerName: "From Date", flex: 1.4 },
     { field: "toDate", headerName: "To Date", flex: 1.4 },
     { field: "place", headerName: "Place", flex: 1.2 },
-    { field: "askedAmount", headerName: "Ask", flex: 1.2 },
+    {
+      field: "requestBy",
+      headerName: "Requested By",
+      flex: 1.2,
+      renderCell: (params) => {
+        const role = params.row.by?.role;
+        return (
+          <Box
+            width="100%"
+            m="0 auto"
+            p="5px"
+            display="flex"
+            justifyContent="center"
+            backgroundColor={
+              role === "admin"
+                ? colors.greenAccent[600]
+                : role === "manager"
+                ? colors.greenAccent[700]
+                : colors.greenAccent[700]
+            }
+            borderRadius="4px"
+          >
+            {params.row.requestBy}
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              {role}
+            </Typography>
+          </Box>
+        );
+      },
+      headerRender: customHeaderCell,
+    },
+    { field: "askedAmount", headerName: "Ask", flex: 1.2},
     {
       field: "claimed",
       headerName: "Claimed",
@@ -293,7 +356,7 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
         >
           <Box
             height="82.3vh"
-            width="42vw"
+            width={tableWidth} // Dynamic table width
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",

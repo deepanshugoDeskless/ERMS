@@ -39,21 +39,40 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectionModel, setSelectionModel] = useState([]);
+  const [tableWidth, setTableWidth] = useState("100%"); // Initial table width
 
-  const handleSelectionModelChange = (newSelection) => {
-    setSelectionModel(newSelection);
 
-    if (newSelection.length > 0) {
-      const selectedReimbursement = reimbursements.find(
-        (row) => row.id === newSelection[0]
-      );
-      setSelectedRowData(selectedReimbursement);
-      setFormOpen(true);
-    } else {
+
+   const handleSelectionModelChange = (newSelection) => {
+    console.log("🚀 ~ file: approvedReimbursementsAdmin.jsx:43 ~ handleSelectionModelChange ~ newSelection:", newSelection)
+    console.log("🚀 ~ file: approvedReimbursementsAdmin.jsx:45 ~ handleSelectionModelChange ~ selectionModel:", selectionModel)
+    if (newSelection[0] == selectionModel[0]){
       setFormOpen(false);
       setSelectedRowData(null);
+      setTableWidth("100%"); // Reset table width when no row is selected
+      setSelectionModel ([]);
     }
+    else{
+      setSelectionModel(newSelection);
+
+      if (newSelection.length > 0) {
+        const selectedReimbursement = reimbursements.find(
+          (row) => row.id === newSelection[0]
+        );
+        setSelectedRowData(selectedReimbursement);
+        setFormOpen(true);
+        setTableWidth("50%"); // Adjust table width when a row is selected
+      } else {
+        setFormOpen(false);
+        setSelectedRowData(null);
+        setTableWidth("100%"); // Reset table width when no row is selected
+      }
+    }
+
   };
+
+  
+
 
   const calculateTotalAmount = (expenses) => {
     return expenses.reduce(
@@ -190,6 +209,7 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
           <Box
             height="82.3vh"
             width="42vw"
+            width={tableWidth} // Dynamic table width
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
