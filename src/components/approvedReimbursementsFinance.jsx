@@ -388,11 +388,8 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   );
 };
 
-const ExpenseElement = ({expense, index}) => {
-  console.log(
-    "🚀 ~ file: approvedReimbursementsFinance.jsx:387 ~ ExpenseElement ~ expense:",
-    expense.expense
-  );
+const ExpenseElement = ({ expense, index }) => {
+  const [expenseHeader, setExpenseHeader] = useState(null);
   const formatDate = (dateString) => {
     const dateParts = dateString?.split("/");
     if (dateParts?.length === 3) {
@@ -500,18 +497,28 @@ const ExpenseElement = ({expense, index}) => {
               id="outlined-basic"
               label="Header"
               defaultValue={`${expense.expenseHeader}`}
-              onChange={() => {}}
+              onChange={(header) => {
+                console.log(
+                  "🚀 ~ file: approvedReimbursementsFinance.jsx:505 ~ ExpenseElement ~ header:",
+                  header.target.value
+                );
+                setExpenseHeader(header.target.value);
+              }}
               variant="outlined"
               style={{ width: "6ch", margin: 20 }}
             />
           </Box>
           <Button
-            variant="outlined"
+            variant={
+              expenseHeader == expense.expenseHeader || expenseHeader == "" || expenseHeader == null
+                ? "outlined"
+                : "contained"
+            }
             style={{
               margin: 10,
             }}
             onClick={() => {}}
-            startIcon={<SaveAsRoundedIcon />}
+            endIcon={<SaveAsRoundedIcon />}
           >
             Save
           </Button>
