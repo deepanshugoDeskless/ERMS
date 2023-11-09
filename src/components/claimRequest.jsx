@@ -881,7 +881,7 @@ function Form({
               variant="outlined"
               startIcon={<AddmoneyIcon />}
             >
-              Add More Expenses
+              Add Expenses
             </Button>
           </div>
           <div>
