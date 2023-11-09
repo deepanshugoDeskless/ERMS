@@ -223,60 +223,46 @@ const AllApprovedReimbursementsFinance = () => {
         },
       },
       
-{
-  field: "isPreApproved",
-  headerName: "Status",
-  flex: 1.4,
-  renderCell: ({ row }) => {
-    console.log("isPreApproved:", row.isPreApproved);
-    console.log("isApproved:", row.isApproved);
-    console.log("expenses.length:", row.expenses.length);
-
-    let status = "Pending";
-
-    if (row.isPreApproved) {
-      if (row.expenses.length > 0) {
-        if (row.isApproved) {
-          status = "Approved";
-        } else {
-          status = "Claimed";
-        }
-      } else {
-        status = "Pre Approved";
-      }
-    }
-
-    if (row.isPaid) {
-      status = "Disbursed";
-    }
-
-    return (
-      <Box
-        width="120%"
-        m="0 auto"
-        p="5px"
-        display="flex"
-        justifyContent="center"
-        backgroundColor={
-          status === "Approved"
-            ? "#0BF265"
-            : status === "Claimed"
-            ? colors.blueAccent[500]
-            : status === "Pre Approved"
-            ? colors.greenAccent[500]
-            : status === "Disbursed"
-            ? colors.blueAccent[600]
-            : colors.redAccent[500]
-        }
-        borderRadius="4px"
-      >
-        <Typography style={{ color: "white" }} sx={{ ml: "5px" }}>
-          {status}
-        </Typography>
-      </Box>
-    );
-  },
-}
+      {
+        field: "isPreApproved",
+        headerName: "Status",
+        flex: 1.4,
+        renderCell: ({ row }) => {
+          return (
+            <Box
+              width="120%"
+              m="0 auto"
+              p="5px"
+              display="flex"
+              justifyContent="center"
+              backgroundColor={
+                row.isPreApproved
+                  ? row.expenses.length > 0
+                    ? row.isApproved
+                      ? row.isPaid
+                        ? colors.blueAccent[300]
+                        : "#0BF265"
+                      : colors.blueAccent[500]
+                    : colors.greenAccent[500]
+                  : colors.redAccent[500]
+              }
+              borderRadius="4px"
+            >
+              <Typography style={{ color: "white" }} sx={{ ml: "5px" }}>
+                {row.isPreApproved
+                  ? row.expenses.length > 0
+                    ? row.isApproved
+                      ? row.isPaid
+                        ? "Disbursed"
+                        : "Approved"
+                      : "Claimed"
+                    : "Pre Approved "
+                  : "Pending"}
+              </Typography>
+            </Box>
+          );
+        },
+      },
 
       
       

@@ -233,7 +233,7 @@ const RaiseRequest = () => {
     },
     {
       field: "isPreApproved",
-      headerName: "Pre Approved",
+      headerName: "Status",
       flex: 1.4,
       renderCell: ({ row }) => {
         return (
