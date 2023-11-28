@@ -146,13 +146,21 @@ export default function Login() {
               <div
                 className="red card-panel"
                 style={{
-                  position: "absolute",
+                  display:'flex',
+                  justifyContent:'center',
+                  paddingTop:'10px',
+                  textAlign:'center',
+                  backgroundColor:'red',
+                  color:'white',
+                  borderRadius:'12px',
+                  width:'20em',
+                  position: "relative",
                   top: "0em",
                   height: "10%",
-                  fontSize: "medium",
+                  fontSize: "large",
                 }}
               >
-                {error.message}
+                Error : {error.message} 
               </div>
             )}
             <img
