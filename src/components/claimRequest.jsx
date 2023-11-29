@@ -106,15 +106,23 @@ const ClaimRequest = () => {
   };
 
 
+  const showExpensesUploadedAlert = () => {
+    if (expenses.length > 0) {
+      alert("Expenses uploaded successfully");
+    } else {
+      alert("Please add expenses first");
+    }
+  };
+
   const callBulkExpenseUpload = () => {
+    if (expenses.length === 0) {
+      return;
+    }
+
     expenses.shift();
     expenses.forEach((object) => {
       delete object["formId"];
     });
-    console.log(
-      "🚀 ~ file: claimRequest.jsx:115 ~ expenses.forEach ~ expenses:",
-      expenses
-    );
 
     createBulkExpenses({
       context: {
@@ -126,12 +134,13 @@ const ClaimRequest = () => {
     })
       .then(() => {
         setExpenses([]);
-        alert("Expenses uploaded successfully");
+        showExpensesUploadedAlert();
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
 
   if (loading) return <Loader />;
   if (error) return <Error />;
@@ -392,6 +401,7 @@ const ClaimRequest = () => {
                   marginRight: 16,
                 }}
                 onClick={callBulkExpenseUpload}
+                disabled={expenses.length === 0} // Disable the button if no expenses are added
               >
                 Claim Reimbursement
               </Button>

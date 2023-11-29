@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme, } from "@mui/material";
 import {
   CREATE_REIMBURSEMENT,
   GET_REIMBURSEMENTS,
@@ -128,6 +128,7 @@ const RaiseRequest = () => {
         setTitle("");
         setDescription("");
         setType({});
+        setType({}); // Clear the 'type' state
         setPurpose("");
         setPlace("");
         setFromDate(null);
@@ -316,6 +317,8 @@ const RaiseRequest = () => {
             flexDirection: "row",
             textAlign: "center",
             justifyContent: "space-between",
+             // Additional styles for responsiveness
+             flexWrap: "wrap",
           }}
         >
           <Autocomplete
@@ -407,6 +410,8 @@ const RaiseRequest = () => {
             textAlign: "center",
             alignItems: "baseline",
             justifyContent: "space-between",
+                // Additional styles for responsiveness
+            flexWrap: "wrap",
           }}
         >
           <div
