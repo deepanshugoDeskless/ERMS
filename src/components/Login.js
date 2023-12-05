@@ -10,7 +10,12 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import loginupdated from "../Assets/loginupdated.json";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Loader, Error } from "./loader";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,6 +24,7 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [SigninUser, { error, loading, data }] = useMutation(LOGIN_USER);
 
   if (loading)
@@ -75,6 +81,11 @@ export default function Login() {
     });
   };
 
+
+  const handleTogglePassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     SigninUser({
@@ -105,6 +116,9 @@ export default function Login() {
     Red: "#E9573F",
     Yellow: "#F6BB42",
   };
+
+  const isLoginButtonDisabled = !loginRequest.email || !loginRequest.password;
+  const isEmailValid = loginRequest.email.endsWith("@godeskless.com");
 
   return (
     <>
@@ -192,44 +206,61 @@ export default function Login() {
                   alignItems: "center",
                 }}
               >
-                <TextField
-                  type="email"
-                  placeholder="Enter your EmailID"
-                  name="email"
-                  onChange={(e) => handleEmailChange(e.target.value)}
-                  required
-                  style={{
-                    marginTop: "10px",
-                    width: "100%",
-                  }}
-                  id="outlined-basic"
-                  label="Email"
-                  variant="outlined"
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Password"
-                  variant="outlined"
-                  type="password"
-                  placeholder="Enter Your Password"
-                  name="password"
-                  onChange={(e) => handlePasswordChange(e.target.value)}
-                  required
-                  style={{
-                    marginTop: "20px",
-                    width: "100%",
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  type="submit"
-                  onClick={() => {
-                    callLogIn();
-                  }}
-                  style={{ fontSize: "medium", marginTop: 60, width: "100%" }}
-                >
-                  Login
-                </Button>
+         <TextField
+            type="email"
+            placeholder="Enter your EmailID"
+            name="email"
+            onChange={(e) => handleEmailChange(e.target.value)}
+            required
+            style={{
+              marginTop: "10px",
+              width: "100%",
+            }}
+            id="outlined-basic"
+            label="Email"
+            variant="outlined"
+            error={loginRequest.email.trim() !== "" && !isEmailValid}
+            helperText={
+              loginRequest.email.trim() !== "" && !isEmailValid
+                ? "Please enter your goDeskless Email ID"
+                : ""
+            }
+          />
+          
+            <TextField
+        id="outlined-basic"
+        label="Password"
+        variant="outlined"
+        type={showPassword ? "text" : "password"}
+        placeholder="Enter Your Password"
+        name="password"
+        onChange={(e) => handlePasswordChange(e.target.value)}
+        required
+        style={{
+          marginTop: "20px",
+          width: "100%",
+        }}
+        InputProps={{
+          endAdornment: (
+             <InputAdornment position="end">
+                 <IconButton onClick={handleTogglePassword}>
+               {showPassword ? <Visibility /> : <VisibilityOff />}
+             </IconButton>
+           </InputAdornment>
+          ),
+        }}
+      />
+          <Button
+            variant="contained"
+            type="submit"
+            onClick={() => {
+              callLogIn();
+            }}
+            style={{ fontSize: "medium", marginTop: 60, width: "100%" }}
+            disabled={isLoginButtonDisabled}
+          >
+            Login
+          </Button>
               </div>
             </form>
           </div>

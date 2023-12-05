@@ -8,7 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://655c-113-193-243-92.ngrok-free.app/",
+  uri: "https://de4e-2405-201-3-2014-dd81-578c-ac6a-4462.ngrok-free.app",
   cache: new InMemoryCache(),
 });
 

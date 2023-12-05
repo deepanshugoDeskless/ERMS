@@ -11,6 +11,10 @@ import Home from "../components/Home";
 import Button from "@mui/material/Button";
 import { Typography, useTheme } from "@mui/material";
 import { tokens } from "../../src/theme";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
@@ -30,6 +34,15 @@ export default function Signup() {
   const [displayPasswordFields, setDisplayPasswordFields] = useState(false);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [showPassword, setShowPassword] = useState(false);  // Set to false if you want the password to be hidden initially
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // Set to false if you want the password to be hidden initially
+
+  const isEmailValid = emailData.endsWith("@godeskless.com");
+  const isEmailFormatValid = /\S+@\S+\.\S+/.test(emailData);
+  const isGetOtpButtonDisabled = emailData.trim() === '' || !(isEmailValid && isEmailFormatValid) || loading;
+
+  const isActivateButtonDisabled = displayPasswordFields && (password.trim() !== confirmPassword.trim() || password.trim() === '');
+
 
   const handleChange = (e) => {
     setEmailData(e.target.value);
@@ -91,7 +104,7 @@ export default function Signup() {
       // Handle activation logic here
       if (password === confirmPassword) {
         // Passwords match, continue with activation logic
-        console.log("Activation logic here");
+        alert("Account activated successfully!"); 
   
         reSetPassword({
           variables: {
@@ -111,6 +124,7 @@ export default function Signup() {
       }
     }
   };
+  
   
 
   return (
@@ -190,17 +204,27 @@ export default function Signup() {
           autoComplete="off"
         >
           <div>
-            <TextField
-              id="outlined-multiline-flexible"
-              label="Email"
-              multiline
-              maxRows={4}
-              onChange={handleChange}
-              required
-              style={{
-                width: 320,
-              }}
-            />
+
+          <TextField
+            id="outlined-multiline-flexible"
+            label="Email ID"
+            multiline
+            maxRows={4}
+            onChange={handleChange}
+            required
+            error={emailData.trim() !== "" && (!isEmailValid || !isEmailFormatValid)}
+            helperText={
+              emailData.trim() !== "" && !isEmailValid
+                ? "Email must end with @godeskless.com"
+                : emailData.trim() !== "" && !isEmailFormatValid
+                ? "Please enter a valid Email ID format"
+                : ""
+            }
+            style={{
+              width: 320,
+            }}
+          />
+
           </div>
         </Box>
         {displayOtp && (
@@ -248,37 +272,60 @@ export default function Signup() {
         )}
         {displayPasswordFields && (
           <>
-            <TextField
-              type="password"
-              label="Create New Password"
-              onChange={handlePasswordChange}
-              required
-              style={{
-                marginTop: 24,
-                width: "93%",
-              }}
-            />
-            <TextField
-              type="password"
-              label="Confirm Password"
-              onChange={handleConfirmPasswordChange}
-              required
-              style={{
-                marginTop: 8,
-                width: "93%",
-                textDecoration: "none !important",
-              }}
-            />
+         <TextField
+            label="Create New Password"
+            onChange={handlePasswordChange}
+            required
+            style={{ marginTop: 24, width: "93%" }}
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+ <TextField
+            type={showConfirmPassword ? "text" : "password"}
+            label="Confirm Password"
+            onChange={handleConfirmPasswordChange}
+            required
+            style={{
+              marginTop: 8,
+              width: "93%",
+              textDecoration: "none !important",
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
           </>
         )}
         {!displayOtp && (
           <Button
-            variant="outlined"
-            onClick={handleSubmit}
-            style={{ fontSize: "large", width: "93%", marginTop: 24 }}
-          >
-            Get OTP
-          </Button>
+          variant="outlined"
+          onClick={handleSubmit}
+          style={{ fontSize: "large", width: "93%", marginTop: 24 }}
+          disabled={isGetOtpButtonDisabled}
+        >
+          Get OTP
+        </Button>
         )}
 
         {displayOtp && !displayPasswordFields && (

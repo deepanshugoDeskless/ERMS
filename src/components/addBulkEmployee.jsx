@@ -81,6 +81,9 @@ const AddEmployee = () => {
       setDisplayTable(true);
 
       handleBulkSubmit({ bulkUserInput: parsedData });
+
+        // Show success alert
+    alert("Success! File added successfully.");
     };
     reader.readAsBinaryString(file);
   };
@@ -166,6 +169,9 @@ const AddEmployee = () => {
         setIndividualBankAccNumber("");
         setIndividualIFSCCode("");
 
+      // Showing apna success alert message
+      alert("Success! User added successfully.");
+
       })
       .catch((error) => {
         console.error(error);
@@ -216,13 +222,30 @@ const AddEmployee = () => {
     },
   ];
 
-  const onFileChange = (e) => {
-    const selectedFile = e[0];
-    console.log(selectedFile);
+  // Add this function to check if the selected file has an allowed extension
+const isValidFile = (fileName) => {
+  const allowedExtensions = ['.xls', '.xlsx', '.csv'];
+  const ext = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
+  return allowedExtensions.includes(`.${ext}`);
+};
+
+  // Update the onFileChange function
+const onFileChange = (e) => {
+  const selectedFile = e[0];
+  console.log(selectedFile);
+
+  if (isValidFile(selectedFile.name)) {
     setFile(selectedFile);
-  };
+  } else {
+    // Show alert for invalid file format
+    alert("Please select only .xls, .xlsx, .csv files.");
+  }
+};
+
+
 
   return (
+    <>
     <Box
       style={{
         position: "absolute",
@@ -242,7 +265,7 @@ const AddEmployee = () => {
           justifyContent: "space-evenly",
         }}
       >
-        <div
+       <div
           style={{
             display: "flex",
             marginLeft: 30,
@@ -265,10 +288,12 @@ const AddEmployee = () => {
           </h6>
 
           <DropFileInput
+            accept=".xls, .xlsx, .csv" // Add the accepted file formats here
             onFileChange={(files) => onFileChange(files)}
             uploadFile={(files) => readFile(files)}
           />
         </div>
+        
 
         <div
           style={{
@@ -468,7 +493,22 @@ const AddEmployee = () => {
           </div>
         </div>
       </div>
+      <div style={{display:'flex',flexDirection:'column'}}>
+                <h6 style={{ color: "red" , fontSize:'small' , display:'flex',marginLeft:80}}>
+                  NOTE:
+                  <br /><br />
+                  1. To avoid any kind of issues,
+                  read the below points carefully before selecting the file <br /><br />
+                  2. Please ensure that the uploaded file format is in .csv, .xls, .xlsx format only <br /><br />
+                  3. The file should not contain more than 50 records. <br /><br />
+                  4. All the fields must be available as in the sample excel provided to the ADMIN <br />(FirstName, LastName, Email, Employee Code) <br /><br />
+
+                  </h6>
+                
+              </div>
     </Box>
+    
+    </>
   );
 };
 
