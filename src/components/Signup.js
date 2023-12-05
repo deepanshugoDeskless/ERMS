@@ -55,6 +55,22 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // Set t
   const handleOtpChange = (e, index) => {
     const newOtp = [...otp];
     newOtp[index] = e.target.value;
+
+     // Enforce only numbers in the OTP field
+     const enteredValue = e.target.value;
+     if (/^\d*$/.test(enteredValue)) {
+       newOtp[index] = enteredValue;
+       
+ 
+       // Handle backspace key
+       if (enteredValue === "" && index > 0) {
+         // Move to the previous digit field
+         document.getElementById(`otpInput-${index - 1}`).focus();
+       } else if (index < 5 && enteredValue !== "") {
+         // Move to the next digit field
+         document.getElementById(`otpInput-${index + 1}`).focus();
+       }}
+
     setOtp(newOtp);
     var password = "";
     newOtp.forEach((dig) => {
@@ -96,7 +112,6 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // Set t
       });
   };
 
-  // Handle activation process
   const handleActivateAccount = () => {
     if (displayOtp && !displayPasswordFields) {
       setDisplayPasswordFields(true);
@@ -104,8 +119,6 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // Set t
       // Handle activation logic here
       if (password === confirmPassword) {
         // Passwords match, continue with activation logic
-        alert("Account activated successfully!"); 
-  
         reSetPassword({
           variables: {
             reSetPasswordInput: {
@@ -114,10 +127,15 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);  // Set t
               otp: completeOtp,
             },
           },
-        }).then(() => {
-          // Successful activation, navigate to the sign-in page
-          navigate("/login"); // Navigate to the sign-in page
-        });
+        })
+          .then(() => {
+            // Successful activation, navigate to the sign-in page
+            navigate("/login");
+          })
+          .catch((error) => {
+            console.error(error);
+            alert("Error activating account. Please try again."); // Show alert for activation error
+          });
       } else {
         // Passwords do not match, show an error or handle accordingly
         alert("Passwords do not match.");
