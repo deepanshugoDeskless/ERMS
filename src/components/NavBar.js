@@ -35,7 +35,7 @@ export default function NavBar() {
             padding: 20,
           }}
         >
-          Expense Reimburesment Management Portal
+          Expense Reimbursement Management Portal
         </h2>
 
         {token ? (

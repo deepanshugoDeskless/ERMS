@@ -15,6 +15,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Loader, Error } from "./loader";
+import { Link } from "react-router-dom";
+
 
 
 export default function Login() {
@@ -261,6 +263,10 @@ export default function Login() {
           >
             Login
           </Button>
+          {/* Add the "Forgot Password?" hyperlink */}
+          <Link to="/forgotpassword" style={{ marginTop: 10, textDecoration: "none" }}>
+            Forgot Password?
+          </Link>
               </div>
             </form>
           </div>

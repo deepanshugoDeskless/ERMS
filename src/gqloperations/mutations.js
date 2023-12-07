@@ -4,8 +4,6 @@ export const SIGNUP_USER = gql`
     user: signupUser(userNew: $userNew) {
       firstName
       lastName
-      bank_account_no
-      bank_ifsc_code
     }
   }
 `;
@@ -52,9 +50,6 @@ export const GET_TEAM_MEMBERS = gql`
       role
       username
       employeeCode
-      sex
-      bank_account_no
-      bank_ifsc_code
     }
   }
 `;
@@ -159,8 +154,6 @@ export const GET_PRE_REQUESTS = gql`
       by {
         firstName
         lastName
-        bank_account_no
-        bank_ifsc_code
 
       }
     }
@@ -200,9 +193,6 @@ export const GET_APPROVED_REIMBURSEMENTS = gql`
       by {
         firstName
         lastName
-        bank_account_no
-        bank_ifsc_code
-        
       }
     }
   }
@@ -242,8 +232,6 @@ export const ADMIN_FETCH_REQUESTS = gql`
       by{
         firstName
         lastName
-        bank_account_no
-        bank_ifsc_code
       }
     }
   }
@@ -274,8 +262,6 @@ export const GET_ALL_REIMBURSEMENTS = gql`
       by {
         firstName
         lastName
-        bank_account_no
-        bank_ifsc_code
       }
       expenses {
         date

@@ -83,7 +83,7 @@ const AddEmployee = () => {
       handleBulkSubmit({ bulkUserInput: parsedData });
 
         // Show success alert
-    alert("Success! File added successfully.");
+    alert("File added successfully!");
     };
     reader.readAsBinaryString(file);
   };
@@ -170,7 +170,7 @@ const AddEmployee = () => {
         setIndividualIFSCCode("");
 
       // Showing apna success alert message
-      alert("Success! User added successfully.");
+      alert("User added successfully!");
 
       })
       .catch((error) => {
@@ -273,7 +273,7 @@ const onFileChange = (e) => {
             border: "2px solid #ddd",
             padding: 4,
             borderRadius: 20,
-            alignItems: "flex-start",
+            alignItems: "center",
             justifyContent: "center",
             marginRight: 20,
           }}
@@ -282,6 +282,7 @@ const onFileChange = (e) => {
             style={{
               marginBottom: 20,
               marginLeft: 10,
+              textAlign:'center',
             }}
           >
             Upload Excel
@@ -302,13 +303,14 @@ const onFileChange = (e) => {
             borderRadius: 20,
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
-            justifyContent: "center",
+            alignItems: "center",  // Center horizontally
+              justifyContent: "center",  // Center vertically
           }}
         >
           <h6
             style={{
               marginLeft: 10,
+              textAlign:'center',
             }}
           >
             Add Individually
@@ -416,7 +418,7 @@ const onFileChange = (e) => {
                   />
                 </div>
                 {/* New fields for Bank Account Number and IFSC Code */}
-                <div style={{ flexDirection: "row",
+                {/* <div style={{ flexDirection: "row",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",}}>
@@ -451,7 +453,7 @@ const onFileChange = (e) => {
                     margin: 4,
                   }}
                 />
-                </div>
+                </div> */}
 
                  <TextField
                   id="outlined-basic"
@@ -464,7 +466,7 @@ const onFileChange = (e) => {
                   onChange={(e) => setIndividualEmployeeCode(e.target.value)}
                   required
                   style={{
-                    width: "100%",
+                    width: "98%",
                     marginTop: 4,
                   }}
                 />
@@ -494,7 +496,7 @@ const onFileChange = (e) => {
         </div>
       </div>
       <div style={{display:'flex',flexDirection:'column'}}>
-                <h6 style={{ color: "red" , fontSize:'small' , display:'flex',marginLeft:80}}>
+                <h6 style={{ color: "red" , fontSize:'small' , display:'flex',marginLeft:80,textTransform:'none'}}>
                   NOTE:
                   <br /><br />
                   1. To avoid any kind of issues,

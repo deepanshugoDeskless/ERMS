@@ -80,11 +80,6 @@ const Team = () => {
       headerName: "Username",
       flex: 1.5,
     },
-    {
-      field: "sex",
-      headerName: "Gender",
-      flex: 1,
-    },
   ];
 
   return (

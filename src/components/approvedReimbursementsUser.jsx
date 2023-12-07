@@ -172,22 +172,21 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
       .map((reimbursement) => {
         const reimbursementData = {
           Title: reimbursement.title,
-          Description: reimbursement.description,
+          Purpose: reimbursement.purpose, // Updated column name
           Type: getTypeDescription(reimbursement.type),
-          VisitLocation: reimbursement.visitLocation,
-          NoOfDays: reimbursement.noOfDays,
-          FromDate: reimbursement.fromDate,
-          ToDate: reimbursement.toDate,
-          AskedAmount: reimbursement.askedAmount,
+          "From Date": reimbursement.fromDate, // Updated column name
+          "To Date": reimbursement.toDate, // Updated column name
+          "Visit Location": reimbursement.visitLocation, // Updated column name
+          "Ask Amount": reimbursement.askedAmount, // Updated column name
         };
-
+  
         if (reimbursement.expenses.length > 0) {
           reimbursement.expenses.forEach((expense, index) => {
             reimbursementData[`Expense${index + 1}_Description`] =
               expense.description;
             reimbursementData[`Expense${index + 1}_Amount`] = expense.amount;
-            reimbursementData[`Expense${index + 1}_InvoiceID`] =
-              expense.invoiceId;
+            reimbursementData[`Expense${index + 1}_Invoice`] = expense.invoiceId; // Updated column name
+            reimbursementData[`Expense${index + 1}_ID`] = expense.invoiceId; // Updated column name
             reimbursementData[`Expense${index + 1}_Establishment`] =
               expense.establishment;
             reimbursementData[`Expense${index + 1}_Type`] = getTypeDescription(
@@ -196,15 +195,16 @@ const ApprovedReimbursementsUser = (key, showPlusButton, addForm) => {
             reimbursementData[`Expense${index + 1}_Date`] = expense.date;
           });
         }
-
+  
         return reimbursementData;
       });
-
+  
     const ws = XLSX.utils.json_to_sheet(dataToExport);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Reimbursements");
     XLSX.writeFile(wb, "reimbursements.xlsx");
   };
+  
 
   return (
     <>

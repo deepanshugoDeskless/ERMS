@@ -80,23 +80,8 @@ const Team = () => {
       headerName: "Username",
       flex: 2.4,
     },
-    {
-      field: "sex",
-      headerName: "Gender",
-      flex: 0.7,
-    },
-    {
-      field: "bank_account_no",
-      headerName: "# Bank Acc",
-      flex: 1.6,
-      cellClassName: "name-column--cell",
-    },
-    {
-      field: "bank_ifsc_code",
-      headerName: "# Bank IFSC",
-      flex: 1,
-      cellClassName: "name-column--cell",
-    },
+
+    
   ];
 
   return (

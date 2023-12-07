@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import { Box, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { tokens } from "../../src/theme";
 
 const useStyles = makeStyles(() => ({
@@ -40,18 +40,21 @@ const MyCounterCard = ({ count, title, subTitle }) => {
           variant="h5"
           component="h2"
           style={{
-            marginTop: 40,
+            marginTop: 10,
             fontSize: 20,
             fontWeight: 600,
             color: colors.blueAccent[200],
             opacity: 1,
+            marginBottom:30,
           }}
         >
           {title}
         </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          {subTitle ?? "Count"}
-        </Typography>
+        {subTitle && (
+          <Typography className={classes.pos} color="textSecondary">
+            {subTitle}
+          </Typography>
+        )}
         <Typography variant="h2" component="p">
           {count ?? 0}
         </Typography>

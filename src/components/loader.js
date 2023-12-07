@@ -5,6 +5,7 @@ import reactError from "../Assets/animation_lnt675ic.json";
 import personScroll from "../Assets/animation_lnt61h6a.json";
 import userAnimation from "../Assets/AnimationUser.json";
 import finanaceAnimation from "../Assets/AnimationFinance.json";
+import forgotPassword from "../Assets/animation_forgotpassword.json";
 import Lottie from "lottie-react";
 
 export function Loader() {
@@ -123,3 +124,4 @@ export function FinanceDashboardAnimation() {
     </div>
   );
 }
+

@@ -121,35 +121,49 @@ const ClaimedReimbursements = (key, showPlusButton, addForm) => {
   };
 
   const formatDateString = (dateString) => {
-    const date = new Date(dateString);
+    // Split the date string into day, month, and year
+    const [day, month, year] = dateString.split("/");
+  
+    // Ensure the date string is in the expected format
+    if (!day || !month || !year) {
+      return "Invalid Date";
+    }
+  
+    // Convert to a Date object with the expected format
+    const date = new Date(`${year}-${month}-${day}`);
+  
     if (isNaN(date)) {
       return "Invalid Date";
     }
-
-    const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "short" });
-
-    return `${day} ${month}`;
+  
+    // Format the date as "DD Mon"
+    const formattedDate = `${date.getDate()} ${date.toLocaleString("default", { month: "short" })}`;
+  
+    return formattedDate;
   };
-  const reimbursements = data.ireimbursements
-    .filter((element) => element.isPreApproved && !element.isApproved)
-    .map((reimbursement, index) => {
-      const fromDateString = formatDateString(reimbursement.fromDate);
-      const toDateString = formatDateString(reimbursement.toDate);
+  
 
-      return {
-        id: reimbursement._id,
-        title: reimbursement.title,
-        fromDate: fromDateString,
-        toDate: toDateString,
-        type: getTypeDescription(reimbursement.type),
-        askedAmount: reimbursement.askedAmount,
-        expenses: reimbursement.expenses,
-        description: reimbursement.description,
-        purpose : reimbursement.purpose,
-        placeOfVisit: reimbursement.visitLocation,
-      };
-    });
+  
+  const reimbursements = data.ireimbursements
+  .filter((element) => element.isPreApproved && !element.isApproved)
+  .map((reimbursement, index) => {
+    const fromDateString = formatDateString(reimbursement.fromDate);
+    const toDateString = formatDateString(reimbursement.toDate);
+
+    return {
+      id: reimbursement._id,
+      title: reimbursement.title,
+      fromDate: fromDateString,
+      toDate: toDateString,
+      type: getTypeDescription(reimbursement.type),
+      askedAmount: reimbursement.askedAmount,
+      expenses: reimbursement.expenses,
+      description: reimbursement.description,
+      purpose: reimbursement.purpose,
+      placeOfVisit: reimbursement.visitLocation,
+    };
+  });
+
 
   const columns = [
     { field: "title", headerName: "Title", flex: 1.8 },

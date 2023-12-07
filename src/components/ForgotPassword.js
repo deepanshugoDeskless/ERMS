@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { GENERATE_OTP, SIGNUP_USER } from "../gqloperations/mutations";
 import signup from "../Assets/signup.json";
+import forgotPassword from "../Assets/animation_forgotpassword.json";
 import Lottie from "lottie-react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -16,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-export default function Signup() {
+export default function ForgotPassword() {
   const [formData, setFormData] = useState({});
   const [emailData, setEmailData] = useState("");
   const [signupUser, { data, loading, error }] = useMutation(SIGNUP_USER);
@@ -99,7 +100,7 @@ export default function Signup() {
     setConfirmPassword(e.target.value);
   };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await sendOtp({
@@ -188,7 +189,7 @@ export default function Signup() {
         className="leftcontainer"
         style={{ width: "30em", marginLeft: "10em", marginTop: "5em" }}
       >
-        <Lottie animationData={signup} />
+        <Lottie animationData={forgotPassword} />
       </div>
       <div
         className="container my-container"
@@ -246,7 +247,7 @@ export default function Signup() {
             marginTop: 20,
           }}
         >
-          Activate Account
+          Reset Password
         </h3>
 
         {/* Email ID field */}
@@ -402,9 +403,9 @@ export default function Signup() {
             variant="contained"
             onClick={handleActivateAccount}
             style={{ fontSize: "large", width: "93%", marginTop: 24 }}
-            disabled={isActivateButtonDisabled} // Disable the "Activate Account" button if the password criteria are not met
+            disabled={isActivateButtonDisabled} // Disable the "Reset Password " button if the password criteria are not met
           >
-            Activate Account
+            Reset Password
           </Button>
         )}
       </div>

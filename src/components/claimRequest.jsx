@@ -76,7 +76,8 @@ const ClaimRequest = () => {
   const [expenses, setExpenses] = useState([]);
   const [reimbursement, setReimbursement] = useState({});
   const [rowSelectionModel, setRowSelectionModel] = useState();
-  const [selectedReimbursementTitle, setSelectedReimbursementTitle] = useState(""); // Add this state variable
+  const [selectedReimbursementTitle, setSelectedReimbursementTitle] =
+    useState(""); // Add this state variable
 
   const addExpense = (expense) => {
     const newTotalAmount = totalAmount + parseFloat(expense.amount);
@@ -104,7 +105,6 @@ const ClaimRequest = () => {
       },
     ]);
   };
-
 
   const showExpensesUploadedAlert = () => {
     if (expenses.length > 0) {
@@ -140,7 +140,6 @@ const ClaimRequest = () => {
         console.error(error);
       });
   };
-
 
   if (loading) return <Loader />;
   if (error) return <Error />;
@@ -184,11 +183,11 @@ const ClaimRequest = () => {
             status = "Pre Approved";
           }
         }
-    
+
         if (row.isPaid) {
           status = "Disbursed";
         }
-    
+
         return (
           <Box
             width="120%"
@@ -215,9 +214,9 @@ const ClaimRequest = () => {
           </Box>
         );
       },
-    }
+    },
   ];
-  
+
   const approvedReimbursements = data?.ireimbursement?.filter(
     (reimbursement) => {
       return (
@@ -234,7 +233,7 @@ const ClaimRequest = () => {
           position: "absolute",
           bottom: "0px",
           left: "5em",
-          right:'0px',
+          right: "0px",
           // width: "100%", // Change the width to 100% to occupy the full available width
         }}
       >
@@ -304,7 +303,7 @@ const ClaimRequest = () => {
             <Box
               height="70vh"
               style={{
-                width:'7.5em',
+                width: "7.5em",
                 position: "fixed",
                 marginLeft: "-0.3em",
                 marginTop: "1.7em",
@@ -369,7 +368,6 @@ const ClaimRequest = () => {
                 marginLeft: 8,
               }}
             >
-  
               <div
                 style={{
                   display: "flex",
@@ -587,13 +585,13 @@ function Form({
                   disabled={!isLastElement}
                   id="combo-box-demo"
                   options={expenseTypes}
-                  value={expenseType?.label ? expenseType?.label : ""}
+                  value={expenseType?.label}
                   onChange={(event, selectedType) => {
                     setExpenseType(selectedType);
                   }}
                   sx={{ width: 140 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="Type" style={{}} />
+                    <TextField {...params} value={expenseType?.label} label="Type" style={{}} />
                   )}
                 />
               </Box>
@@ -620,7 +618,10 @@ function Form({
               </Box>
 
               <div style={{ marginTop: -8 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale="en-gb"
+                >
                   <DemoContainer components={["DatePicker"]}>
                     <DatePicker
                       value={
@@ -632,6 +633,8 @@ function Form({
                       onChange={(date) => setExpenseDate(date)}
                       label="Payment Date"
                       style={{ width: "3em" }}
+                      // Add the disableFuture prop to allow only current and past dates
+                      disableFuture
                     />
                   </DemoContainer>
                 </LocalizationProvider>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, useTheme, } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import {
   CREATE_REIMBURSEMENT,
   GET_REIMBURSEMENTS,
@@ -22,6 +22,10 @@ import dayjs from "dayjs";
 import { useMutation, useQuery } from "@apollo/client";
 import { Loader, Error } from "./loader";
 import "dayjs/locale/en-gb";
+import ClearIcon from "@mui/icons-material/Clear";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import { toast } from "react-toastify";
 
 const RaiseRequest = () => {
   const [colorMode] = useMode();
@@ -37,6 +41,10 @@ const RaiseRequest = () => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [amount, setAmount] = useState("");
+  const [dateValidationError, setDateValidationError] = useState("");
+  // New state variable to track if purpose is selected
+  const [isPurposeSelected, setIsPurposeSelected] = useState(false);
+  const [amountExceedsLimitError, setAmountExceedsLimitError] = useState(false);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -86,11 +94,18 @@ const RaiseRequest = () => {
 
   const handleAmountInput = (e) => {
     const input = e.target.value;
-    if (/^\d*\.?\d*$/.test(input)) {
+    const numericValue = parseFloat(input);
+
+    // Check if the input contains only numeric characters
+    const isNumeric = /^[0-9]*$/.test(input);
+
+    if (input === "" || (isNumeric && parseFloat(input) <= 50000)) {
       setAmount(input);
       setAmountError(false);
+      setAmountExceedsLimitError(false);
     } else {
       setAmountError(true);
+      setAmountExceedsLimitError(isNumeric); // Set the specific error only if the input is not numeric
     }
   };
 
@@ -102,8 +117,22 @@ const RaiseRequest = () => {
   });
 
   const callRaiseReimbursementRequest = () => {
-    var numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
+    if (
+      !fromDate ||
+      !toDate ||
+      dayjs(fromDate, "DD/MM/YYYY").isAfter(dayjs(toDate, "DD/MM/YYYY"))
+    ) {
+      // Validation failed, set error message
+      setDateValidationError(
+        "From date cannot be greater than or equal to the To Date"
+      );
+      return;
+    }
 
+    // Clear any previous validation error
+    setDateValidationError("");
+
+    const numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
     createReimbursement({
       context: {
         headers: {
@@ -204,13 +233,13 @@ const RaiseRequest = () => {
     },
     {
       field: "fromDate",
-      headerName: "FromDate",
+      headerName: "From Date",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
       field: "toDate",
-      headerName: "ToDate",
+      headerName: "To Date",
       flex: 1,
       cellClassName: "name-column--cell",
     },
@@ -228,7 +257,7 @@ const RaiseRequest = () => {
     },
     {
       field: "askedAmount",
-      headerName: "Asked For",
+      headerName: "Amount",
       flex: 0.8,
       cellClassName: "name-column--cell",
     },
@@ -274,6 +303,21 @@ const RaiseRequest = () => {
     },
   ];
 
+  // Function to check if all required fields are filled
+  const areAllFieldsFilled = () => {
+    return (
+      title !== "" &&
+      description !== "" &&
+      place !== "" &&
+      fromDate !== null &&
+      toDate !== null &&
+      amount !== "" &&
+      // amount <500000 &&
+      type &&
+      purpose
+    );
+  };
+
   return (
     <Box
       style={{
@@ -299,7 +343,7 @@ const RaiseRequest = () => {
         >
           <h4
             style={{
-              marginLeft: 20,
+              marginLeft: 30,
               fontFamily: "Bebas Neue,sans-serif",
               fontSize: "xxx-large",
             }}
@@ -317,8 +361,8 @@ const RaiseRequest = () => {
             flexDirection: "row",
             textAlign: "center",
             justifyContent: "space-between",
-             // Additional styles for responsiveness
-             flexWrap: "wrap",
+            // Additional styles for responsiveness
+            flexWrap: "wrap",
           }}
         >
           <Autocomplete
@@ -326,17 +370,17 @@ const RaiseRequest = () => {
             id="combo-box-nature"
             maxRows={6}
             options={TypeNature}
-            sx={{ width: 200, height: 80 }}
-            value={purpose}
+            sx={{ width: 300, height: 80 }}
+            value={purpose?.label}
             style={{
-              width: "4em",
+              width: "4.8em",
               marginLeft: "0.12em",
             }}
             onChange={(event, selectedType) => {
               setPurpose(selectedType?.label);
             }}
             renderInput={(params) => (
-              <TextField {...params} value={purpose} label="Purpose" />
+              <TextField {...params} value={purpose?.label} label="Purpose" />
             )}
           />
           <Autocomplete
@@ -347,7 +391,6 @@ const RaiseRequest = () => {
             sx={{ width: 240, height: 80 }}
             style={{
               width: "4.8em",
-              marginLeft: "0.6em",
             }}
             value={type?.label}
             onChange={(event, selectedType) => {
@@ -410,7 +453,7 @@ const RaiseRequest = () => {
             textAlign: "center",
             alignItems: "baseline",
             justifyContent: "space-between",
-                // Additional styles for responsiveness
+            // Additional styles for responsiveness
             flexWrap: "wrap",
           }}
         >
@@ -420,10 +463,13 @@ const RaiseRequest = () => {
               marginBottom: 5,
               display: "flex",
               flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
+              textAlign: "center",
+              justifyContent: "space-between",
+              // Additional styles for responsiveness
+              flexWrap: "wrap",
             }}
           >
+            <div className="" style={{marginRight:'0.6em'}}>
             <LocalizationProvider
               dateAdapter={AdapterDayjs}
               adapterLocale="en-gb"
@@ -442,6 +488,7 @@ const RaiseRequest = () => {
                 />
               </DemoContainer>
             </LocalizationProvider>
+            </div>
 
             <LocalizationProvider
               dateAdapter={AdapterDayjs}
@@ -466,13 +513,14 @@ const RaiseRequest = () => {
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
+              marginRight:'1em'
             }}
           >
             <TextField
               id="outlined-select-currency"
               select
               defaultValue="INR"
-              style={{ ...styles.input, width: 60, marginLeft: "-0.3em" }}
+              style={{ ...styles.input, width: 60, }}
             >
               {currencies.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -488,6 +536,7 @@ const RaiseRequest = () => {
               onChange={handleAmountInput}
               variant="outlined"
               style={{ ...styles.input, width: "7.8em" }}
+              inputProps={{ pattern: "[0-9]*" }}
             />
           </div>
 
@@ -500,6 +549,7 @@ const RaiseRequest = () => {
             onClick={() => {
               callRaiseReimbursementRequest();
             }}
+            disabled={!areAllFieldsFilled()|| (amount !== "" && parseFloat(amount) > 50000)}
           >
             Submit
           </Button>
@@ -547,13 +597,15 @@ const RaiseRequest = () => {
                 marginRight: 3,
               }}
             >
-              Please enter only numbers
+              {amountExceedsLimitError
+                ? "Please enter an amount less than or equal to 5,00,000 INR"
+                : "Please enter only numbers"}
             </Alert>
           )}
 
           {successAlert && (
             <Alert severity="success" sx={{ marginRight: 3 }}>
-              Your request has been submitted successfully!
+              Your request has been submitted successfully!!
             </Alert>
           )}
         </div>

@@ -46,7 +46,7 @@ import DisburseReimbursement from "./DisburseReimbursement";
 export const ADMIN_SIDEBAR_DATA = [
   {
     id: 1,
-    name: "Admin Dashboards",
+    name: "Dashboard",
     page: <AdminHome />,
     path: "adminHome",
     icon: <HomeIcon />,

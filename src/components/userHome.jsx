@@ -106,7 +106,7 @@ const UserHome = () => {
             <h3
               style={{
                 marginTop: 40,
-                marginLeft: 40,
+                marginLeft: 20,
                 color: colors.blueAccent[500],
                 fontSize: "xxx-large",
               }}
@@ -116,14 +116,15 @@ const UserHome = () => {
             <h4
               style={{
                 marginTop: 40,
-                marginLeft: 40,
+                marginLeft: 10,
                 fontSize: 40,
                 fontWeight: 400,
                 color: colors.blueAccent[200],
                 opacity: 0.5,
+                textTransform: "none", 
               }}
             >
-              Welcome To goDeskless ERMS
+              Welcome To goDeskless ERMS 
             </h4>
           </div>
         </div>
