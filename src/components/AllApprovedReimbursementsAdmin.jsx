@@ -107,11 +107,11 @@ const AllApprovedReimbursementsAdmin = () => {
     askedAmount: row.askedAmount,
     totalAmount: row.totalAmount,
     isPreApproved: row.isPreApproved,
-    isApproved:row.isApproved,
-    isPaid:row.isPaid,
+    isApproved: row.isApproved,
+    isPaid: row.isPaid,
     purpose: row.purpose,
     sumOfExpenses: calculateTotalAmount(row.expenses),
-    requestedBy: `${row.by.firstName} ${row.by.lastName}`, // Combine firstName and lastName
+    requestedBy: row.by ? `${row.by.firstName} ${row.by.lastName}` : '', // Add a check for row.by
   }));
 
   console.log("Rows data:", rows);
@@ -172,7 +172,7 @@ const AllApprovedReimbursementsAdmin = () => {
     {
         field: "requestedBy",
         headerName: "Requested By",
-        flex: 1.2,
+        flex: 1.4,
         renderCell: (params) => {
           const role = params.row.by?.role;
           return (

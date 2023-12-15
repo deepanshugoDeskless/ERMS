@@ -14,7 +14,7 @@ import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "./Header";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../src/theme";
@@ -56,13 +56,53 @@ const AddEmployee = () => {
   const [file, setFile] = useState("");
   const [jsonData, setJsonData] = useState([]);
   const [displayTable, setDisplayTable] = useState(false);
-  const [individualBankAccNumber, setIndividualBankAccNumber] = useState("");
-  const [individualIFSCCode, setIndividualIFSCCode] = useState("");
+  // New state variable to track form validity
+  const [isFormValid, setIsFormValid] = useState(false);
+    // New state variable to track email validity
+  const [isEmailValid, setIsEmailValid] = useState(true);
 
   const [
     bulkUserCreate,
     { bulkUploadData, bulkUploadLoading, bulkUploadEerror },
   ] = useMutation(BULK_UPLOAD_USER);
+
+  const updateFormValidity = () => {
+    const isValid =
+      individualFirstName.trim().length > 0 &&
+      individualLasttName.trim().length > 0 &&
+      individualEmail.trim().length > 0 &&
+      individualEmail.endsWith("@godeskless.com")&&
+      // individualPhone.trim().length > 0 &&
+      individualPhone.trim().length === 10 || individualPhone.trim().length === 8 &&
+      individualEmployeeCode.trim().length > 0;
+
+    // Update the form validity state
+    setIsFormValid(isValid);
+  };
+
+  // Use useEffect to update form validity whenever any input field changes
+  useEffect(() => {
+    updateFormValidity();
+  }, [
+    individualFirstName,
+    individualLasttName,
+    individualEmail,
+    individualPhone,
+    individualEmployeeCode,
+  ]);
+
+  // Function to handle email input change
+  const handleEmailChange = (e) => {
+    const enteredEmail = e.target.value;
+    if (enteredEmail.endsWith("@godeskless.com")) {
+      setIndividualEmail(enteredEmail);
+    } else {
+      // Show an alert error message
+      alert("Your email id must end with '@godeskless.com'");
+      // You can choose to clear the input or handle it differently based on your requirements
+      // setIndividualEmail("");
+    }
+  };
 
   const readFile = () => {
     if (!file) {
@@ -82,8 +122,8 @@ const AddEmployee = () => {
 
       handleBulkSubmit({ bulkUserInput: parsedData });
 
-        // Show success alert
-    alert("File added successfully!");
+      // Show success alert
+      alert("File added successfully!");
     };
     reader.readAsBinaryString(file);
   };
@@ -155,8 +195,6 @@ const AddEmployee = () => {
             individualLasttName +
             "-" +
             "godeskless",
-            bank_account_no :individualBankAccNumber,
-            bank_ifsc_code:individualIFSCCode,
         },
       },
     })
@@ -166,12 +204,9 @@ const AddEmployee = () => {
         setIndividualEmail("");
         setIndividualPhone("");
         setIndividualEmployeeCode("");
-        setIndividualBankAccNumber("");
-        setIndividualIFSCCode("");
 
-      // Showing apna success alert message
-      alert("User added successfully!");
-
+        // Showing apna success alert message
+        alert("User added successfully!");
       })
       .catch((error) => {
         console.error(error);
@@ -223,293 +258,275 @@ const AddEmployee = () => {
   ];
 
   // Add this function to check if the selected file has an allowed extension
-const isValidFile = (fileName) => {
-  const allowedExtensions = ['.xls', '.xlsx', '.csv'];
-  const ext = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
-  return allowedExtensions.includes(`.${ext}`);
-};
+  const isValidFile = (fileName) => {
+    const allowedExtensions = [".xls", ".xlsx", ".csv"];
+    const ext = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
+    return allowedExtensions.includes(`.${ext}`);
+  };
 
   // Update the onFileChange function
-const onFileChange = (e) => {
-  const selectedFile = e[0];
-  console.log(selectedFile);
+  const onFileChange = (e) => {
+    const selectedFile = e[0];
+    console.log(selectedFile);
 
-  if (isValidFile(selectedFile.name)) {
-    setFile(selectedFile);
-  } else {
-    // Show alert for invalid file format
-    alert("Please select only .xls, .xlsx, .csv files.");
-  }
-};
-
-
+    if (isValidFile(selectedFile.name)) {
+      setFile(selectedFile);
+    } else {
+      // Show alert for invalid file format
+      alert("Please select only .xls, .xlsx, .csv files.");
+    }
+  };
 
   return (
     <>
-    <Box
-      style={{
-        position: "absolute",
-        top: "100px",
-        left: "5em",
-        right: "0px",
-      }}
-    >
-      <div
+      <Box
         style={{
-          display: "flex",
-          flexDirection: "row",
-          marginTop: 50,
-          flex: 1,
-          width: "100%",
-          alignItems: "flex-start",
-          justifyContent: "space-evenly",
+          position: "absolute",
+          top: "100px",
+          left: "5em",
+          right: "0px",
         }}
       >
-       <div
-          style={{
-            display: "flex",
-            marginLeft: 30,
-            flexDirection: "column",
-            border: "2px solid #ddd",
-            padding: 4,
-            borderRadius: 20,
-            alignItems: "center",
-            justifyContent: "center",
-            marginRight: 20,
-          }}
-        >
-          <h6
-            style={{
-              marginBottom: 20,
-              marginLeft: 10,
-              textAlign:'center',
-            }}
-          >
-            Upload Excel
-          </h6>
-
-          <DropFileInput
-            accept=".xls, .xlsx, .csv" // Add the accepted file formats here
-            onFileChange={(files) => onFileChange(files)}
-            uploadFile={(files) => readFile(files)}
-          />
-        </div>
-        
-
         <div
           style={{
-            border: "2px solid #ddd",
-            padding: 4,
-            borderRadius: 20,
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",  // Center horizontally
-              justifyContent: "center",  // Center vertically
+            flexDirection: "row",
+            marginTop: 50,
+            flex: 1,
+            width: "100%",
+            alignItems: "flex-start",
+            justifyContent: "space-evenly",
           }}
         >
-          <h6
-            style={{
-              marginLeft: 10,
-              textAlign:'center',
-            }}
-          >
-            Add Individually
-          </h6>
           <div
             style={{
               display: "flex",
+              marginLeft: 30,
               flexDirection: "column",
-              flex: 1,
-              width: "100%",
+              border: "2px solid #ddd",
+              padding: 4,
+              borderRadius: 20,
               alignItems: "center",
               justifyContent: "center",
+              marginRight: 20,
             }}
           >
-            <div
+            <h6
               style={{
-                flexDirection: "column",
-                display: "flex",
-                width: "80%",
-                height: 120,
-                margin: 4,
-                marginTop: 12,
-                justifyContent: "center",
-                flex: 1,
+                marginBottom: 20,
+                marginLeft: 10,
+                textAlign: "center",
               }}
             >
-              <div>
-                <div
-                  style={{
-                    flexDirection: "row",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <TextField
-                    type="text"
-                    placeholder="Enter First Name"
-                    name="firstName"
-                    value={individualFirstName}
-                    onChange={(e) => setIndividualFirstName(e.target.value)}
-                    required
-                    style={{
-                      width: "60%",
-                      margin: 4,
-                    }}
-                    id="outlined-basic"
-                    label="First Name"
-                    variant="outlined"
-                  />
-                  <TextField
-                    id="outlined-basic"
-                    label="Last Name"
-                    variant="outlined"
-                    value={individualLasttName}
-                    type="text"
-                    placeholder="Enter Last Name"
-                    name="lastName"
-                    onChange={(e) => setIndividualLasttName(e.target.value)}
-                    required
-                    style={{
-                      width: "60%",
-                      margin: 4,
-                    }}
-                  />
-                </div>
+              Upload File
+            </h6>
 
-                <div
-                  style={{
-                    flexDirection: "row",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <TextField
-                    type="email"
-                    placeholder="Enter Email"
-                    name="email"
-                    value={individualEmail}
-                    onChange={(e) => setIndividualEmail(e.target.value)}
-                    required
+            <DropFileInput
+              accept=".xls, .xlsx, .csv" // Add the accepted file formats here
+              onFileChange={(files) => onFileChange(files)}
+              uploadFile={(files) => readFile(files)}
+            />
+          </div>
+
+          <div
+            style={{
+              border: "2px solid #ddd",
+              padding: 4,
+              borderRadius: 20,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center", // Center horizontally
+              justifyContent: "center", // Center vertically
+            }}
+          >
+            <h6
+              style={{
+                marginLeft: 10,
+                textAlign: "center",
+              }}
+            >
+              Add Individually
+            </h6>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  flexDirection: "column",
+                  display: "flex",
+                  width: "80%",
+                  height: 120,
+                  margin: 4,
+                  marginTop: 12,
+                  justifyContent: "center",
+                  flex: 1,
+                }}
+              >
+                <div>
+                  <div
                     style={{
-                      width: "60%",
-                      margin: 4,
+                      flexDirection: "row",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    id="outlined-basic"
-                    label="Email"
-                    variant="outlined"
-                  />
-                  <TextField
-                    id="outlined-basic"
-                    label="Phone"
-                    variant="outlined"
-                    type="number"
-                    placeholder="Enter Number"
-                    value={individualPhone}
-                    name="phone"
-                    onChange={(e) => setIndividualPhone(e.target.value)}
-                    required
-                    style={{
-                      width: "60%",
-                      margin: 4,
-                    }}
-                  />
-                </div>
-                {/* New fields for Bank Account Number and IFSC Code */}
-                {/* <div style={{ flexDirection: "row",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",}}>
-                <TextField
-                  id="outlined-basic"
-                  label="Bank Account Number"
-                  variant="outlined"
-                  value={individualBankAccNumber}
-                  type="text"
-                  placeholder="Enter Bank Account Number"
-                  name="bankAccountNumber"
-                  onChange={(e) => setIndividualBankAccNumber(e.target.value)}
-                  required
-                  style={{
-                    width: "60%",
-                    margin: 4,
-                  }}
-                />
-
-                <TextField
-                  id="outlined-basic"
-                  label="IFSC Code"
-                  variant="outlined"
-                  value={individualIFSCCode}
-                  type="text"
-                  placeholder="Enter IFSC Code"
-                  name="ifscCode"
-                  onChange={(e) => setIndividualIFSCCode(e.target.value)}
-                  required
-                  style={{
-                    width: "60%",
-                    margin: 4,
-                  }}
-                />
-                </div> */}
-
-                 <TextField
-                  id="outlined-basic"
-                  label="Employee Code"
-                  variant="outlined"
-                  value={individualEmployeeCode}
-                  type="number"
-                  placeholder="Enter Employee Code"
-                  name="employeeCode"
-                  onChange={(e) => setIndividualEmployeeCode(e.target.value)}
-                  required
-                  style={{
-                    width: "98%",
-                    marginTop: 4,
-                  }}
-                />
-
-                <div
-                  style={{
-                    flexDirection: "column",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    onClick={() => {
-                      callAddIndividualEmployee();
-                    }}
-                    style={{ fontSize: "medium", marginTop: 40, width: "80%" }}
                   >
-                    Add Employee
-                  </Button>
+                    <TextField
+                      type="text"
+                      placeholder="Enter First Name"
+                      name="firstName"
+                      value={individualFirstName}
+                      onChange={(e) => setIndividualFirstName(e.target.value)}
+                      required
+                      style={{
+                        width: "60%",
+                        margin: 4,
+                      }}
+                      id="outlined-basic"
+                      label="First Name"
+                      variant="outlined"
+                    />
+                    <TextField
+                      id="outlined-basic"
+                      label="Last Name"
+                      variant="outlined"
+                      value={individualLasttName}
+                      type="text"
+                      placeholder="Enter Last Name"
+                      name="lastName"
+                      onChange={(e) => setIndividualLasttName(e.target.value)}
+                      required
+                      style={{
+                        width: "60%",
+                        margin: 4,
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      flexDirection: "row",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      type="email"
+                      placeholder="Enter Email"
+                      name="email"
+                      value={individualEmail}
+                      onChange={(e) => setIndividualEmail(e.target.value)}
+                      required
+                      error={!isEmailValid} // Highlight the field when email is not valid
+                      helperText={
+                        !isEmailValid && "Email must end with '@godeskless.com'"
+                      }
+                      style={{
+                        width: "60%",
+                        margin: 4,
+                      }}
+                      id="outlined-basic"
+                      label="Email"
+                      variant="outlined"
+                    />
+                    <TextField
+                      id="outlined-basic"
+                      label="Phone"
+                      variant="outlined"
+                      type="number"
+                      placeholder="Enter Number"
+                      value={individualPhone}
+                      name="phone"
+                      onChange={(e) => setIndividualPhone(e.target.value)}
+                      required
+                      style={{
+                        width: "60%",
+                        margin: 4,
+                      }}
+                    />
+                  </div>
+
+                  <TextField
+                    id="outlined-basic"
+                    label="Employee Code"
+                    variant="outlined"
+                    value={individualEmployeeCode}
+                    type="number"
+                    placeholder="Enter Employee Code"
+                    name="employeeCode"
+                    onChange={(e) => setIndividualEmployeeCode(e.target.value)}
+                    required
+                    style={{
+                      width: "98%",
+                      marginTop: 4,
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      flexDirection: "column",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      onClick={() => {
+                        callAddIndividualEmployee();
+                      }}
+                      style={{
+                        fontSize: "medium",
+                        marginTop: 40,
+                        width: "80%",
+                      }}
+                      disabled={!isFormValid}
+                    >
+                      Add Employee
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div style={{display:'flex',flexDirection:'column'}}>
-                <h6 style={{ color: "red" , fontSize:'small' , display:'flex',marginLeft:80,textTransform:'none'}}>
-                  NOTE:
-                  <br /><br />
-                  1. To avoid any kind of issues,
-                  read the below points carefully before selecting the file <br /><br />
-                  2. Please ensure that the uploaded file format is in .csv, .xls, .xlsx format only <br /><br />
-                  3. The file should not contain more than 50 records. <br /><br />
-                  4. All the fields must be available as in the sample excel provided to the ADMIN <br />(FirstName, LastName, Email, Employee Code) <br /><br />
-
-                  </h6>
-                
-              </div>
-    </Box>
-    
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <h6
+            style={{
+              color: "red",
+              fontSize: "small",
+              display: "flex",
+              marginLeft: 80,
+              textTransform: "none",
+            }}
+          >
+            NOTE:
+            <br />
+            <br />
+            1. To avoid any kind of issues, read the below points carefully
+            before selecting the file <br />
+            <br />
+            2. Please ensure that the uploaded file format is in .csv, .xls,
+            .xlsx format only <br />
+            <br />
+            3. The file should not contain more than 50 records. <br />
+            <br />
+            4. All the fields must be available as in the sample excel provided
+            to the ADMIN <br />
+            (FirstName, LastName, Email, Employee Code) <br />
+            <br />
+          </h6>
+        </div>
+      </Box>
     </>
   );
 };

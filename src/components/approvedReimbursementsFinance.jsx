@@ -196,45 +196,48 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
     return "Invalid Date";
   };
 
-  const reimbursements = data.approvedReimbursements
-    .map((reimbursement, index) => {
-      const fromDateString = formatDateString(reimbursement.fromDate);
-      const toDateString = formatDateString(reimbursement.toDate);
-       // Access firstName and lastName from the by object
-       const { firstName, lastName } = reimbursement.by;
+// ...
 
-       // Create a new field that combines firstName and lastName
-       const requestBy = `${firstName} ${lastName}`;
+const reimbursements = data.approvedReimbursements
+  .map((reimbursement, index) => {
+    const fromDateString = formatDateString(reimbursement.fromDate);
+    const toDateString = formatDateString(reimbursement.toDate);
 
+    // Check if 'reimbursement.by' is not null or undefined
+    const requestBy = reimbursement.by?.firstName && reimbursement.by?.lastName
+      ? `${reimbursement.by.firstName} ${reimbursement.by.lastName}`
+      : "Unknown";
 
-      if (
-        fromDateString !== "Invalid Date" &&
-        toDateString !== "Invalid Date"
-      ) {
-        return {
-          id: reimbursement._id,
-          title: reimbursement.title,
-          fromDate: fromDateString,
-          toDate: toDateString,
-          type: getTypeDescription(reimbursement.type),
-          askedAmount: reimbursement.askedAmount,
-          expenses: reimbursement.expenses,
-          description: reimbursement.description,
-          purpose : reimbursement.purpose,
-          place : reimbursement.visitLocation,
-          requestBy, // New field combining firstName and lastName
-        };
-      } else {
-        console.error(
-          "Invalid date format:",
-          reimbursement.fromDate,
-          reimbursement.toDate
-        );
-      }
-    })
-    .filter((reimbursement) => !!reimbursement);
+    if (
+      fromDateString !== "Invalid Date" &&
+      toDateString !== "Invalid Date"
+    ) {
+      return {
+        id: reimbursement._id,
+        title: reimbursement.title,
+        fromDate: fromDateString,
+        toDate: toDateString,
+        type: getTypeDescription(reimbursement.type),
+        askedAmount: reimbursement.askedAmount,
+        expenses: reimbursement.expenses,
+        description: reimbursement.description,
+        purpose: reimbursement.purpose,
+        place: reimbursement.visitLocation,
+        requestBy,
+      };
+    } else {
+      console.error(
+        "Invalid date format:",
+        reimbursement.fromDate,
+        reimbursement.toDate
+      );
+      return null; // Return null for invalid dates
+    }
+  })
+  .filter((reimbursement) => !!reimbursement);
 
-  // ...
+// ...
+
 
   const customHeaderCell = (params) => {
     return (
@@ -245,16 +248,16 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
   };
 
   const columns = [
-    { field: "title", headerName: "Title", flex: 1.4 },
+    { field: "title", headerName: "Title", flex: 1.8 },
     { field: "purpose", headerName: "Purpose", flex: 1.4 },
-    { field: "type", headerName: "Type", flex: 1.6 },
-    { field: "fromDate", headerName: "From Date", flex: 1.4 },
-    { field: "toDate", headerName: "To Date", flex: 1.4 },
-    { field: "place", headerName: "Place", flex: 1.2 },
+    { field: "type", headerName: "Type", flex: 1.4 },
+    { field: "fromDate", headerName: "From Date", flex: 0.7 },
+    { field: "toDate", headerName: "To Date", flex: 0.7 },
+    { field: "place", headerName: "Place", flex: 1.4 },
     {
       field: "requestBy",
       headerName: "Requested By",
-      flex: 1.2,
+      flex: 1.4,
       renderCell: (params) => {
         const role = params.row.by?.role;
         return (
@@ -282,11 +285,11 @@ const ApprovedReimbursementsFinance = (key, showPlusButton, addForm) => {
       },
       headerRender: customHeaderCell,
     },
-    { field: "askedAmount", headerName: "Ask", flex: 1.2},
+    { field: "askedAmount", headerName: "Ask", flex: 1},
     {
       field: "claimed",
       headerName: "Claimed",
-      flex: 1.1,
+      flex: 1,
       renderCell: (params) => {
         const claimedAmount = calculateTotalAmount(params.row.expenses);
         const askedAmount = params.row.askedAmount;

@@ -41,20 +41,43 @@ export default function Signup() {
   const isEmailFormatValid = /\S+@\S+\.\S+/.test(emailData);
 
   const isGetOtpButtonDisabled =
-    emailData.trim() === "" || !(isEmailValid && isEmailFormatValid) || loading;
+  emailData.trim() === "" ||
+  !(isEmailValid && isEmailFormatValid) ||
+  emailData.split("@")[1].trim().toLowerCase() !== "godeskless.com";
+
+
+
+
+
+
   const isNextButtonDisabled =
     displayOtp && (completeOtp.length !== 6 || loading || otpLoading);
   const isActivateButtonDisabled =
     displayPasswordFields &&
     (password.trim() !== confirmPassword.trim() || password.trim() === "");
 
-  const handleChange = (e) => {
-    setEmailData(e.target.value);
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    const handleChange = (e) => {
+      const inputValue = e.target.value.trim(); // Trim extra spaces
+    
+      if (inputValue.endsWith("@godeskless.com")) {
+        // If it ends with "@godeskless.com", truncate the input after ".com"
+        const truncatedEmail = inputValue.slice(0, inputValue.indexOf("@godeskless.com") + "@godeskless.com".length);
+        setEmailData(truncatedEmail);
+        setFormData({
+          ...formData,
+          [e.target.name]: truncatedEmail,
+        });
+      } else {
+        setEmailData(inputValue);
+        setFormData({
+          ...formData,
+          [e.target.name]: inputValue,
+        });
+      }
+    };
+    
+    
+    
 
   const handleOtpChange = (e, index) => {
     const newOtp = [...otp];

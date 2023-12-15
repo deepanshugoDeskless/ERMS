@@ -132,7 +132,7 @@ const FinanceHome = () => {
                 textTransform: "none", 
               }}
             >
-              Welcome To goDeskless ERMS
+              Welcome to goDeskless ERMS
             </h4>
           </div>
         </div>

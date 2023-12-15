@@ -141,7 +141,6 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
         element.isPreApproved &&
         element.isApproved &&
         !element.isPaid
-        
     )
     .map((reimbursement, index) => {
       const fromDateStringParts = reimbursement.fromDate.split("/");
@@ -150,15 +149,12 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
       if (fromDateStringParts.length === 3 && toDateStringParts.length === 3) {
         const fromFormatted = formatDateToDDMMM(reimbursement.fromDate);
         const toFormatted = formatDateToDDMMM(reimbursement.toDate);
+
+        // Check if reimbursement.by is not null before destructuring
+        const { firstName, lastName } = reimbursement.by || {};
         
-        // Access firstName and lastName from the by object
-        const { firstName, lastName } = reimbursement.by;
-
-        //Access bankacc number and ifsc code fetch karre hain
-        const {bank_account_no , bank_ifsc_code }= reimbursement.by
-
-         // Create a new field that combines firstName and lastName
-         const requestBy = `${firstName} ${lastName}`;
+        // Create a new field that combines firstName and lastName
+        const requestBy = firstName && lastName ? `${firstName} ${lastName}` : '';
 
         return {
           id: reimbursement._id,
@@ -173,8 +169,6 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
           place: reimbursement.visitLocation,
           Expenses: reimbursement.expenses.length,
           requestBy, // New field combining firstName and lastName
-          bank_account_no,
-          bank_ifsc_code
         };
       } else {
         console.error(
@@ -194,18 +188,18 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
     };
 
   const columns = [
-    { field: "title", headerName: "Title", flex: 1 },
+    { field: "title", headerName: "Title", flex: 1.4 },
     { field: "purpose", headerName: "Purpose", flex: 1.2 },
     { field: "type", headerName: "Type", flex: 1.2 },
-    { field: "fromDate", headerName: "From Date", flex: 1.4 },
-    { field: "toDate", headerName: "To Date", flex: 1.4 },
-    { field: "place", headerName: "Place", flex: 1 },
-    { field: "askedAmount", headerName: "Ask", flex: 1.4 },
+    { field: "fromDate", headerName: "From Date", flex: 1 },
+    { field: "toDate", headerName: "To Date", flex: 1 },
+    { field: "place", headerName: "Place", flex: 1.4 },
+    { field: "askedAmount", headerName: "Ask", flex: 1 },
     { field: "Expenses", headerName: "Expenses", flex: 0.7 },
     {
       field: "claimed",
       headerName: "Claimed",
-      flex: 1.4,
+      flex: 1,
       valueGetter: (params) => {
         return `${calculateTotalAmount(params.row.expenses)}`;
       },
@@ -213,7 +207,7 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
     {
       field: "requestBy",
       headerName: "Requested By",
-      flex: 1.2,
+      flex: 1.4,
       renderCell: (params) => {
         const role = params.row.by?.role;
         return (
@@ -240,16 +234,6 @@ const DisburseReimbursement = (key, showPlusButton, addForm) => {
         );
       },
       headerRender: customHeaderCell,
-    },
-    {
-      field: "bank_account_no", // Use the new field for requestBy
-      headerName: "# Acc No.",
-      flex: 1.4,
-    },
-    {
-      field: "bank_ifsc_code", // Use the new field for requestBy
-      headerName: "#Ifsc Code",
-      flex: 1.4,
     },
   ];
 

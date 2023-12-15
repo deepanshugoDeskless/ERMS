@@ -11,6 +11,8 @@ const DropFileInput = (props) => {
   const wrapperRef = useRef(null);
 
   const [fileList, setFileList] = useState([]);
+  const [isValidFile, setIsValidFile] = useState(true);
+
 
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
 
@@ -18,14 +20,35 @@ const DropFileInput = (props) => {
 
   const onDrop = () => wrapperRef.current.classList.remove("dragover");
 
+  // const onFileDrop = (e) => {
+  //   const newFile = e.target.files[0];
+  //   if (newFile) {
+  //     const updatedList = [...fileList, newFile];
+  //     setFileList(updatedList);
+  //     props.onFileChange(updatedList);
+  //   }
+  // };
   const onFileDrop = (e) => {
     const newFile = e.target.files[0];
     if (newFile) {
-      const updatedList = [...fileList, newFile];
-      setFileList(updatedList);
-      props.onFileChange(updatedList);
+      const fileExtension = newFile.name.split(".").pop().toLowerCase();
+
+      // Add your allowed file extensions here
+      const allowedExtensions = ["csv", "xlsx", "xlx"];
+
+      if (allowedExtensions.includes(fileExtension)) {
+        const updatedList = [...fileList, newFile];
+        setFileList(updatedList);
+        props.onFileChange(updatedList);
+        setIsValidFile(true);
+      } else {
+        // Invalid file extension
+        setIsValidFile(false);
+        alert("Invalid file format. Please upload a .csv, .xlsx, or .xlx file.");
+      }
     }
   };
+
 
   const fileRemove = (file) => {
     const updatedList = [...fileList];
@@ -95,7 +118,7 @@ const DropFileInput = (props) => {
                 >
                   Remove
                 </Button>
-                <Button
+                {/* <Button
                   variant="contained"
                   onClick={() => {
                     console.log(
@@ -107,7 +130,25 @@ const DropFileInput = (props) => {
                   style={{ fontSize: "small" }}
                 >
                   Upload
-                </Button>
+                </Button> */}
+                <Button
+          variant="contained"
+          onClick={() => {
+            if (isValidFile) {
+              console.log(
+                "🚀 ~ file: DropFileInput.jsx:112 ~ DropFileInput ~ item:",
+                item
+              );
+              props.uploadFile(item);
+            } else {
+              alert("Invalid file format. Please upload a .csv, .xlsx, or .xlx file.");
+            }
+          }}
+          style={{ fontSize: "small" }}
+          disabled={!isValidFile} 
+        >
+          Upload
+        </Button>
               </div>
             </div>
           ))}

@@ -124,7 +124,7 @@ const UserHome = () => {
                 textTransform: "none", 
               }}
             >
-              Welcome To goDeskless ERMS 
+              Welcome to goDeskless ERMS 
             </h4>
           </div>
         </div>
@@ -146,7 +146,7 @@ const UserHome = () => {
           <UserDashboardAnimation />
           <MyCounterCard
             count={pendingPreRequests?.length}
-            title={"Requested For Pre Approval"}
+            title={"Requested For Pre-Approval"}
           />
           <MyCounterCard
             count={pendingReimbursementRequests?.length}

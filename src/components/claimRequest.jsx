@@ -11,7 +11,7 @@ import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "./Header";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../src/theme";
@@ -48,6 +48,15 @@ const ClaimRequest = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [refreshed, setRefreshed] = useState(false);
+
+  useEffect(() => {
+    if (!refreshed) {
+      console.log("Refreshing...");
+      // Add any logic you want to execute only once here
+      setRefreshed(true);
+    }
+  }, []); // Empty dependency array means it runs only once when the component mounts
 
   const [createReimbursement] = useMutation(CREATE_REIMBURSEMENT, {
     refetchQueries: [{ query: GET_REIMBURSEMENTS }],
@@ -109,6 +118,7 @@ const ClaimRequest = () => {
   const showExpensesUploadedAlert = () => {
     if (expenses.length > 0) {
       alert("Expenses uploaded successfully");
+      window.location.reload(); // Refresh the page
     } else {
       alert("Please add expenses first");
     }

@@ -27,6 +27,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { toast } from "react-toastify";
 
+
 const RaiseRequest = () => {
   const [colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -116,22 +117,19 @@ const RaiseRequest = () => {
     };
   });
 
+ 
   const callRaiseReimbursementRequest = () => {
-    if (
-      !fromDate ||
-      !toDate ||
-      dayjs(fromDate, "DD/MM/YYYY").isAfter(dayjs(toDate, "DD/MM/YYYY"))
-    ) {
-      // Validation failed, set error message
-      setDateValidationError(
-        "From date cannot be greater than or equal to the To Date"
-      );
+    // Validate that To Date is greater than or equal to From Date
+    if (!fromDate || !toDate || dayjs(toDate, "DD/MM/YYYY").isBefore(dayjs(fromDate, "DD/MM/YYYY"))) {
+      // Validation failed, set error message and show an alert
+      setDateValidationError("To date cannot be less than the From Date");
+      window.alert("To date cannot be less than the From Date");
       return;
     }
-
+  
     // Clear any previous validation error
     setDateValidationError("");
-
+  
     const numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
     createReimbursement({
       context: {
@@ -156,7 +154,6 @@ const RaiseRequest = () => {
       .then(() => {
         setTitle("");
         setDescription("");
-        setType({});
         setType({}); // Clear the 'type' state
         setPurpose("");
         setPlace("");
@@ -165,12 +162,13 @@ const RaiseRequest = () => {
         const newAmount = parseFloat(amount);
         setTotalAmount((prevTotal) => prevTotal + newAmount);
         setAmount("");
+        setSuccessAlert(true);
       })
       .catch((error) => {
         console.error(error);
       });
   };
-
+  
   function getDatesInRange(startDateStr, endDateStr) {
     // Parse the input date strings into Date objects
     const startDate = new Date(startDateStr?.split("/").reverse().join("/"));
@@ -303,20 +301,22 @@ const RaiseRequest = () => {
     },
   ];
 
-  // Function to check if all required fields are filled
-  const areAllFieldsFilled = () => {
-    return (
-      title !== "" &&
-      description !== "" &&
-      place !== "" &&
-      fromDate !== null &&
-      toDate !== null &&
-      amount !== "" &&
-      // amount <500000 &&
-      type &&
-      purpose
-    );
-  };
+// Function to check if all required fields are filled
+const areAllFieldsFilled = () => {
+  const areInputFieldsFilled =
+    title.trim() !== "" &&
+    description.trim() !== "" &&
+    place.trim() !== "";
+
+  return (
+    areInputFieldsFilled &&
+    fromDate !== null &&
+    toDate !== null &&
+    amount !== "" &&
+    type &&
+    purpose
+  );
+};
 
   return (
     <Box
@@ -420,6 +420,7 @@ const RaiseRequest = () => {
           <TextField
             id="outlined-multiline-static"
             label="Description"
+            maxRows={2}
             multiline
             sx={{
               width: 200,
@@ -598,7 +599,7 @@ const RaiseRequest = () => {
               }}
             >
               {amountExceedsLimitError
-                ? "Please enter an amount less than or equal to 5,00,000 INR"
+                ? "Please enter an amount less than or equal to 50,000 INR"
                 : "Please enter only numbers"}
             </Alert>
           )}

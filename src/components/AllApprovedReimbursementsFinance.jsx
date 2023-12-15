@@ -111,14 +111,14 @@ const AllApprovedReimbursementsFinance = () => {
     isPaid:row.isPaid,
     purpose: row.purpose,
     sumOfExpenses: calculateTotalAmount(row.expenses),
-    requestedBy: `${row.by.firstName} ${row.by.lastName}`, // Combine firstName and lastName
+    requestedBy: row.by?.firstName && row.by?.lastName ? `${row.by.firstName} ${row.by.lastName}` : '',
   }));
 
   console.log("Rows data:", rows);
 
   const columns = [
-    { field: "title", headerName: "Title", flex: 1, headerRender: customHeaderCell },
-    { field: "purpose", headerName: "Purpose", flex: 1.4, headerRender: customHeaderCell },
+    { field: "title", headerName: "Title", flex: 1.4, headerRender: customHeaderCell },
+    { field: "purpose", headerName: "Purpose", flex: 1.2, headerRender: customHeaderCell },
     {
       field: "description",
       headerName: "Description",
@@ -129,7 +129,7 @@ const AllApprovedReimbursementsFinance = () => {
     {
       field: "type",
       headerName: "Type",
-      flex: 1.2,
+      flex: 1.3,
       cellClassName: "name-column--cell",
       headerRender: customHeaderCell,
       valueGetter: (params) => {
@@ -151,7 +151,7 @@ const AllApprovedReimbursementsFinance = () => {
     {
       field: "visitLocation",
       headerName: "Place",
-      flex: 0.8,
+      flex: 1.2,
       headerRender: customHeaderCell,
     },
     {
@@ -172,7 +172,7 @@ const AllApprovedReimbursementsFinance = () => {
     {
         field: "requestedBy",
         headerName: "Requested By",
-        flex: 1.2,
+        flex: 1.5,
         renderCell: (params) => {
           const role = params.row.by?.role;
           return (
@@ -203,13 +203,13 @@ const AllApprovedReimbursementsFinance = () => {
     {
       field: "askedAmount",
       headerName: "Ask",
-      flex: 1,
+      flex: 0.7,
       headerRender: customHeaderCell,
     },
     {
         field: "claimed",
         headerName: "Claimed",
-        flex: 1,
+        flex: 0.7,
         renderCell: (params) => {
           const claimedAmount = calculateTotalAmount(params.row.expenses);
           const askedAmount = params.row.askedAmount;

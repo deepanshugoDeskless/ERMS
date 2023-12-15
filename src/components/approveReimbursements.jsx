@@ -198,7 +198,7 @@ const PreApproveRequest = (key, showPlusButton, addForm) => {
     {
       field: "requestBy",
       headerName: "Requested By",
-      flex: 1.2,
+      flex: 1.4,
       renderCell: (params) => {
         const role = params.row.by?.role;
         return (

@@ -42,7 +42,11 @@ const Team = () => {
       field: "email",
       headerName: "Email",
       flex: 2.8,
-      valueFormatter: (params) => params.value.toLowerCase(),
+      renderCell: ({ row }) => (
+        <Typography color={colors.grey[100]} style={{ textTransform: "none" }}>
+          {row.email}
+        </Typography>
+      ),
     },
     {
       field: "role",
@@ -79,6 +83,11 @@ const Team = () => {
       field: "username",
       headerName: "Username",
       flex: 2.4,
+      renderCell: (params) => (
+        <Typography color={colors.grey[100]} style={{ textTransform: "none" }}>
+          {params.row.username}
+        </Typography>
+      ),
     },
 
     

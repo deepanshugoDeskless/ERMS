@@ -168,18 +168,13 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
       const fromDateString = formatDateString(reimbursement.fromDate);
       const toDateString = formatDateString(reimbursement.toDate);
 
-        // Access firstName and lastName from the by object
-        const { firstName, lastName } = reimbursement.by;
+      // Check if reimbursement.by is not null before destructuring
+      const { firstName, lastName } = reimbursement.by || {};
 
-        // Create a new field that combines firstName and lastName
-        const requestBy = `${firstName} ${lastName}`;
+      // Create a new field that combines firstName and lastName
+      const requestBy = `${firstName || ''} ${lastName || ''}`;
 
-      if (
-        fromDateString !== "Invalid Date" &&
-        toDateString !== "Invalid Date"
-      )
-
-      {
+      if (fromDateString !== "Invalid Date" && toDateString !== "Invalid Date") {
         return {
           id: reimbursement._id,
           title: reimbursement.title,
@@ -189,18 +184,13 @@ const ApprovedReimbursementsAdmin = (key, showPlusButton, addForm) => {
           askedAmount: reimbursement.askedAmount,
           expenses: reimbursement.expenses,
           description: reimbursement.description,
-          purpose : reimbursement.purpose,
-          place:reimbursement.visitLocation,
+          purpose: reimbursement.purpose,
+          place: reimbursement.visitLocation,
           requestBy, // New field combining firstName and lastName
-
-         
         };
       } else {
-        console.error(
-          "Invalid date format:",
-          reimbursement.fromDate,
-          reimbursement.toDate
-        );
+        console.error("Invalid date format:", reimbursement.fromDate, reimbursement.toDate);
+        return null;
       }
     })
     .filter((reimbursement) => !!reimbursement);
@@ -226,7 +216,7 @@ const customHeaderCell = (params) => {
     {
       field: "requestBy",
       headerName: "Requested By",
-      flex: 1.2,
+      flex: 1.4,
       renderCell: (params) => {
         const role = params.row.by?.role;
         return (
@@ -254,11 +244,11 @@ const customHeaderCell = (params) => {
       },
       headerRender: customHeaderCell,
     },
-    { field: "askedAmount", headerName: "Ask", flex: 1.2 },
+    { field: "askedAmount", headerName: "Ask", flex: 1 },
     {
       field: "claimed",
       headerName: "Claimed",
-      flex: 1.1,
+      flex: 1,
       renderCell: (params) => {
         const claimedAmount = calculateTotalAmount(params.row.expenses);
         const askedAmount = params.row.askedAmount;
