@@ -118,57 +118,57 @@ const RaiseRequest = () => {
   });
 
  
-  const callRaiseReimbursementRequest = () => {
-    // Validate that To Date is greater than or equal to From Date
-    if (!fromDate || !toDate || dayjs(toDate, "DD/MM/YYYY").isBefore(dayjs(fromDate, "DD/MM/YYYY"))) {
-      // Validation failed, set error message and show an alert
-      setDateValidationError("To date cannot be less than the From Date");
-      window.alert("To date cannot be less than the From Date");
-      return;
-    }
-  
-    // Clear any previous validation error
-    setDateValidationError("");
-  
-    const numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
-    createReimbursement({
-      context: {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
+const callRaiseReimbursementRequest = () => {
+  // Validate that To Date is greater than or equal to From Date
+  if (!fromDate || !toDate || dayjs(toDate, "DD/MM/YYYY").isBefore(dayjs(fromDate, "DD/MM/YYYY"))) {
+    // Validation failed, set error message and show an alert
+    setDateValidationError("To date cannot be less than the From Date");
+    window.alert("To date cannot be less than the From Date");
+    return;
+  }
+
+  // Clear any previous validation error
+  setDateValidationError("");
+
+  const numberOfDays = getDatesInRange(fromDate, toDate).length.toString();
+  createReimbursement({
+    context: {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
       },
-      variables: {
-        reimbursementNew: {
-          title: title,
-          purpose: purpose,
-          description: description,
-          type: type.code,
-          visitLocation: place,
-          noOfDays: numberOfDays,
-          fromDate: fromDate,
-          toDate: toDate,
-          askedAmount: amount,
-        },
+    },
+    variables: {
+      reimbursementNew: {
+        title: title,
+        purpose: purpose,
+        description: description,
+        type: type.code,
+        visitLocation: place,
+        noOfDays: numberOfDays,
+        fromDate: fromDate,
+        toDate: toDate,
+        askedAmount: amount,
       },
+    },
+  })
+    .then(() => {
+      setTitle("");
+      setDescription("");
+      setType({}); // Clear the 'type' state
+      setPurpose("");
+      setPlace("");
+      setFromDate(null);
+      setToDate(null);
+      const newAmount = parseFloat(amount);
+      setTotalAmount((prevTotal) => prevTotal + newAmount);
+      setAmount("");
+      setSuccessAlert(true);
     })
-      .then(() => {
-        setTitle("");
-        setDescription("");
-        setType({}); // Clear the 'type' state
-        setPurpose("");
-        setPlace("");
-        setFromDate(null);
-        setToDate(null);
-        const newAmount = parseFloat(amount);
-        setTotalAmount((prevTotal) => prevTotal + newAmount);
-        setAmount("");
-        setSuccessAlert(true);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-  
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
   function getDatesInRange(startDateStr, endDateStr) {
     // Parse the input date strings into Date objects
     const startDate = new Date(startDateStr?.split("/").reverse().join("/"));
